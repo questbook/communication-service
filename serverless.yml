@@ -1,0 +1,32 @@
+service: communication-service
+
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  versionFunctions: false
+  stage: v1
+  region: ap-south-1
+  apiName: ${self:service}
+  memorySize: 256
+  logRetentionInDays: 14
+
+functions:
+  rateHandler:
+    handler: src/functions/handler.run
+    events:
+      # Invoke Lambda function every minute
+      - schedule: rate(1 minute)
+  # send-emails:
+  #   handler: src/functions/send-emails.handler
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(2 minutes)
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+  - serverless-dotenv-plugin
