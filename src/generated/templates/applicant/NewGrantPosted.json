@@ -1,6 +1,6 @@
 {
     "Template": {
-        "TemplateName": "NewGrantPosted",
+        "TemplateName": "applicant_NewGrantPosted",
         "SubjectPart": "{{daoName}} - Inviting applications for {{grantName}}",
         "HtmlPart": "<p>Hi <b>{{applicantName}}</b>,</p> <p>{{daoName}} is inviting applications for their new grant titled {{grantName}}. You can view the grant details {{applicationLink}}. To apply to this grant, click Apply Now or visit {{faqLink}} if you have any questions. You can reach out to us at questbook.app@gmail.com or message us on our {{discordServerLink}}. Wishing you the best for your application! <br /> <br />Best, <br />Team Questbook </p>",
         "TextPart": "Hi {{applicantName}}, \n{{daoName}} is inviting applications for their new grant titled {{grantName}}. You can view the grant details {{applicationLink}}. To apply to this grant, click Apply Now or visit {{faqLink}} if you have any questions. You can reach out to us at questbook.app@gmail.com or message us on our {{discordServerLink}}. Wishing you the best for your application! \n \nBest, \nTeam Questbook"

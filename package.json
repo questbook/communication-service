@@ -5,7 +5,8 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "generate-templates": "ts-node ./scripts/templateGen.ts"
+    "generate-templates": "ts-node ./scripts/templateGen.ts",
+    "deploy-templates": "ts-node ./scripts/deployTemplates.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.5.10",

@@ -38,7 +38,7 @@ const templateGen = async () => {
 
         let config = {
           Template: {
-            TemplateName: name.trim(),
+            TemplateName: userType + "_" + name.trim(),
             SubjectPart: typeSubjects[name as keyof typeof typeSubjects],
             HtmlPart: html.trim(),
             TextPart: text.trim(),
