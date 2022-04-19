@@ -1,0 +1,8 @@
+{
+    "Template": {
+        "TemplateName": "InviteMember",
+        "SubjectPart": "{{daoName}}: Invitation to join Grants DAO",
+        "HtmlPart": "<p>Hi,</p> <p>Your team member from <b>{{daoName}}</b> has invited you to join the Grant DAO as <b>{{role}}</b>. Please click {{link}} to join the DAO. <br /> <br />Best, <br />Team Questbook </p>",
+        "TextPart": "Hi, \nYour team member from {{daoName}} has invited you to join the Grant DAO as {{role}}. Please click {{link}} to join the DAO. \n \nBest, \nTeam Questbook"
+    }
+}
