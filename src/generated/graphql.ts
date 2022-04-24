@@ -3031,7 +3031,7 @@ export type GetReceivedApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type GetReceivedApplicationsQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string }, managers: Array<{ __typename?: 'GrantManager', member?: { __typename?: 'WorkspaceMember', email?: string | null } | null }> } }> };
+export type GetReceivedApplicationsQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type GetRejectedApplicationsQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -3192,12 +3192,12 @@ export const GetReceivedApplicationsDocument = gql`
       }
     }
     grant {
+      title
       workspace {
         title
-      }
-      managers {
-        member {
+        members(where: {accessLevel: admin, email_not: null}) {
           email
+          actorId
         }
       }
     }

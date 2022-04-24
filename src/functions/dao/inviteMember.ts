@@ -20,7 +20,6 @@ module.exports.run = async (event, context) => {
   const time = new Date();
 
   for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
-    console.log(SupportedChainId[chainId]);
     const data = await dynamo
       .get({
         TableName: "communication-touchpoints",
@@ -35,7 +34,6 @@ module.exports.run = async (event, context) => {
     else fromTimestamp = GENESIS_TIMESTAMP;
 
     const toTimestamp = Math.floor(time.getTime() / 1000);
-    console.log('From:', fromTimestamp, 'To:', toTimestamp);
     const results = await executeQuery(
       chainId,
       fromTimestamp,
@@ -43,10 +41,10 @@ module.exports.run = async (event, context) => {
       GetInvitedMembersDocument
     );
 
-    const emailData : {email: string, cc: string[], replacementData: string}[] = [];
+    const emailData : {to: string[], cc: string[], replacementData: string}[] = [];
     for (const result of results.workspaceMembers) {
       const email = {
-        email: result.email,
+        to: [result.email],
         cc: [],
         replacementData: JSON.stringify({
           daoName: result.workspace.title,
@@ -74,6 +72,9 @@ module.exports.run = async (event, context) => {
 
       for (var i = 0; i < emailResult.Status.length; ++i) {
         console.log({
+          chain: SupportedChainId[chainId],
+          from: fromTimestamp,
+          to: toTimestamp,
           request: emailData[i],
           response: emailResult.Status[i],
         })

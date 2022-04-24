@@ -4,7 +4,7 @@ async function sendEmails(data: any[], templateName: string, defaultTemplateData
   var params = {
     Destinations: data.map((item: any) => ({
       Destination: {
-        ToAddresses: [item.email],
+        ToAddresses: item.to,
         CcAddresses: item.cc,
       },
       ReplacementTemplateData: item.replacementData,

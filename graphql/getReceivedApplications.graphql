@@ -1,7 +1,11 @@
 query getReceivedApplications($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
-    where: { updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted }
+    where: {
+      updatedAtS_gt: $lowerLimit
+      updatedAtS_lte: $upperLimit
+      state: submitted
+    }
   ) {
     projectName: fields(where: { field_ends_with: "projectName" }) {
       values {
@@ -19,12 +23,12 @@ query getReceivedApplications($lowerLimit: Int!, $upperLimit: Int!) {
       }
     }
     grant {
+      title
       workspace {
         title
-      }
-      managers {
-        member {
+        members(where: { accessLevel: admin, email_not: null }) {
           email
+          actorId
         }
       }
     }
