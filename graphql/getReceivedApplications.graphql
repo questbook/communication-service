@@ -1,0 +1,32 @@
+query getReceivedApplications($lowerLimit: Int!, $upperLimit: Int!) {
+  grantApplications(
+    subgraphError: allow
+    where: { updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted }
+  ) {
+    projectName: fields(where: { field_ends_with: "projectName" }) {
+      values {
+        value
+      }
+    }
+    applicantName: fields(where: { field_ends_with: "applicantName" }) {
+      values {
+        value
+      }
+    }
+    applicantEmail: fields(where: { field_ends_with: "applicantEmail" }) {
+      values {
+        value
+      }
+    }
+    grant {
+      workspace {
+        title
+      }
+      managers {
+        member {
+          email
+        }
+      }
+    }
+  }
+}

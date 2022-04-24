@@ -14,17 +14,12 @@ provider:
   logRetentionInDays: 14
 
 functions:
-  rateHandler:
-    handler: src/functions/handler.run
+  dao-invite-members:
+    handler: src/functions/dao/inviteMember.run
+    timeout: 60
+    reservedConcurrency: 1
     events:
-      # Invoke Lambda function every minute
       - schedule: rate(1 minute)
-  # send-emails:
-  #   handler: src/functions/send-emails.handler
-  #   timeout: 60
-  #   reservedConcurrency: 1
-  #   events:
-  #     - schedule: rate(2 minutes)
 
 plugins:
   - serverless-offline

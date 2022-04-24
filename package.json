@@ -6,26 +6,32 @@
   "license": "MIT",
   "scripts": {
     "generate-templates": "ts-node ./scripts/templateGen.ts",
-    "deploy-templates": "ts-node ./scripts/deployTemplates.ts"
+    "deploy-templates": "ts-node ./scripts/deployTemplates.ts",
+    "generate": "graphql-codegen --config codegen.yaml"
   },
   "dependencies": {
     "@apollo/client": "^3.5.10",
-    "aws-sdk": "^2.1113.0",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.25",
+    "@types/react": "^18.0.5",
+    "@types/react-dom": "^18.0.1",
+    "aws-sdk": "^2.1117.0",
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.0",
     "ethers": "^5.6.4",
     "graphql": "^15.8.0",
-    "moment": "^2.29.2"
+    "moment": "^2.29.2",
+    "react": "^17.0.2"
   },
   "devDependencies": {
-    "serverless-dotenv-plugin": "^4.0.0",
-    "serverless-offline": "^8.7.0",
-    "serverless-plugin-typescript": "^2.1.2",
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.5",
     "@graphql-codegen/typescript-operations": "^2.3.2",
     "@graphql-codegen/typescript-react-apollo": "^3.2.8",
+    "serverless-dotenv-plugin": "^4.0.0",
+    "serverless-offline": "^8.7.0",
+    "serverless-plugin-typescript": "^2.1.2",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }
