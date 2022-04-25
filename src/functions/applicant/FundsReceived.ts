@@ -67,7 +67,7 @@ import { formatAmount } from "../../utils/formattingUtils";
         if (emailData.length > 0) {
           const emailResult = await sendEmails(
             emailData,
-            "applicant_ApplicationResubmit",
+            "applicant_FundsReceived",
             JSON.stringify({
               projectName: '',
               applicantName: '',

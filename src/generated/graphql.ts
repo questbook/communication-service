@@ -3087,6 +3087,14 @@ export type FundsReceivedQueryVariables = Exact<{
 
 export type FundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, application?: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> }, reward: { __typename?: 'Reward', asset: string } } } | null }> };
 
+export type NewGrantPostedQueryVariables = Exact<{
+  lowerLimit: Scalars['Int'];
+  upperLimit: Scalars['Int'];
+}>;
+
+
+export type NewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
+
 export type ApplicationReceivedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
@@ -3359,6 +3367,61 @@ export function useFundsReceivedLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type FundsReceivedQueryHookResult = ReturnType<typeof useFundsReceivedQuery>;
 export type FundsReceivedLazyQueryHookResult = ReturnType<typeof useFundsReceivedLazyQuery>;
 export type FundsReceivedQueryResult = Apollo.QueryResult<FundsReceivedQuery, FundsReceivedQueryVariables>;
+export const NewGrantPostedDocument = gql`
+    query NewGrantPosted($lowerLimit: Int!, $upperLimit: Int!) {
+  grants(
+    subgraphError: allow
+    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit}
+  ) {
+    id
+    title
+    workspace {
+      title
+    }
+  }
+  grantApplications(subgraphError: allow) {
+    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
+      values(where: {value_not: null}) {
+        value
+      }
+    }
+    applicantName: fields(where: {field_ends_with: "applicantName"}) {
+      values(where: {value_not: null}) {
+        value
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewGrantPostedQuery__
+ *
+ * To run a query within a React component, call `useNewGrantPostedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNewGrantPostedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewGrantPostedQuery({
+ *   variables: {
+ *      lowerLimit: // value for 'lowerLimit'
+ *      upperLimit: // value for 'upperLimit'
+ *   },
+ * });
+ */
+export function useNewGrantPostedQuery(baseOptions: Apollo.QueryHookOptions<NewGrantPostedQuery, NewGrantPostedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NewGrantPostedQuery, NewGrantPostedQueryVariables>(NewGrantPostedDocument, options);
+      }
+export function useNewGrantPostedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewGrantPostedQuery, NewGrantPostedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NewGrantPostedQuery, NewGrantPostedQueryVariables>(NewGrantPostedDocument, options);
+        }
+export type NewGrantPostedQueryHookResult = ReturnType<typeof useNewGrantPostedQuery>;
+export type NewGrantPostedLazyQueryHookResult = ReturnType<typeof useNewGrantPostedLazyQuery>;
+export type NewGrantPostedQueryResult = Apollo.QueryResult<NewGrantPostedQuery, NewGrantPostedQueryVariables>;
 export const ApplicationReceivedDocument = gql`
     query ApplicationReceived($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(

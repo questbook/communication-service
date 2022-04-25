@@ -63,7 +63,7 @@ import {
         if (emailData.length > 0) {
           const emailResult = await sendEmails(
             emailData,
-            "applicant_ApplicationResubmit",
+            "applicant_ApplicationSubmitted",
             JSON.stringify({
               projectName: '',
               applicantName: '',
