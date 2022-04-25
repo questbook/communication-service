@@ -1,4 +1,4 @@
-query getReceivedApplications($lowerLimit: Int!, $upperLimit: Int!) {
+query ApplicationReceived($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
     where: {

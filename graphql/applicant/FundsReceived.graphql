@@ -1,6 +1,10 @@
-query getGrantAmountsReceived($lowerLimit: Int!, $upperLimit: Int!) {
+query FundsReceived($lowerLimit: Int!, $upperLimit: Int!) {
   fundsTransfers(
-    where: { createdAtS_gt: $lowerLimit, createdAtS_lte: $upperLimit, type: funds_disbursed }
+    where: {
+      createdAtS_gt: $lowerLimit
+      createdAtS_lte: $upperLimit
+      type: funds_disbursed
+    }
   ) {
     application {
       id
@@ -23,14 +27,13 @@ query getGrantAmountsReceived($lowerLimit: Int!, $upperLimit: Int!) {
         title
         workspace {
           title
+          members(where: { accessLevel: admin, email_not: null }) {
+            email
+            actorId
+          }
         }
         reward {
           asset
-        }
-        managers {
-          member {
-            email
-          }
         }
       }
     }

@@ -9,7 +9,7 @@ import {
   GENESIS_TIMESTAMP,
   SupportedChainId,
 } from "../../configs/chains";
-import { GetReceivedApplicationsDocument } from "../../generated/graphql";
+import { ApplicationReceivedDocument } from "../../generated/graphql";
 import sendEmails from "../email";
 import executeQuery from "../query";
 
@@ -38,7 +38,7 @@ module.exports.run = async (event, context) => {
       chainId,
       fromTimestamp,
       toTimestamp,
-      GetReceivedApplicationsDocument
+      ApplicationReceivedDocument
     );
 
     const emailData: {

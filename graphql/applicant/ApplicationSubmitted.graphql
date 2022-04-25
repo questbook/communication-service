@@ -1,0 +1,27 @@
+query ApplicationSubmitted($lowerLimit: Int!, $upperLimit: Int!) {
+  grantApplications(
+    subgraphError: allow
+    where: { updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted }
+  ) {
+    projectName: fields(where: { field_ends_with: "projectName" }) {
+      values {
+        value
+      }
+    }
+    applicantName: fields(where: { field_ends_with: "applicantName" }) {
+      values {
+        value
+      }
+    }
+    grant {
+      title
+      workspace {
+        title
+        members(where: { accessLevel: admin, email_not: null }) {
+          email
+          actorId
+        }
+      }
+    }
+  }
+}

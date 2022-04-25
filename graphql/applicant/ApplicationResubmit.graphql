@@ -1,7 +1,8 @@
-query getSubmittedApplications($lowerLimit: Int!, $upperLimit: Int!) {
+
+query ApplicationResubmit($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
-    where: { updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted }
+    where: { updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: resubmit }
   ) {
     projectName: fields(where: { field_ends_with: "projectName" }) {
       values {
@@ -17,10 +18,9 @@ query getSubmittedApplications($lowerLimit: Int!, $upperLimit: Int!) {
       title
       workspace {
         title
-      }
-      managers {
-        member {
+        members(where: { accessLevel: admin, email_not: null }) {
           email
+          actorId
         }
       }
     }
