@@ -9,7 +9,7 @@ import {
   GENESIS_TIMESTAMP,
   SupportedChainId,
 } from "../../configs/chains";
-import { ApplicationSubmittedDocument } from "../../generated/graphql";
+import { NewGrantPostedDocument } from "../../generated/graphql";
 import sendEmails from "../email";
 import executeQuery from "../query";
 
@@ -38,7 +38,7 @@ module.exports.run = async (event, context) => {
       chainId,
       fromTimestamp,
       toTimestamp,
-      ApplicationSubmittedDocument
+      NewGrantPostedDocument
     );
 
     const emailData: {
@@ -48,16 +48,18 @@ module.exports.run = async (event, context) => {
     }[] = [];
     for (const grant of results.grants) {
       for (const applicant of results.grantApplications) {
+        console.log(grant);
+        console.log(applicant);
         const email = {
-          to: applicant.applicantEmail[0].values[0].value,
+          to: applicant.applicantEmail[0]?.values[0]?.value,
           cc: [],
           replacementData: JSON.stringify({
             grantName: grant.title,
-            daoName: grant.grant.workspace.title,
-            applicantName: applicant.applicantName[0].values[0].value,
+            daoName: grant.workspace.title,
+            applicantName: applicant.applicantName[0]?.values[0]?.value,
             grantLink: `https://new.questbook.app/explore_grants/about_grant/?grantId=${grant.id}&chainId=${chainId}`,
-            faqLink: "",
-            discordServerLink: "",
+            faqLink: "https://www.notion.so/questbook/Grant-DAO-Wiki-e844026ab4344b67b447a7aa390ae053",
+            discordServerLink: "https://discord.gg/YkG4Y5ABEu",
           }),
         };
         emailData.push(email);

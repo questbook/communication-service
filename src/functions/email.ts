@@ -23,6 +23,12 @@ async function sendEmails(data: any[], templateName: string, defaultTemplateData
   // Handle promise's fulfilled/rejected states
   const response = await sendPromise;
   return response;
+
+  // console.log('EMAIL SERVICE:', params);
+  // return {
+  //   ResponseMetadata: 'testing',
+  //   Status: data.map((datum: any) => 'Success'),
+  // }
 }
 
 export default sendEmails;

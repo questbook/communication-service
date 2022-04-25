@@ -3077,7 +3077,7 @@ export type ApplicationSubmittedQueryVariables = Exact<{
 }>;
 
 
-export type ApplicationSubmittedQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type ApplicationSubmittedQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type FundsReceivedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -3093,7 +3093,7 @@ export type NewGrantPostedQueryVariables = Exact<{
 }>;
 
 
-export type NewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
+export type NewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
 
 export type ApplicationReceivedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -3264,6 +3264,11 @@ export const ApplicationSubmittedDocument = gql`
         value
       }
     }
+    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
+      values {
+        value
+      }
+    }
     grant {
       title
       workspace {
@@ -3388,6 +3393,7 @@ export const NewGrantPostedDocument = gql`
     }
   }
   grantApplications(subgraphError: allow) {
+    id
     applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
       values(where: {value_not: null}) {
         value

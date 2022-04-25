@@ -14,6 +14,7 @@ provider:
   logRetentionInDays: 14
 
 functions:
+
   dao-invite-members:
     handler: src/functions/dao/InviteMember.run
     timeout: 60
@@ -22,6 +23,49 @@ functions:
       - schedule: rate(1 minute)
   dao-application-received:
     handler: src/functions/dao/ApplicationReceived.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  dao-application-resubmitted:
+    handler: src/functions/dao/ApplicationResubmitted.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  dao-milestone-updated:
+    handler: src/functions/dao/MilestoneUpdated.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+
+  applicant-applicationreject:
+    handler: src/functions/applicant/ApplicationReject.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  applicant-applicationresubmit:
+    handler: src/functions/applicant/ApplicationResubmit.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  applicant-applicationsubmitted:
+    handler: src/functions/applicant/ApplicationSubmitted.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  applicant-funds-received:
+    handler: src/functions/applicant/FundsReceived.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  applicant-new-grant-posted:
+    handler: src/functions/applicant/NewGrantPosted.run
     timeout: 60
     reservedConcurrency: 1
     events:
