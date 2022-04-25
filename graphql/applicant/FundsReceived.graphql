@@ -38,11 +38,5 @@ query FundsReceived($lowerLimit: Int!, $upperLimit: Int!) {
       }
     }
     amount
-    createdAtS
-    milestone {
-      id
-      amount
-      amountPaid
-    }
   }
 }

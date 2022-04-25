@@ -25,11 +25,14 @@ export type ApplicationMilestone = {
   amount: Scalars['BigInt'];
   /** amount paid by DAO */
   amountPaid: Scalars['BigInt'];
+  /** The grant application this milestone belongs to */
+  application: GrantApplication;
   /** Feedback from the grant DAO manager/applicant */
   feedbackDao?: Maybe<Scalars['String']>;
   /** Feedback from the developer */
   feedbackDev?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  /** Current state of the milestone */
   state: MilestoneState;
   title: Scalars['String'];
   /** in seconds since epoch */
@@ -53,6 +56,26 @@ export type ApplicationMilestone_Filter = {
   amount_lte?: InputMaybe<Scalars['BigInt']>;
   amount_not?: InputMaybe<Scalars['BigInt']>;
   amount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  application?: InputMaybe<Scalars['String']>;
+  application_contains?: InputMaybe<Scalars['String']>;
+  application_contains_nocase?: InputMaybe<Scalars['String']>;
+  application_ends_with?: InputMaybe<Scalars['String']>;
+  application_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  application_gt?: InputMaybe<Scalars['String']>;
+  application_gte?: InputMaybe<Scalars['String']>;
+  application_in?: InputMaybe<Array<Scalars['String']>>;
+  application_lt?: InputMaybe<Scalars['String']>;
+  application_lte?: InputMaybe<Scalars['String']>;
+  application_not?: InputMaybe<Scalars['String']>;
+  application_not_contains?: InputMaybe<Scalars['String']>;
+  application_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  application_not_ends_with?: InputMaybe<Scalars['String']>;
+  application_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  application_not_in?: InputMaybe<Array<Scalars['String']>>;
+  application_not_starts_with?: InputMaybe<Scalars['String']>;
+  application_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  application_starts_with?: InputMaybe<Scalars['String']>;
+  application_starts_with_nocase?: InputMaybe<Scalars['String']>;
   feedbackDao?: InputMaybe<Scalars['String']>;
   feedbackDao_contains?: InputMaybe<Scalars['String']>;
   feedbackDao_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -138,6 +161,7 @@ export type ApplicationMilestone_Filter = {
 export enum ApplicationMilestone_OrderBy {
   Amount = 'amount',
   AmountPaid = 'amountPaid',
+  Application = 'application',
   FeedbackDao = 'feedbackDao',
   FeedbackDev = 'feedbackDev',
   Id = 'id',
@@ -403,6 +427,8 @@ export type GrantApplication = {
   state: ApplicationState;
   /** in seconds since epoch */
   updatedAtS: Scalars['Int'];
+  /** Version of the application, incremented on resubmission */
+  version: Scalars['Int'];
 };
 
 
@@ -469,6 +495,8 @@ export type GrantApplicationRevision = {
   milestones: Array<ApplicationMilestone>;
   /** The state that was set in the revision */
   state: ApplicationState;
+  /** Version number of the grant application */
+  version: Scalars['Int'];
 };
 
 
@@ -590,6 +618,14 @@ export type GrantApplicationRevision_Filter = {
   state_in?: InputMaybe<Array<ApplicationState>>;
   state_not?: InputMaybe<ApplicationState>;
   state_not_in?: InputMaybe<Array<ApplicationState>>;
+  version?: InputMaybe<Scalars['Int']>;
+  version_gt?: InputMaybe<Scalars['Int']>;
+  version_gte?: InputMaybe<Scalars['Int']>;
+  version_in?: InputMaybe<Array<Scalars['Int']>>;
+  version_lt?: InputMaybe<Scalars['Int']>;
+  version_lte?: InputMaybe<Scalars['Int']>;
+  version_not?: InputMaybe<Scalars['Int']>;
+  version_not_in?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export enum GrantApplicationRevision_OrderBy {
@@ -601,7 +637,8 @@ export enum GrantApplicationRevision_OrderBy {
   Fields = 'fields',
   Id = 'id',
   Milestones = 'milestones',
-  State = 'state'
+  State = 'state',
+  Version = 'version'
 }
 
 export type GrantApplication_Filter = {
@@ -723,6 +760,14 @@ export type GrantApplication_Filter = {
   updatedAtS_lte?: InputMaybe<Scalars['Int']>;
   updatedAtS_not?: InputMaybe<Scalars['Int']>;
   updatedAtS_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  version?: InputMaybe<Scalars['Int']>;
+  version_gt?: InputMaybe<Scalars['Int']>;
+  version_gte?: InputMaybe<Scalars['Int']>;
+  version_in?: InputMaybe<Array<Scalars['Int']>>;
+  version_lt?: InputMaybe<Scalars['Int']>;
+  version_lte?: InputMaybe<Scalars['Int']>;
+  version_not?: InputMaybe<Scalars['Int']>;
+  version_not_in?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export enum GrantApplication_OrderBy {
@@ -738,7 +783,8 @@ export enum GrantApplication_OrderBy {
   Reviewers = 'reviewers',
   Reviews = 'reviews',
   State = 'state',
-  UpdatedAtS = 'updatedAtS'
+  UpdatedAtS = 'updatedAtS',
+  Version = 'version'
 }
 
 export type GrantField = {
@@ -3039,7 +3085,7 @@ export type FundsReceivedQueryVariables = Exact<{
 }>;
 
 
-export type FundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, createdAtS: number, application?: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> }, reward: { __typename?: 'Reward', asset: string } } } | null, milestone?: { __typename?: 'ApplicationMilestone', id: string, amount: string, amountPaid: string } | null }> };
+export type FundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, application?: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> }, reward: { __typename?: 'Reward', asset: string } } } | null }> };
 
 export type ApplicationReceivedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -3281,12 +3327,6 @@ export const FundsReceivedDocument = gql`
       }
     }
     amount
-    createdAtS
-    milestone {
-      id
-      amount
-      amountPaid
-    }
   }
 }
     `;
