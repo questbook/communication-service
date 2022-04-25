@@ -11,111 +11,27 @@ authorName: 'Rob Abbott'
 authorAvatar: 'https://avatars3.githubusercontent.com/u/5679763?v=4&s=140'
 -->
 
-# Serverless Framework Node Scheduled Cron on AWS
+# Questbook Communication Service
 
-This template demonstrates how to develop and deploy a simple cron-like service running on AWS Lambda using the traditional Serverless Framework.
+This service is responsible for sending out emails and integrating all forms of communiation on the Questbook platform.
 
-## Schedule event type
+## Getting started
 
-This examples defines two functions, `cron` and `secondCron`, both of which are triggered by an event of `schedule` type, which is used for configuring functions to be executed at specific time or in specific intervals. For detailed information about `schedule` event, please refer to corresponding section of Serverless [docs](https://serverless.com/framework/docs/providers/aws/events/schedule/).
+1. Clone the repository
+2. Install the dependencies by running `npm install -S`
 
-When defining `schedule` events, we need to use `rate` or `cron` expression syntax.
+## Steps to add a new email template
 
-### Rate expressions syntax
+1. Create a new file in the `templates` directory with the name of the template you want to add, with `.html` as the extension
 
-```pseudo
-rate(value unit)
-```
+2. Consturct the HTML design of the email template
 
-`value` - A positive number
+3. Run `npm run generate-templates` to generate the AWS SES compatible templates.
 
-`unit` - The unit of time. ( minute | minutes | hour | hours | day | days )
+4. Run `npm run deploy-templates` to deploy these templates to SES.
 
-In below example, we use `rate` syntax to define `schedule` event that will trigger our `rateHandler` function every minute
+## Project Structure
 
-```yml
-functions:
-  rateHandler:
-    handler: handler.run
-    events:
-      - schedule: rate(1 minute)
-```
+1. `serverless.yml` in the root directory, specifies the CRON jobs that are run
 
-Detailed information about rate expressions is available in official [AWS docs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#RateExpressions).
-
-
-### Cron expressions syntax
-
-```pseudo
-cron(Minutes Hours Day-of-month Month Day-of-week Year)
-```
-
-All fields are required and time zone is UTC only.
-
-| Field         | Values         | Wildcards     |
-| ------------- |:--------------:|:-------------:|
-| Minutes       | 0-59           | , - * /       |
-| Hours         | 0-23           | , - * /       |
-| Day-of-month  | 1-31           | , - * ? / L W |
-| Month         | 1-12 or JAN-DEC| , - * /       |
-| Day-of-week   | 1-7 or SUN-SAT | , - * ? / L # |
-| Year          | 192199      | , - * /       |
-
-In below example, we use `cron` syntax to define `schedule` event that will trigger our `cronHandler` function every second minute every Monday through Friday
-
-```yml
-functions:
-  cronHandler:
-    handler: handler.run
-    events:
-      - schedule: cron(0/2 * ? * MON-FRI *)
-```
-
-Detailed information about cron expressions in available in official [AWS docs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions).
-
-
-## Usage
-
-### Deployment
-
-This example is made to work with the Serverless Framework dashboard, which includes advanced features such as CI/CD, monitoring, metrics, etc.
-
-In order to deploy with dashboard, you need to first login with:
-
-```
-serverless login
-```
-
-and then perform deployment with:
-
-```
-serverless deploy
-```
-
-After running deploy, you should see output similar to:
-
-```bash
-Deploying aws-node-scheduled-cron-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-node-scheduled-cron-project-dev (205s)
-
-functions:
-  rateHandler: aws-node-scheduled-cron-project-dev-rateHandler (2.9 kB)
-  cronHandler: aws-node-scheduled-cron-project-dev-cronHandler (2.9 kB)
-```
-
-There is no additional step required. Your defined schedules becomes active right away after deployment.
-
-### Local invocation
-
-In order to test out your functions locally, you can invoke them with the following command:
-
-```
-serverless invoke local --function rateHandler
-```
-
-After invocation, you should see output similar to:
-
-```bash
-Your cron function "aws-node-scheduled-cron-dev-rateHandler" ran at Fri Mar 05 2021 15:14:39 GMT+0100 (Central European Standard Time)
-```
+2. The functions that are executed in the CRON jobs, are specified under the `src` folder.
