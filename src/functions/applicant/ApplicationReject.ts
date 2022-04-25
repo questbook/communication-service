@@ -48,7 +48,7 @@ import {
       }[] = [];
       for (const result of results.grantApplications) {
         const email = {
-          to: result.applicantEmail[0].values,
+          to: result.applicantEmail[0].values.map((item) => item.value),
           cc: result.grant.workspace.members.map((member: any) => member.email),
           replacementData: JSON.stringify({
             projectName: result.projectName[0].values[0].value,
