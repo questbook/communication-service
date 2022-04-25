@@ -5,6 +5,7 @@ query ApplicationResubmitted($lowerLimit: Int!, $upperLimit: Int!) {
       updatedAtS_gt: $lowerLimit
       updatedAtS_lte: $upperLimit
       state: submitted
+      version_gt: 1
     }
   ) {
     projectName: fields(where: { field_ends_with: "projectName" }) {

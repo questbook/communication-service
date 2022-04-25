@@ -5,6 +5,7 @@ query ApplicationReceived($lowerLimit: Int!, $upperLimit: Int!) {
       updatedAtS_gt: $lowerLimit
       updatedAtS_lte: $upperLimit
       state: submitted
+      version: 1
     }
   ) {
     projectName: fields(where: { field_ends_with: "projectName" }) {

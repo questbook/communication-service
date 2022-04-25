@@ -3434,7 +3434,7 @@ export const ApplicationReceivedDocument = gql`
     query ApplicationReceived($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted}
+    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version: 1}
   ) {
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
@@ -3497,7 +3497,7 @@ export const ApplicationResubmittedDocument = gql`
     query ApplicationResubmitted($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted}
+    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version_gt: 1}
   ) {
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
