@@ -3119,6 +3119,14 @@ export type InvitedMemberQueryVariables = Exact<{
 
 export type InvitedMemberQuery = { __typename?: 'Query', workspaceMembers: Array<{ __typename?: 'WorkspaceMember', email?: string | null, accessLevel: WorkspaceMemberAccessLevel, updatedAt: number, workspace: { __typename?: 'Workspace', title: string } }> };
 
+export type MiletoneUpdatedQueryVariables = Exact<{
+  lowerLimit: Scalars['Int'];
+  upperLimit: Scalars['Int'];
+}>;
+
+
+export type MiletoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
+
 
 export const ApplicationRejectDocument = gql`
     query ApplicationReject($lowerLimit: Int!, $upperLimit: Int!) {
@@ -3592,3 +3600,62 @@ export function useInvitedMemberLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type InvitedMemberQueryHookResult = ReturnType<typeof useInvitedMemberQuery>;
 export type InvitedMemberLazyQueryHookResult = ReturnType<typeof useInvitedMemberLazyQuery>;
 export type InvitedMemberQueryResult = Apollo.QueryResult<InvitedMemberQuery, InvitedMemberQueryVariables>;
+export const MiletoneUpdatedDocument = gql`
+    query MiletoneUpdated($lowerLimit: Int!, $upperLimit: Int!) {
+  applicationMilestones(
+    subgraphError: allow
+    where: {state: requested, updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit}
+  ) {
+    application {
+      projectName: fields(where: {field_ends_with: "projectName"}) {
+        values {
+          value
+        }
+      }
+      applicantName: fields(where: {field_ends_with: "applicantName"}) {
+        values {
+          value
+        }
+      }
+      grant {
+        workspace {
+          title
+          members(where: {accessLevel: admin, email_not: null}) {
+            email
+            actorId
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useMiletoneUpdatedQuery__
+ *
+ * To run a query within a React component, call `useMiletoneUpdatedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMiletoneUpdatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMiletoneUpdatedQuery({
+ *   variables: {
+ *      lowerLimit: // value for 'lowerLimit'
+ *      upperLimit: // value for 'upperLimit'
+ *   },
+ * });
+ */
+export function useMiletoneUpdatedQuery(baseOptions: Apollo.QueryHookOptions<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>(MiletoneUpdatedDocument, options);
+      }
+export function useMiletoneUpdatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>(MiletoneUpdatedDocument, options);
+        }
+export type MiletoneUpdatedQueryHookResult = ReturnType<typeof useMiletoneUpdatedQuery>;
+export type MiletoneUpdatedLazyQueryHookResult = ReturnType<typeof useMiletoneUpdatedLazyQuery>;
+export type MiletoneUpdatedQueryResult = Apollo.QueryResult<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>;
