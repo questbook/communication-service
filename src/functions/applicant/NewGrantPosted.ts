@@ -42,7 +42,7 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 		for(const grant of results.grants) {
 			for(const applicant of results.grantApplications) {
 				const email = {
-					to: applicant.applicantEmail[0]?.values[0]?.value,
+					to: [applicant.applicantEmail[0]?.values[0]?.value],
 					cc: [],
 					replacementData: JSON.stringify({
 						grantName: grant.title,
