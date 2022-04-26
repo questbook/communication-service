@@ -21,7 +21,9 @@ const processHTML = (html: string) => {
 
 const templateGen = async () => {
   const userTypes = await readdir("./src/templates");
+  let templateNames = '//generated file, run \'npm run generate-templates\' to update\n\nexport default {\n'
   for (const userType of userTypes) {
+    templateNames += `\t${userType}: {\n`;
     if (!existsSync(`./src/generated/templates/${userType}`)) 
       mkdir(`./src/generated/templates/${userType}`, { recursive: true });
 
@@ -45,13 +47,18 @@ const templateGen = async () => {
           },
         };
 
+        templateNames += `\t\t${name}: "${userType}_${name.trim()}",\n`;
         await writeFile(
           `./src/generated/templates/${userType}/` + name + ".json",
           JSON.stringify(config, null, 4)
         );
       }
     }
+    templateNames += `\t},\n`;
   }
+  templateNames += "}\n";
+
+  await writeFile("./src/generated/templateNames.ts", templateNames);
 };
 
 templateGen();

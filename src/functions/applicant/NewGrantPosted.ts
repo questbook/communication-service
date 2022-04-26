@@ -4,106 +4,79 @@
 // we modify the timestamp till which we have processed.
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
+import { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import { EmailData } from '../../../types/EmailData'
 import {
-  ALL_SUPPORTED_CHAIN_IDS,
-  GENESIS_TIMESTAMP,
-  SupportedChainId,
-} from "../../configs/chains";
-import { NewGrantPostedDocument } from "../../generated/graphql";
-import sendEmails from "../email";
-import executeQuery from "../query";
+	ALL_SUPPORTED_CHAIN_IDS,
+	SupportedChainId,
+} from '../../configs/chains'
+import { NewGrantPostedDocument } from '../../generated/graphql'
+import templateNames from '../../generated/templateNames'
+import { getItem, setItem } from '../db'
+import sendEmails from '../email'
+import executeQuery from '../query'
 
-const AWS = require("aws-sdk");
-const dynamo = new AWS.DynamoDB.DocumentClient();
+const TEMPLATE = templateNames.applicant.NewGrantPosted
+const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`
 
-module.exports.run = async (event, context) => {
-  const time = new Date();
+export const run = async(event: APIGatewayProxyEvent, context: Context) => {
+	const time = new Date()
 
-  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
-    const data = await dynamo
-      .get({
-        TableName: "communication-touchpoints",
-        Key: {
-          id: `${chainId}_applicant_NewGrantPosted`,
-        },
-      })
-      .promise();
+	for(const chainId of ALL_SUPPORTED_CHAIN_IDS) {
+		const fromTimestamp = await getItem(getKey(chainId))
+		const toTimestamp = Math.floor(time.getTime() / 1000)
 
-    let fromTimestamp = 0;
-    if ("Item" in data) fromTimestamp = data.Item.timestamp;
-    else fromTimestamp = GENESIS_TIMESTAMP;
+		if(fromTimestamp === -1) {
+			await setItem(getKey(chainId), toTimestamp)
+			continue
+		}
 
-    const toTimestamp = Math.floor(time.getTime() / 1000);
-    const results = await executeQuery(
-      chainId,
-      fromTimestamp,
-      toTimestamp,
-      NewGrantPostedDocument
-    );
+		const results = await executeQuery(
+			chainId,
+			fromTimestamp,
+			toTimestamp,
+			NewGrantPostedDocument
+		)
 
-    const emailData: {
-      to: string[];
-      cc: string[];
-      replacementData: string;
-    }[] = [];
-    for (const grant of results.grants) {
-      for (const applicant of results.grantApplications) {
-        console.log(grant);
-        console.log(applicant);
-        const email = {
-          to: applicant.applicantEmail[0]?.values[0]?.value,
-          cc: [],
-          replacementData: JSON.stringify({
-            grantName: grant.title,
-            daoName: grant.workspace.title,
-            applicantName: applicant.applicantName[0]?.values[0]?.value,
-            grantLink: `https://new.questbook.app/explore_grants/about_grant/?grantId=${grant.id}&chainId=${chainId}`,
-            faqLink: "https://www.notion.so/questbook/Grant-DAO-Wiki-e844026ab4344b67b447a7aa390ae053",
-            discordServerLink: "https://discord.gg/YkG4Y5ABEu",
-          }),
-        };
-        emailData.push(email);
-      }
-    }
+		const emailData: EmailData[] = []
+		for(const grant of results.grants) {
+			for(const applicant of results.grantApplications) {
+				const email = {
+					to: applicant.applicantEmail[0]?.values[0]?.value,
+					cc: [],
+					replacementData: JSON.stringify({
+						grantName: grant.title,
+						daoName: grant.workspace.title,
+						applicantName: applicant.applicantName[0]?.values[0]?.value,
+						grantLink: `https://new.questbook.app/explore_grants/about_grant/?grantId=${grant.id}&chainId=${chainId}`,
+						faqLink:
+              'https://www.notion.so/questbook/Grant-DAO-Wiki-e844026ab4344b67b447a7aa390ae053',
+						discordServerLink: 'https://discord.gg/YkG4Y5ABEu',
+					}),
+				}
+				emailData.push(email)
+			}
+		}
 
-    if (emailData.length > 0) {
-      const emailResult = await sendEmails(
-        emailData,
-        "applicant_NewGrantPosted",
-        JSON.stringify({
-          grantName: "",
-          daoName: "",
-          applicantName: "",
-          grantLink: ``,
-          faqLink: "",
-          discordServerLink: "",
-        })
-      );
+		if(emailData.length === 0) {
+			continue
+		}
 
-      console.log(emailResult.ResponseMetadata);
+		const emailResult = await sendEmails(
+			emailData,
+			TEMPLATE,
+			JSON.stringify({
+				grantName: '',
+				daoName: '',
+				applicantName: '',
+				grantLink: '',
+				faqLink: '',
+				discordServerLink: '',
+			})
+		)
 
-      for (var i = 0; i < emailResult.Status.length; ++i) {
-        console.log({
-          chain: SupportedChainId[chainId],
-          from: fromTimestamp,
-          to: toTimestamp,
-          request: emailData[i],
-          response: emailResult.Status[i],
-        });
-        console.log("\n");
-      }
+		await setItem(getKey(chainId), toTimestamp)
+	}
+}
 
-      const updated = await dynamo
-        .put({
-          TableName: "communication-touchpoints",
-          Item: {
-            id: `${chainId}_applicant_NewGrantPosted`,
-            timestamp: toTimestamp,
-          },
-        })
-        .promise();
-
-      console.log("Updated in DB: ", updated);
-    }
-  }
-};
+export default run
