@@ -6,34 +6,31 @@
 
 import {
   ALL_SUPPORTED_CHAIN_IDS,
-  GENESIS_TIMESTAMP,
   SupportedChainId,
 } from "../../configs/chains";
-import { MiletoneUpdatedDocument } from "../../generated/graphql";
+import { MiletoneUpdatedDocument, WorkspaceMember } from "../../generated/graphql";
+import { getItem, setItem } from "../db";
 import sendEmails from "../email";
 import executeQuery from "../query";
+import templateNames from "../../generated/templateNames";
+import { EmailData } from "../../../types/EmailData";
+import { APIGatewayProxyEvent, Context } from "aws-lambda";
 
-const AWS = require("aws-sdk");
-const dynamo = new AWS.DynamoDB.DocumentClient();
+const TEMPLATE = templateNames.dao.MilestoneUpdated;
+const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-module.exports.run = async (event, context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
 
   for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
-    const data = await dynamo
-      .get({
-        TableName: "communication-touchpoints",
-        Key: {
-          id: `${chainId}_dao_MilestoneUpdated`,
-        },
-      })
-      .promise();
-
-    let fromTimestamp = 0;
-    if ("Item" in data) fromTimestamp = data.Item.timestamp;
-    else fromTimestamp = GENESIS_TIMESTAMP;
-
+    const fromTimestamp = await getItem(getKey(chainId));
     const toTimestamp = Math.floor(time.getTime() / 1000);
+
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      continue;
+    }
+
     const results = await executeQuery(
       chainId,
       fromTimestamp,
@@ -41,12 +38,11 @@ module.exports.run = async (event, context) => {
       MiletoneUpdatedDocument
     );
 
-    const emailData: { to: string[]; cc: string[]; replacementData: string }[] =
-      [];
+    const emailData: EmailData[] = [];
     for (const result of results.applicationMilestones) {
       const email = {
         to: result.application.grant.workspace.members.map(
-          (member: any) => member.email
+          (member: WorkspaceMember) => member.email
         ),
         cc: [],
         replacementData: JSON.stringify({
@@ -59,42 +55,19 @@ module.exports.run = async (event, context) => {
       emailData.push(email);
     }
 
-    if (emailData.length > 0) {
-      const emailResult = await sendEmails(
-        emailData,
-        "dao_MilestoneUpdated",
-        JSON.stringify({
-          projectName: "",
-          applicantName: "",
-          daoName: "",
-          link: "",
-        })
-      );
+    if (emailData.length === 0) continue;
 
-      console.log(emailResult.ResponseMetadata);
+    const emailResult = await sendEmails(
+      emailData,
+      TEMPLATE,
+      JSON.stringify({
+        projectName: "",
+        applicantName: "",
+        daoName: "",
+        link: "",
+      })
+    );
 
-      for (var i = 0; i < emailResult.Status.length; ++i) {
-        console.log({
-          chain: SupportedChainId[chainId],
-          from: fromTimestamp,
-          to: toTimestamp,
-          request: emailData[i],
-          response: emailResult.Status[i],
-        });
-        console.log("\n");
-      }
-
-      const updated = await dynamo
-        .put({
-          TableName: "communication-touchpoints",
-          Item: {
-            id: `${chainId}_dao_MilestoneUpdated`,
-            timestamp: toTimestamp,
-          },
-        })
-        .promise();
-
-      console.log("Updated in DB: ", updated);
-    }
+    await setItem(getKey(chainId), toTimestamp);
   }
 };

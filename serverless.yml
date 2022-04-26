@@ -69,7 +69,7 @@ functions:
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(10 minutes)
 
 plugins:
   - serverless-offline

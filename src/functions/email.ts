@@ -1,8 +1,10 @@
+import { EmailData } from "../../types/EmailData";
+
 const AWS = require('aws-sdk');
 
-async function sendEmails(data: any[], templateName: string, defaultTemplateData: string) {
+async function sendEmails(data: EmailData[], templateName: string, defaultTemplateData: string) {
   var params = {
-    Destinations: data.map((item: any) => ({
+    Destinations: data.map((item: EmailData) => ({
       Destination: {
         ToAddresses: item.to,
         CcAddresses: item.cc,
@@ -16,19 +18,19 @@ async function sendEmails(data: any[], templateName: string, defaultTemplateData
   };
 
   // Create the promise and SES service object
-  const sendPromise = new AWS.SES({ apiVersion: "2010-12-01" })
-    .sendBulkTemplatedEmail(params)
-    .promise();
+  // const sendPromise = new AWS.SES({ apiVersion: "2010-12-01" })
+  //   .sendBulkTemplatedEmail(params)
+  //   .promise();
 
   // Handle promise's fulfilled/rejected states
-  const response = await sendPromise;
-  return response;
+  // const response = await sendPromise;
+  // return response;
 
-  // console.log('EMAIL SERVICE:', params);
-  // return {
-  //   ResponseMetadata: 'testing',
-  //   Status: data.map((datum: any) => 'Success'),
-  // }
+  console.log('DATA: ', data);
+  return {
+    ResponseMetadata: 'testing',
+    Status: data.map((datum: any) => 'Success'),
+  }
 }
 
 export default sendEmails;
