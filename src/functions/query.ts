@@ -6,7 +6,10 @@ import {
 } from "@apollo/client";
 import { CHAIN_INFO } from "../configs/chainInfo";
 import { SupportedChainId } from "../configs/chains";
-import fetch from 'cross-fetch';
+import fetch from "cross-fetch";
+
+const Pino = require("pino");
+const logger = Pino();
 
 async function executeQuery(
   chainId: SupportedChainId,
@@ -14,6 +17,7 @@ async function executeQuery(
   to: number,
   query: DocumentNode
 ) {
+  logger.info({ chainId, from, to }, "Executing query");
   const link = new HttpLink({
     uri: CHAIN_INFO[chainId].subgraphClientUrl,
     fetch,
@@ -31,8 +35,10 @@ async function executeQuery(
       upperLimit: to,
     },
   });
+  const { data } = response;
+  logger.info({ chainId, from, to, data }, "Executed query");
 
-  return response.data;
+  return data;
 }
 
 export default executeQuery;

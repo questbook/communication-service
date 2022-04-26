@@ -1,8 +1,11 @@
 import { EmailData } from "../../types/EmailData";
 
 const AWS = require('aws-sdk');
+const Pino = require('pino');
+const logger = Pino();
 
 async function sendEmails(data: EmailData[], templateName: string, defaultTemplateData: string) {
+  logger.info({ data, templateName, defaultTemplateData }, 'Sending emails');
   var params = {
     Destinations: data.map((item: EmailData) => ({
       Destination: {
@@ -24,6 +27,7 @@ async function sendEmails(data: EmailData[], templateName: string, defaultTempla
 
   // Handle promise's fulfilled/rejected states
   const response = await sendPromise;
+  logger.info({ response }, 'Sent emails');
   return response;
 
   // console.log('DATA: ', data);
