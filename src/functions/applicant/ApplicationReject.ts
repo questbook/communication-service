@@ -11,7 +11,7 @@ import {
 	SupportedChainId,
 } from '../../configs/chains'
 import {
-	ApplicationSubmittedDocument,
+	ApplicationRejectDocument,
 	GrantFieldAnswerItem,
 	WorkspaceMember,
 } from '../../generated/graphql'
@@ -39,7 +39,7 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 			chainId,
 			fromTimestamp,
 			toTimestamp,
-			ApplicationSubmittedDocument
+			ApplicationRejectDocument
 		)
 
 		const emailData: EmailData[] = []

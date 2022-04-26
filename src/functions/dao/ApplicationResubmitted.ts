@@ -19,7 +19,7 @@ import { getItem, setItem } from '../db'
 import sendEmails from '../email'
 import executeQuery from '../query'
 
-const TEMPLATE = templateNames.dao.InviteMember
+const TEMPLATE = templateNames.dao.ApplicationResubmitted
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`
 
 export const run = async(event: APIGatewayProxyEvent, context: Context) => {
