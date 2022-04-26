@@ -67,7 +67,7 @@ functions:
   applicant-new-grant-posted:
     handler: src/functions/applicant/NewGrantPosted.run
     timeout: 60
-    reservedConcurrency: 1
+    reservedConcurrency: 0
     events:
       - schedule: rate(10 minutes)
 

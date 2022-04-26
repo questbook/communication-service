@@ -7,7 +7,9 @@
   "scripts": {
     "generate-templates": "ts-node ./scripts/generate-templates.ts",
     "deploy-templates": "ts-node ./scripts/deploy-templates.ts",
-    "generate": "graphql-codegen --config codegen.yaml"
+    "generate": "graphql-codegen --config codegen.yaml",
+    "lint": "yarn eslint src --ext ts --cache",
+    "lint:fix": "yarn lint --fix || true"
   },
   "dependencies": {
     "@apollo/client": "^3.5.10",
@@ -26,6 +28,7 @@
     "react": "^17.0.2"
   },
   "devDependencies": {
+    "@creatoros/eslint-config": "git+https://github.com/creatoros/eslint-config",
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
     "@graphql-codegen/typescript": "^2.4.5",
