@@ -1,11 +1,11 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from '@apollo/client'
+import * as Apollo from '@apollo/client'
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions = {} as const;
+const defaultOptions = {} as const
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -3109,7 +3109,7 @@ export type OnMilestoneAcceptedQueryVariables = Exact<{
 }>;
 
 
-export type OnMilestoneAcceptedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string } } } }> };
+export type OnMilestoneAcceptedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } } }> };
 
 export type OnNewGrantPostedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -3149,7 +3149,7 @@ export type OnMilestoneUpdatedQueryVariables = Exact<{
 }>;
 
 
-export type OnMilestoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
+export type OnMilestoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
 
 
 export const OnApplicationAcceptDocument = gql`
@@ -3185,7 +3185,7 @@ export const OnApplicationAcceptDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnApplicationAcceptQuery__
@@ -3205,13 +3205,15 @@ export const OnApplicationAcceptDocument = gql`
  * });
  */
 export function useOnApplicationAcceptQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options)
+}
+
 export function useOnApplicationAcceptLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options)
+}
+
 export type OnApplicationAcceptQueryHookResult = ReturnType<typeof useOnApplicationAcceptQuery>;
 export type OnApplicationAcceptLazyQueryHookResult = ReturnType<typeof useOnApplicationAcceptLazyQuery>;
 export type OnApplicationAcceptQueryResult = Apollo.QueryResult<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>;
@@ -3248,7 +3250,7 @@ export const OnApplicationRejectDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnApplicationRejectQuery__
@@ -3268,13 +3270,15 @@ export const OnApplicationRejectDocument = gql`
  * });
  */
 export function useOnApplicationRejectQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options)
+}
+
 export function useOnApplicationRejectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options)
+}
+
 export type OnApplicationRejectQueryHookResult = ReturnType<typeof useOnApplicationRejectQuery>;
 export type OnApplicationRejectLazyQueryHookResult = ReturnType<typeof useOnApplicationRejectLazyQuery>;
 export type OnApplicationRejectQueryResult = Apollo.QueryResult<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>;
@@ -3307,7 +3311,7 @@ export const OnApplicationResubmitDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnApplicationResubmitQuery__
@@ -3327,13 +3331,15 @@ export const OnApplicationResubmitDocument = gql`
  * });
  */
 export function useOnApplicationResubmitQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options)
+}
+
 export function useOnApplicationResubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options)
+}
+
 export type OnApplicationResubmitQueryHookResult = ReturnType<typeof useOnApplicationResubmitQuery>;
 export type OnApplicationResubmitLazyQueryHookResult = ReturnType<typeof useOnApplicationResubmitLazyQuery>;
 export type OnApplicationResubmitQueryResult = Apollo.QueryResult<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>;
@@ -3367,7 +3373,7 @@ export const OnApplicationSubmitDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnApplicationSubmitQuery__
@@ -3387,13 +3393,15 @@ export const OnApplicationSubmitDocument = gql`
  * });
  */
 export function useOnApplicationSubmitQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options)
+}
+
 export function useOnApplicationSubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options)
+}
+
 export type OnApplicationSubmitQueryHookResult = ReturnType<typeof useOnApplicationSubmitQuery>;
 export type OnApplicationSubmitLazyQueryHookResult = ReturnType<typeof useOnApplicationSubmitLazyQuery>;
 export type OnApplicationSubmitQueryResult = Apollo.QueryResult<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>;
@@ -3431,7 +3439,7 @@ export const OnAskedToResubmitDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnAskedToResubmitQuery__
@@ -3451,13 +3459,15 @@ export const OnAskedToResubmitDocument = gql`
  * });
  */
 export function useOnAskedToResubmitQuery(baseOptions: Apollo.QueryHookOptions<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options)
+}
+
 export function useOnAskedToResubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options)
+}
+
 export type OnAskedToResubmitQueryHookResult = ReturnType<typeof useOnAskedToResubmitQuery>;
 export type OnAskedToResubmitLazyQueryHookResult = ReturnType<typeof useOnAskedToResubmitLazyQuery>;
 export type OnAskedToResubmitQueryResult = Apollo.QueryResult<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>;
@@ -3500,7 +3510,7 @@ export const OnFundsReceivedDocument = gql`
     amount
   }
 }
-    `;
+    `
 
 /**
  * __useOnFundsReceivedQuery__
@@ -3520,13 +3530,15 @@ export const OnFundsReceivedDocument = gql`
  * });
  */
 export function useOnFundsReceivedQuery(baseOptions: Apollo.QueryHookOptions<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options)
+}
+
 export function useOnFundsReceivedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options)
+}
+
 export type OnFundsReceivedQueryHookResult = ReturnType<typeof useOnFundsReceivedQuery>;
 export type OnFundsReceivedLazyQueryHookResult = ReturnType<typeof useOnFundsReceivedLazyQuery>;
 export type OnFundsReceivedQueryResult = Apollo.QueryResult<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>;
@@ -3554,6 +3566,7 @@ export const OnMilestoneAcceptedDocument = gql`
         }
       }
       grant {
+        title
         workspace {
           title
         }
@@ -3561,7 +3574,7 @@ export const OnMilestoneAcceptedDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnMilestoneAcceptedQuery__
@@ -3581,13 +3594,15 @@ export const OnMilestoneAcceptedDocument = gql`
  * });
  */
 export function useOnMilestoneAcceptedQuery(baseOptions: Apollo.QueryHookOptions<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options)
+}
+
 export function useOnMilestoneAcceptedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options)
+}
+
 export type OnMilestoneAcceptedQueryHookResult = ReturnType<typeof useOnMilestoneAcceptedQuery>;
 export type OnMilestoneAcceptedLazyQueryHookResult = ReturnType<typeof useOnMilestoneAcceptedLazyQuery>;
 export type OnMilestoneAcceptedQueryResult = Apollo.QueryResult<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>;
@@ -3617,7 +3632,7 @@ export const OnNewGrantPostedDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnNewGrantPostedQuery__
@@ -3637,13 +3652,15 @@ export const OnNewGrantPostedDocument = gql`
  * });
  */
 export function useOnNewGrantPostedQuery(baseOptions: Apollo.QueryHookOptions<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options)
+}
+
 export function useOnNewGrantPostedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options)
+}
+
 export type OnNewGrantPostedQueryHookResult = ReturnType<typeof useOnNewGrantPostedQuery>;
 export type OnNewGrantPostedLazyQueryHookResult = ReturnType<typeof useOnNewGrantPostedLazyQuery>;
 export type OnNewGrantPostedQueryResult = Apollo.QueryResult<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>;
@@ -3681,7 +3698,7 @@ export const OnApplicationResubmissionDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnApplicationResubmissionQuery__
@@ -3701,13 +3718,15 @@ export const OnApplicationResubmissionDocument = gql`
  * });
  */
 export function useOnApplicationResubmissionQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options)
+}
+
 export function useOnApplicationResubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options)
+}
+
 export type OnApplicationResubmissionQueryHookResult = ReturnType<typeof useOnApplicationResubmissionQuery>;
 export type OnApplicationResubmissionLazyQueryHookResult = ReturnType<typeof useOnApplicationResubmissionLazyQuery>;
 export type OnApplicationResubmissionQueryResult = Apollo.QueryResult<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>;
@@ -3745,7 +3764,7 @@ export const OnApplicationSubmissionDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnApplicationSubmissionQuery__
@@ -3765,13 +3784,15 @@ export const OnApplicationSubmissionDocument = gql`
  * });
  */
 export function useOnApplicationSubmissionQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options)
+}
+
 export function useOnApplicationSubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options)
+}
+
 export type OnApplicationSubmissionQueryHookResult = ReturnType<typeof useOnApplicationSubmissionQuery>;
 export type OnApplicationSubmissionLazyQueryHookResult = ReturnType<typeof useOnApplicationSubmissionLazyQuery>;
 export type OnApplicationSubmissionQueryResult = Apollo.QueryResult<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>;
@@ -3789,7 +3810,7 @@ export const OnInviteMemberDocument = gql`
     updatedAt
   }
 }
-    `;
+    `
 
 /**
  * __useOnInviteMemberQuery__
@@ -3809,13 +3830,15 @@ export const OnInviteMemberDocument = gql`
  * });
  */
 export function useOnInviteMemberQuery(baseOptions: Apollo.QueryHookOptions<OnInviteMemberQuery, OnInviteMemberQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options)
+}
+
 export function useOnInviteMemberLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnInviteMemberQuery, OnInviteMemberQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options)
+}
+
 export type OnInviteMemberQueryHookResult = ReturnType<typeof useOnInviteMemberQuery>;
 export type OnInviteMemberLazyQueryHookResult = ReturnType<typeof useOnInviteMemberLazyQuery>;
 export type OnInviteMemberQueryResult = Apollo.QueryResult<OnInviteMemberQuery, OnInviteMemberQueryVariables>;
@@ -3838,6 +3861,7 @@ export const OnMilestoneUpdatedDocument = gql`
         }
       }
       grant {
+        title
         workspace {
           title
           members(where: {accessLevel: admin, email_not: null}) {
@@ -3849,7 +3873,7 @@ export const OnMilestoneUpdatedDocument = gql`
     }
   }
 }
-    `;
+    `
 
 /**
  * __useOnMilestoneUpdatedQuery__
@@ -3869,13 +3893,15 @@ export const OnMilestoneUpdatedDocument = gql`
  * });
  */
 export function useOnMilestoneUpdatedQuery(baseOptions: Apollo.QueryHookOptions<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options);
-      }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options)
+}
+
 export function useOnMilestoneUpdatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options);
-        }
+	const options = { ...defaultOptions, ...baseOptions }
+	return Apollo.useLazyQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options)
+}
+
 export type OnMilestoneUpdatedQueryHookResult = ReturnType<typeof useOnMilestoneUpdatedQuery>;
 export type OnMilestoneUpdatedLazyQueryHookResult = ReturnType<typeof useOnMilestoneUpdatedLazyQuery>;
 export type OnMilestoneUpdatedQueryResult = Apollo.QueryResult<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>;

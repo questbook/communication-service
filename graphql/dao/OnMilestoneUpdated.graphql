@@ -20,6 +20,7 @@ query OnMilestoneUpdated($lowerLimit: Int!, $upperLimit: Int!) {
         }
       }
       grant {
+        title
         workspace {
           title
           members(where: { accessLevel: admin, email_not: null }) {

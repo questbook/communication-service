@@ -25,6 +25,7 @@ query OnMilestoneAccepted($lowerLimit: Int!, $upperLimit: Int!) {
         }
       }
       grant {
+        title
         workspace {
           title
         }

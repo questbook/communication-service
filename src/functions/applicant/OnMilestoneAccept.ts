@@ -49,6 +49,7 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 				cc: [],
 				replacementData: JSON.stringify({
 					applicantName: result.application.applicantName[0].values[0].value,
+					daoName: result.application.grant.workspace.title
 				}),
 			}
 			emailData.push(email)
@@ -63,6 +64,7 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 			TEMPLATE,
 			JSON.stringify({
 				applicantName: '',
+				daoName: '',
 			})
 		)
 

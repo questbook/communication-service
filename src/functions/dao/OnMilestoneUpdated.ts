@@ -50,6 +50,7 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 					projectName: result.application.projectName[0].values[0].value,
 					applicantName: result.application.applicantName[0].values[0].value,
 					daoName: result.application.grant.workspace.title,
+					grantName: result.application.grant.title,
 					link: getDomain(chainId) + `/your_grants/view_applicants/manage/?applicationId=${result.application.id}`
 				}),
 			}
@@ -67,6 +68,7 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 				projectName: '',
 				applicantName: '',
 				daoName: '',
+				grantName: '',
 				link: '',
 			})
 		)
