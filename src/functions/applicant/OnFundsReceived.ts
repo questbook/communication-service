@@ -83,19 +83,6 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 			})
 		)
 
-		console.log(emailResult.ResponseMetadata)
-
-		for(var i = 0; i < emailResult.Status.length; ++i) {
-			console.log({
-				chain: SupportedChainId[chainId],
-				from: fromTimestamp,
-				to: toTimestamp,
-				request: emailData[i],
-				response: emailResult.Status[i],
-			})
-			console.log('\n')
-		}
-
 		await setItem(getKey(chainId), toTimestamp)
 	}
 }
