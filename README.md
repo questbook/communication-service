@@ -47,10 +47,10 @@ This service is responsible for sending out emails and integrating all forms of 
 3. `src/functions/query.ts` - This file defines a helper function that executes a query on the subgraph. The `executeQuery` function executes a query to retrieve the data specific to a certain time-period (`fromTimestamp` to `toTimestamp`).
 
 4. `src/functions/dao/` - The functions in this folder define all the email triggers that will be received by a DAO admin.
-    
+
     a. `OnApplicationResubmission.ts` - Received by the DAO admins when an application is resubmitted.
 
-    b. `OnApplicationSubmission.ts` - Received by the DAO admins when an application is submitted. 
+    b. `OnApplicationSubmission.ts` - Received by the DAO admins when an application is submitted.
 
     c. `OnInviteMember.ts` - Received by the new member when they are invited to join a DAO.
 
