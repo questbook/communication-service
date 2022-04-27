@@ -1,0 +1,8 @@
+{
+    "Template": {
+        "TemplateName": "applicantOnApplicationAccept",
+        "SubjectPart": "{{daoName}} - Your application has been accepted",
+        "HtmlPart": "<p>Congratulations <b>{{applicantName}}</b>,</p> <p> <b>{{daoName}}</b> is impressed with your application and has accepted your grant application for the project <b>{{projectName}}</b>. <b>{{daoName}}</b> will keep you posted about the next steps. You can also view the updates on your application under the My Application section {{link}} <br /> <br />Best, <br />Team Questbook </p>",
+        "TextPart": "Congratulations {{applicantName}}, \n {{daoName}} is impressed with your application and has accepted your grant application for the project {{projectName}}. {{daoName}} will keep you posted about the next steps. You can also view the updates on your application under the My Application section {{link}} \n \nBest, \nTeam Questbook"
+    }
+}

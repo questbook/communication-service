@@ -1,0 +1,10 @@
+query OnInviteMember($lowerLimit: Int!, $upperLimit: Int!) {
+  workspaceMembers(subgraphError: allow, where: { updatedAt_gt: $lowerLimit, updatedAt_lte: $upperLimit, email_not: null }) {
+    email
+    workspace {
+      title
+    }
+    accessLevel
+    updatedAt
+  }
+}

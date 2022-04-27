@@ -83,33 +83,33 @@ export const CHAIN_INFO: ChainInfoMap = {
 		subgraphClientUrl: 'https://the-graph.questbook.app/subgraphs/name/qb-subgraph-harmonytest',
 		rpcUrls: ['https://api.s0.b.hmny.io'],
 	},
-	// [SupportedChainId.POLYGON_TESTNET]: {
-	//   id: SupportedChainId.POLYGON_TESTNET,
-	//   name: 'Polygon Testnet',
-	//   nativeCurrency: {
-	//     name: 'Matic Token',
-	//     symbol: 'MATIC',
-	//     decimals: 18,
-	//   },
-	//   explorer: {
-	//     address: 'https://mumbai.polygonscan.com/address/',
-	//     transactionHash: 'https://mumbai.polygonscan.com/tx/',
-	//   },
-	//   supportedCurrencies: {
-	//     '0x9c3c9283d3e44854697cd22d3faa240cfb032889': {
-	//       label: 'WMATIC',
-	//       address: '0x9c3c9283d3e44854697cd22d3faa240cfb032889',
-	//       decimals: 18,
-	//     },
-	//     '0xe6b8a5cf854791412c1f6efc7caf629f5df1c747': {
-	//       label: 'USDC',
-	//       address: '0xe6b8a5cf854791412c1f6efc7caf629f5df1c747',
-	//       decimals: 6,
-	//     },
-	//   },
-	//   subgraphClientUrl: 'https://the-graph.questbook.app/subgraphs/name/qb-subgraph-polygon-mumbai',
-	//   rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-	// },
+	[SupportedChainId.POLYGON_TESTNET]: {
+	  id: SupportedChainId.POLYGON_TESTNET,
+	  name: 'Polygon Testnet',
+	  nativeCurrency: {
+	    name: 'Matic Token',
+	    symbol: 'MATIC',
+	    decimals: 18,
+	  },
+	  explorer: {
+	    address: 'https://mumbai.polygonscan.com/address/',
+	    transactionHash: 'https://mumbai.polygonscan.com/tx/',
+	  },
+	  supportedCurrencies: {
+	    '0x9c3c9283d3e44854697cd22d3faa240cfb032889': {
+	      label: 'WMATIC',
+	      address: '0x9c3c9283d3e44854697cd22d3faa240cfb032889',
+	      decimals: 18,
+	    },
+	    '0xe6b8a5cf854791412c1f6efc7caf629f5df1c747': {
+	      label: 'USDC',
+	      address: '0xe6b8a5cf854791412c1f6efc7caf629f5df1c747',
+	      decimals: 6,
+	    },
+	  },
+	  subgraphClientUrl: 'https://the-graph.questbook.app/subgraphs/name/qb-subgraph-polygon-mumbai',
+	  rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+	},
 	// [SupportedChainId.POLYGON_MAINNET]: {
 	//   id: SupportedChainId.POLYGON_MAINNET,
 	//   name: 'Polygon Mainnet',

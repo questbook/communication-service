@@ -1,8 +1,0 @@
-{
-    "Template": {
-        "TemplateName": "applicant_FundsReceived",
-        "SubjectPart": "{{daoName}} - Awarding Grant Amount",
-        "HtmlPart": "<p>Congratulations <b>{{applicantName}}</b>!<br /><b>{{daoName}}</b> is impressed with your grant proposal and agreed to offer your project <b>{{projectName}}</b> a grant of {{grantAmount}}. We will keep you posted about the next steps and the grant disbursal. <br /> <br />In case you have any questions, please let us know or write to us. <br />{{daoName}} </p>",
-        "TextPart": "Congratulations {{applicantName}}!\n{{daoName}} is impressed with your grant proposal and agreed to offer your project {{projectName}} a grant of {{grantAmount}}. We will keep you posted about the next steps and the grant disbursal. \n \nIn case you have any questions, please let us know or write to us. \n{{daoName}}"
-    }
-}

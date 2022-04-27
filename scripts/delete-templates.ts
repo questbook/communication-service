@@ -18,13 +18,13 @@ const deploy = async() => {
 				)
 				const config = JSON.parse(fileData)
 				try {
-					const result = await ses.createTemplate(config).promise()
+					const result = await ses.deleteTemplate({ TemplateName: config.Template.TemplateName }).promise()
 					await new Promise(resolve => setTimeout(resolve, 1000))
 					console.log(file, result)
 				} catch(err) {
 					console.log(
 						config.Template.TemplateName,
-						': Template already exists'
+						': Could not delete template'
 					)
 				}
 			}

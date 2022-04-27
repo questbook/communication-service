@@ -2,16 +2,19 @@
 
 export default {
 	applicant: {
-		ApplicationReject: 'applicant_ApplicationReject',
-		ApplicationResubmit: 'applicant_ApplicationResubmit',
-		ApplicationSubmitted: 'applicant_ApplicationSubmitted',
-		FundsReceived: 'applicant_FundsReceived',
-		NewGrantPosted: 'applicant_NewGrantPosted',
+		OnApplicationAccept: 'applicantOnApplicationAccept',
+		OnApplicationReject: 'applicantOnApplicationReject',
+		OnApplicationResubmit: 'applicantOnApplicationResubmit',
+		OnApplicationSubmit: 'applicantOnApplicationSubmit',
+		OnAskedToResubmit: 'applicantOnAskedToResubmit',
+		OnFundsReceived: 'applicantOnFundsReceived',
+		OnMilestoneAccept: 'applicantOnMilestoneAccept',
+		OnNewGrantPosted: 'applicantOnNewGrantPosted',
 	},
 	dao: {
-		ApplicationReceived: 'dao_ApplicationReceived',
-		ApplicationResubmitted: 'dao_ApplicationResubmitted',
-		InviteMember: 'dao_InviteMember',
-		MilestoneUpdated: 'dao_MilestoneUpdated',
+		OnApplicationResubmission: 'daoOnApplicationResubmission',
+		OnApplicationSubmission: 'daoOnApplicationSubmission',
+		OnInviteMember: 'daoOnInviteMember',
+		OnMilestoneUpdated: 'daoOnMilestoneUpdated',
 	},
 }

@@ -3055,85 +3055,173 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type ApplicationRejectQueryVariables = Exact<{
+export type OnApplicationAcceptQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type ApplicationRejectQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationAcceptQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
-export type ApplicationResubmitQueryVariables = Exact<{
+export type OnApplicationRejectQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type ApplicationResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationRejectQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
-export type ApplicationSubmittedQueryVariables = Exact<{
+export type OnApplicationResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type ApplicationSubmittedQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string } } }> };
 
-export type FundsReceivedQueryVariables = Exact<{
+export type OnApplicationSubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type FundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, application?: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> }, reward: { __typename?: 'Reward', asset: string } } } | null }> };
+export type OnApplicationSubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } }> };
 
-export type NewGrantPostedQueryVariables = Exact<{
+export type OnAskedToResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type NewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
+export type OnAskedToResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
-export type ApplicationReceivedQueryVariables = Exact<{
+export type OnFundsReceivedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type ApplicationReceivedQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnFundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, application?: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> }, reward: { __typename?: 'Reward', asset: string } } } | null }> };
 
-export type ApplicationResubmittedQueryVariables = Exact<{
+export type OnMilestoneAcceptedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type ApplicationResubmittedQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnMilestoneAcceptedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string } } } }> };
 
-export type InvitedMemberQueryVariables = Exact<{
+export type OnNewGrantPostedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type InvitedMemberQuery = { __typename?: 'Query', workspaceMembers: Array<{ __typename?: 'WorkspaceMember', email?: string | null, accessLevel: WorkspaceMemberAccessLevel, updatedAt: number, workspace: { __typename?: 'Workspace', title: string } }> };
+export type OnNewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
 
-export type MiletoneUpdatedQueryVariables = Exact<{
+export type OnApplicationResubmissionQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
 
-export type MiletoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
+export type OnApplicationResubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+
+export type OnApplicationSubmissionQueryVariables = Exact<{
+  lowerLimit: Scalars['Int'];
+  upperLimit: Scalars['Int'];
+}>;
 
 
-export const ApplicationRejectDocument = gql`
-    query ApplicationReject($lowerLimit: Int!, $upperLimit: Int!) {
+export type OnApplicationSubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+
+export type OnInviteMemberQueryVariables = Exact<{
+  lowerLimit: Scalars['Int'];
+  upperLimit: Scalars['Int'];
+}>;
+
+
+export type OnInviteMemberQuery = { __typename?: 'Query', workspaceMembers: Array<{ __typename?: 'WorkspaceMember', email?: string | null, accessLevel: WorkspaceMemberAccessLevel, updatedAt: number, workspace: { __typename?: 'Workspace', title: string } }> };
+
+export type OnMilestoneUpdatedQueryVariables = Exact<{
+  lowerLimit: Scalars['Int'];
+  upperLimit: Scalars['Int'];
+}>;
+
+
+export type OnMilestoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
+
+
+export const OnApplicationAcceptDocument = gql`
+    query OnApplicationAccept($lowerLimit: Int!, $upperLimit: Int!) {
+  grantApplications(
+    subgraphError: allow
+    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: approved}
+  ) {
+    id
+    projectName: fields(where: {field_ends_with: "projectName"}) {
+      values {
+        value
+      }
+    }
+    applicantName: fields(where: {field_ends_with: "applicantName"}) {
+      values {
+        value
+      }
+    }
+    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
+      values {
+        value
+      }
+    }
+    grant {
+      workspace {
+        title
+        members(where: {accessLevel: admin, email_not: null}) {
+          email
+          actorId
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOnApplicationAcceptQuery__
+ *
+ * To run a query within a React component, call `useOnApplicationAcceptQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnApplicationAcceptQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnApplicationAcceptQuery({
+ *   variables: {
+ *      lowerLimit: // value for 'lowerLimit'
+ *      upperLimit: // value for 'upperLimit'
+ *   },
+ * });
+ */
+export function useOnApplicationAcceptQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options);
+      }
+export function useOnApplicationAcceptLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options);
+        }
+export type OnApplicationAcceptQueryHookResult = ReturnType<typeof useOnApplicationAcceptQuery>;
+export type OnApplicationAcceptLazyQueryHookResult = ReturnType<typeof useOnApplicationAcceptLazyQuery>;
+export type OnApplicationAcceptQueryResult = Apollo.QueryResult<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>;
+export const OnApplicationRejectDocument = gql`
+    query OnApplicationReject($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: rejected}
   ) {
+    id
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -3163,39 +3251,159 @@ export const ApplicationRejectDocument = gql`
     `;
 
 /**
- * __useApplicationRejectQuery__
+ * __useOnApplicationRejectQuery__
  *
- * To run a query within a React component, call `useApplicationRejectQuery` and pass it any options that fit your needs.
- * When your component renders, `useApplicationRejectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOnApplicationRejectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnApplicationRejectQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useApplicationRejectQuery({
+ * const { data, loading, error } = useOnApplicationRejectQuery({
  *   variables: {
  *      lowerLimit: // value for 'lowerLimit'
  *      upperLimit: // value for 'upperLimit'
  *   },
  * });
  */
-export function useApplicationRejectQuery(baseOptions: Apollo.QueryHookOptions<ApplicationRejectQuery, ApplicationRejectQueryVariables>) {
+export function useOnApplicationRejectQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ApplicationRejectQuery, ApplicationRejectQueryVariables>(ApplicationRejectDocument, options);
+        return Apollo.useQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options);
       }
-export function useApplicationRejectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ApplicationRejectQuery, ApplicationRejectQueryVariables>) {
+export function useOnApplicationRejectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ApplicationRejectQuery, ApplicationRejectQueryVariables>(ApplicationRejectDocument, options);
+          return Apollo.useLazyQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options);
         }
-export type ApplicationRejectQueryHookResult = ReturnType<typeof useApplicationRejectQuery>;
-export type ApplicationRejectLazyQueryHookResult = ReturnType<typeof useApplicationRejectLazyQuery>;
-export type ApplicationRejectQueryResult = Apollo.QueryResult<ApplicationRejectQuery, ApplicationRejectQueryVariables>;
-export const ApplicationResubmitDocument = gql`
-    query ApplicationResubmit($lowerLimit: Int!, $upperLimit: Int!) {
+export type OnApplicationRejectQueryHookResult = ReturnType<typeof useOnApplicationRejectQuery>;
+export type OnApplicationRejectLazyQueryHookResult = ReturnType<typeof useOnApplicationRejectLazyQuery>;
+export type OnApplicationRejectQueryResult = Apollo.QueryResult<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>;
+export const OnApplicationResubmitDocument = gql`
+    query OnApplicationResubmit($lowerLimit: Int!, $upperLimit: Int!) {
+  grantApplications(
+    subgraphError: allow
+    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version_gt: 1}
+  ) {
+    id
+    projectName: fields(where: {field_ends_with: "projectName"}) {
+      values {
+        value
+      }
+    }
+    applicantName: fields(where: {field_ends_with: "applicantName"}) {
+      values {
+        value
+      }
+    }
+    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
+      values {
+        value
+      }
+    }
+    grant {
+      workspace {
+        title
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOnApplicationResubmitQuery__
+ *
+ * To run a query within a React component, call `useOnApplicationResubmitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnApplicationResubmitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnApplicationResubmitQuery({
+ *   variables: {
+ *      lowerLimit: // value for 'lowerLimit'
+ *      upperLimit: // value for 'upperLimit'
+ *   },
+ * });
+ */
+export function useOnApplicationResubmitQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options);
+      }
+export function useOnApplicationResubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options);
+        }
+export type OnApplicationResubmitQueryHookResult = ReturnType<typeof useOnApplicationResubmitQuery>;
+export type OnApplicationResubmitLazyQueryHookResult = ReturnType<typeof useOnApplicationResubmitLazyQuery>;
+export type OnApplicationResubmitQueryResult = Apollo.QueryResult<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>;
+export const OnApplicationSubmitDocument = gql`
+    query OnApplicationSubmit($lowerLimit: Int!, $upperLimit: Int!) {
+  grantApplications(
+    subgraphError: allow
+    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version: 1}
+  ) {
+    id
+    projectName: fields(where: {field_ends_with: "projectName"}) {
+      values {
+        value
+      }
+    }
+    applicantName: fields(where: {field_ends_with: "applicantName"}) {
+      values {
+        value
+      }
+    }
+    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
+      values {
+        value
+      }
+    }
+    grant {
+      title
+      workspace {
+        title
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOnApplicationSubmitQuery__
+ *
+ * To run a query within a React component, call `useOnApplicationSubmitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnApplicationSubmitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnApplicationSubmitQuery({
+ *   variables: {
+ *      lowerLimit: // value for 'lowerLimit'
+ *      upperLimit: // value for 'upperLimit'
+ *   },
+ * });
+ */
+export function useOnApplicationSubmitQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options);
+      }
+export function useOnApplicationSubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options);
+        }
+export type OnApplicationSubmitQueryHookResult = ReturnType<typeof useOnApplicationSubmitQuery>;
+export type OnApplicationSubmitLazyQueryHookResult = ReturnType<typeof useOnApplicationSubmitLazyQuery>;
+export type OnApplicationSubmitQueryResult = Apollo.QueryResult<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>;
+export const OnAskedToResubmitDocument = gql`
+    query OnAskedToResubmit($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: resubmit}
   ) {
+    id
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -3226,98 +3434,35 @@ export const ApplicationResubmitDocument = gql`
     `;
 
 /**
- * __useApplicationResubmitQuery__
+ * __useOnAskedToResubmitQuery__
  *
- * To run a query within a React component, call `useApplicationResubmitQuery` and pass it any options that fit your needs.
- * When your component renders, `useApplicationResubmitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOnAskedToResubmitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnAskedToResubmitQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useApplicationResubmitQuery({
+ * const { data, loading, error } = useOnAskedToResubmitQuery({
  *   variables: {
  *      lowerLimit: // value for 'lowerLimit'
  *      upperLimit: // value for 'upperLimit'
  *   },
  * });
  */
-export function useApplicationResubmitQuery(baseOptions: Apollo.QueryHookOptions<ApplicationResubmitQuery, ApplicationResubmitQueryVariables>) {
+export function useOnAskedToResubmitQuery(baseOptions: Apollo.QueryHookOptions<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ApplicationResubmitQuery, ApplicationResubmitQueryVariables>(ApplicationResubmitDocument, options);
+        return Apollo.useQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options);
       }
-export function useApplicationResubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ApplicationResubmitQuery, ApplicationResubmitQueryVariables>) {
+export function useOnAskedToResubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ApplicationResubmitQuery, ApplicationResubmitQueryVariables>(ApplicationResubmitDocument, options);
+          return Apollo.useLazyQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options);
         }
-export type ApplicationResubmitQueryHookResult = ReturnType<typeof useApplicationResubmitQuery>;
-export type ApplicationResubmitLazyQueryHookResult = ReturnType<typeof useApplicationResubmitLazyQuery>;
-export type ApplicationResubmitQueryResult = Apollo.QueryResult<ApplicationResubmitQuery, ApplicationResubmitQueryVariables>;
-export const ApplicationSubmittedDocument = gql`
-    query ApplicationSubmitted($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted}
-  ) {
-    projectName: fields(where: {field_ends_with: "projectName"}) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: {field_ends_with: "applicantName"}) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
-      values {
-        value
-      }
-    }
-    grant {
-      title
-      workspace {
-        title
-        members(where: {accessLevel: admin, email_not: null}) {
-          email
-          actorId
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useApplicationSubmittedQuery__
- *
- * To run a query within a React component, call `useApplicationSubmittedQuery` and pass it any options that fit your needs.
- * When your component renders, `useApplicationSubmittedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useApplicationSubmittedQuery({
- *   variables: {
- *      lowerLimit: // value for 'lowerLimit'
- *      upperLimit: // value for 'upperLimit'
- *   },
- * });
- */
-export function useApplicationSubmittedQuery(baseOptions: Apollo.QueryHookOptions<ApplicationSubmittedQuery, ApplicationSubmittedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ApplicationSubmittedQuery, ApplicationSubmittedQueryVariables>(ApplicationSubmittedDocument, options);
-      }
-export function useApplicationSubmittedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ApplicationSubmittedQuery, ApplicationSubmittedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ApplicationSubmittedQuery, ApplicationSubmittedQueryVariables>(ApplicationSubmittedDocument, options);
-        }
-export type ApplicationSubmittedQueryHookResult = ReturnType<typeof useApplicationSubmittedQuery>;
-export type ApplicationSubmittedLazyQueryHookResult = ReturnType<typeof useApplicationSubmittedLazyQuery>;
-export type ApplicationSubmittedQueryResult = Apollo.QueryResult<ApplicationSubmittedQuery, ApplicationSubmittedQueryVariables>;
-export const FundsReceivedDocument = gql`
-    query FundsReceived($lowerLimit: Int!, $upperLimit: Int!) {
+export type OnAskedToResubmitQueryHookResult = ReturnType<typeof useOnAskedToResubmitQuery>;
+export type OnAskedToResubmitLazyQueryHookResult = ReturnType<typeof useOnAskedToResubmitLazyQuery>;
+export type OnAskedToResubmitQueryResult = Apollo.QueryResult<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>;
+export const OnFundsReceivedDocument = gql`
+    query OnFundsReceived($lowerLimit: Int!, $upperLimit: Int!) {
   fundsTransfers(
     where: {createdAtS_gt: $lowerLimit, createdAtS_lte: $upperLimit, type: funds_disbursed}
   ) {
@@ -3358,35 +3503,96 @@ export const FundsReceivedDocument = gql`
     `;
 
 /**
- * __useFundsReceivedQuery__
+ * __useOnFundsReceivedQuery__
  *
- * To run a query within a React component, call `useFundsReceivedQuery` and pass it any options that fit your needs.
- * When your component renders, `useFundsReceivedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOnFundsReceivedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnFundsReceivedQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFundsReceivedQuery({
+ * const { data, loading, error } = useOnFundsReceivedQuery({
  *   variables: {
  *      lowerLimit: // value for 'lowerLimit'
  *      upperLimit: // value for 'upperLimit'
  *   },
  * });
  */
-export function useFundsReceivedQuery(baseOptions: Apollo.QueryHookOptions<FundsReceivedQuery, FundsReceivedQueryVariables>) {
+export function useOnFundsReceivedQuery(baseOptions: Apollo.QueryHookOptions<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FundsReceivedQuery, FundsReceivedQueryVariables>(FundsReceivedDocument, options);
+        return Apollo.useQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options);
       }
-export function useFundsReceivedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundsReceivedQuery, FundsReceivedQueryVariables>) {
+export function useOnFundsReceivedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FundsReceivedQuery, FundsReceivedQueryVariables>(FundsReceivedDocument, options);
+          return Apollo.useLazyQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options);
         }
-export type FundsReceivedQueryHookResult = ReturnType<typeof useFundsReceivedQuery>;
-export type FundsReceivedLazyQueryHookResult = ReturnType<typeof useFundsReceivedLazyQuery>;
-export type FundsReceivedQueryResult = Apollo.QueryResult<FundsReceivedQuery, FundsReceivedQueryVariables>;
-export const NewGrantPostedDocument = gql`
-    query NewGrantPosted($lowerLimit: Int!, $upperLimit: Int!) {
+export type OnFundsReceivedQueryHookResult = ReturnType<typeof useOnFundsReceivedQuery>;
+export type OnFundsReceivedLazyQueryHookResult = ReturnType<typeof useOnFundsReceivedLazyQuery>;
+export type OnFundsReceivedQueryResult = Apollo.QueryResult<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>;
+export const OnMilestoneAcceptedDocument = gql`
+    query OnMilestoneAccepted($lowerLimit: Int!, $upperLimit: Int!) {
+  applicationMilestones(
+    subgraphError: allow
+    where: {state: approved, updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit}
+  ) {
+    application {
+      id
+      projectName: fields(where: {field_ends_with: "projectName"}) {
+        values {
+          value
+        }
+      }
+      applicantName: fields(where: {field_ends_with: "applicantName"}) {
+        values {
+          value
+        }
+      }
+      applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
+        values {
+          value
+        }
+      }
+      grant {
+        workspace {
+          title
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOnMilestoneAcceptedQuery__
+ *
+ * To run a query within a React component, call `useOnMilestoneAcceptedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnMilestoneAcceptedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnMilestoneAcceptedQuery({
+ *   variables: {
+ *      lowerLimit: // value for 'lowerLimit'
+ *      upperLimit: // value for 'upperLimit'
+ *   },
+ * });
+ */
+export function useOnMilestoneAcceptedQuery(baseOptions: Apollo.QueryHookOptions<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options);
+      }
+export function useOnMilestoneAcceptedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options);
+        }
+export type OnMilestoneAcceptedQueryHookResult = ReturnType<typeof useOnMilestoneAcceptedQuery>;
+export type OnMilestoneAcceptedLazyQueryHookResult = ReturnType<typeof useOnMilestoneAcceptedLazyQuery>;
+export type OnMilestoneAcceptedQueryResult = Apollo.QueryResult<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>;
+export const OnNewGrantPostedDocument = gql`
+    query OnNewGrantPosted($lowerLimit: Int!, $upperLimit: Int!) {
   grants(
     subgraphError: allow
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit}
@@ -3414,102 +3620,40 @@ export const NewGrantPostedDocument = gql`
     `;
 
 /**
- * __useNewGrantPostedQuery__
+ * __useOnNewGrantPostedQuery__
  *
- * To run a query within a React component, call `useNewGrantPostedQuery` and pass it any options that fit your needs.
- * When your component renders, `useNewGrantPostedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOnNewGrantPostedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnNewGrantPostedQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNewGrantPostedQuery({
+ * const { data, loading, error } = useOnNewGrantPostedQuery({
  *   variables: {
  *      lowerLimit: // value for 'lowerLimit'
  *      upperLimit: // value for 'upperLimit'
  *   },
  * });
  */
-export function useNewGrantPostedQuery(baseOptions: Apollo.QueryHookOptions<NewGrantPostedQuery, NewGrantPostedQueryVariables>) {
+export function useOnNewGrantPostedQuery(baseOptions: Apollo.QueryHookOptions<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<NewGrantPostedQuery, NewGrantPostedQueryVariables>(NewGrantPostedDocument, options);
+        return Apollo.useQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options);
       }
-export function useNewGrantPostedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewGrantPostedQuery, NewGrantPostedQueryVariables>) {
+export function useOnNewGrantPostedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<NewGrantPostedQuery, NewGrantPostedQueryVariables>(NewGrantPostedDocument, options);
+          return Apollo.useLazyQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options);
         }
-export type NewGrantPostedQueryHookResult = ReturnType<typeof useNewGrantPostedQuery>;
-export type NewGrantPostedLazyQueryHookResult = ReturnType<typeof useNewGrantPostedLazyQuery>;
-export type NewGrantPostedQueryResult = Apollo.QueryResult<NewGrantPostedQuery, NewGrantPostedQueryVariables>;
-export const ApplicationReceivedDocument = gql`
-    query ApplicationReceived($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version: 1}
-  ) {
-    projectName: fields(where: {field_ends_with: "projectName"}) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: {field_ends_with: "applicantName"}) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
-      values {
-        value
-      }
-    }
-    grant {
-      title
-      workspace {
-        title
-        members(where: {accessLevel: admin, email_not: null}) {
-          email
-          actorId
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useApplicationReceivedQuery__
- *
- * To run a query within a React component, call `useApplicationReceivedQuery` and pass it any options that fit your needs.
- * When your component renders, `useApplicationReceivedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useApplicationReceivedQuery({
- *   variables: {
- *      lowerLimit: // value for 'lowerLimit'
- *      upperLimit: // value for 'upperLimit'
- *   },
- * });
- */
-export function useApplicationReceivedQuery(baseOptions: Apollo.QueryHookOptions<ApplicationReceivedQuery, ApplicationReceivedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ApplicationReceivedQuery, ApplicationReceivedQueryVariables>(ApplicationReceivedDocument, options);
-      }
-export function useApplicationReceivedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ApplicationReceivedQuery, ApplicationReceivedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ApplicationReceivedQuery, ApplicationReceivedQueryVariables>(ApplicationReceivedDocument, options);
-        }
-export type ApplicationReceivedQueryHookResult = ReturnType<typeof useApplicationReceivedQuery>;
-export type ApplicationReceivedLazyQueryHookResult = ReturnType<typeof useApplicationReceivedLazyQuery>;
-export type ApplicationReceivedQueryResult = Apollo.QueryResult<ApplicationReceivedQuery, ApplicationReceivedQueryVariables>;
-export const ApplicationResubmittedDocument = gql`
-    query ApplicationResubmitted($lowerLimit: Int!, $upperLimit: Int!) {
+export type OnNewGrantPostedQueryHookResult = ReturnType<typeof useOnNewGrantPostedQuery>;
+export type OnNewGrantPostedLazyQueryHookResult = ReturnType<typeof useOnNewGrantPostedLazyQuery>;
+export type OnNewGrantPostedQueryResult = Apollo.QueryResult<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>;
+export const OnApplicationResubmissionDocument = gql`
+    query OnApplicationResubmission($lowerLimit: Int!, $upperLimit: Int!) {
   grantApplications(
     subgraphError: allow
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version_gt: 1}
   ) {
+    id
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -3540,35 +3684,99 @@ export const ApplicationResubmittedDocument = gql`
     `;
 
 /**
- * __useApplicationResubmittedQuery__
+ * __useOnApplicationResubmissionQuery__
  *
- * To run a query within a React component, call `useApplicationResubmittedQuery` and pass it any options that fit your needs.
- * When your component renders, `useApplicationResubmittedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOnApplicationResubmissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnApplicationResubmissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useApplicationResubmittedQuery({
+ * const { data, loading, error } = useOnApplicationResubmissionQuery({
  *   variables: {
  *      lowerLimit: // value for 'lowerLimit'
  *      upperLimit: // value for 'upperLimit'
  *   },
  * });
  */
-export function useApplicationResubmittedQuery(baseOptions: Apollo.QueryHookOptions<ApplicationResubmittedQuery, ApplicationResubmittedQueryVariables>) {
+export function useOnApplicationResubmissionQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ApplicationResubmittedQuery, ApplicationResubmittedQueryVariables>(ApplicationResubmittedDocument, options);
+        return Apollo.useQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options);
       }
-export function useApplicationResubmittedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ApplicationResubmittedQuery, ApplicationResubmittedQueryVariables>) {
+export function useOnApplicationResubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ApplicationResubmittedQuery, ApplicationResubmittedQueryVariables>(ApplicationResubmittedDocument, options);
+          return Apollo.useLazyQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options);
         }
-export type ApplicationResubmittedQueryHookResult = ReturnType<typeof useApplicationResubmittedQuery>;
-export type ApplicationResubmittedLazyQueryHookResult = ReturnType<typeof useApplicationResubmittedLazyQuery>;
-export type ApplicationResubmittedQueryResult = Apollo.QueryResult<ApplicationResubmittedQuery, ApplicationResubmittedQueryVariables>;
-export const InvitedMemberDocument = gql`
-    query InvitedMember($lowerLimit: Int!, $upperLimit: Int!) {
+export type OnApplicationResubmissionQueryHookResult = ReturnType<typeof useOnApplicationResubmissionQuery>;
+export type OnApplicationResubmissionLazyQueryHookResult = ReturnType<typeof useOnApplicationResubmissionLazyQuery>;
+export type OnApplicationResubmissionQueryResult = Apollo.QueryResult<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>;
+export const OnApplicationSubmissionDocument = gql`
+    query OnApplicationSubmission($lowerLimit: Int!, $upperLimit: Int!) {
+  grantApplications(
+    subgraphError: allow
+    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version: 1}
+  ) {
+    id
+    projectName: fields(where: {field_ends_with: "projectName"}) {
+      values {
+        value
+      }
+    }
+    applicantName: fields(where: {field_ends_with: "applicantName"}) {
+      values {
+        value
+      }
+    }
+    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
+      values {
+        value
+      }
+    }
+    grant {
+      title
+      workspace {
+        title
+        members(where: {accessLevel: admin, email_not: null}) {
+          email
+          actorId
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOnApplicationSubmissionQuery__
+ *
+ * To run a query within a React component, call `useOnApplicationSubmissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnApplicationSubmissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnApplicationSubmissionQuery({
+ *   variables: {
+ *      lowerLimit: // value for 'lowerLimit'
+ *      upperLimit: // value for 'upperLimit'
+ *   },
+ * });
+ */
+export function useOnApplicationSubmissionQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options);
+      }
+export function useOnApplicationSubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options);
+        }
+export type OnApplicationSubmissionQueryHookResult = ReturnType<typeof useOnApplicationSubmissionQuery>;
+export type OnApplicationSubmissionLazyQueryHookResult = ReturnType<typeof useOnApplicationSubmissionLazyQuery>;
+export type OnApplicationSubmissionQueryResult = Apollo.QueryResult<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>;
+export const OnInviteMemberDocument = gql`
+    query OnInviteMember($lowerLimit: Int!, $upperLimit: Int!) {
   workspaceMembers(
     subgraphError: allow
     where: {updatedAt_gt: $lowerLimit, updatedAt_lte: $upperLimit, email_not: null}
@@ -3584,40 +3792,41 @@ export const InvitedMemberDocument = gql`
     `;
 
 /**
- * __useInvitedMemberQuery__
+ * __useOnInviteMemberQuery__
  *
- * To run a query within a React component, call `useInvitedMemberQuery` and pass it any options that fit your needs.
- * When your component renders, `useInvitedMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOnInviteMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnInviteMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useInvitedMemberQuery({
+ * const { data, loading, error } = useOnInviteMemberQuery({
  *   variables: {
  *      lowerLimit: // value for 'lowerLimit'
  *      upperLimit: // value for 'upperLimit'
  *   },
  * });
  */
-export function useInvitedMemberQuery(baseOptions: Apollo.QueryHookOptions<InvitedMemberQuery, InvitedMemberQueryVariables>) {
+export function useOnInviteMemberQuery(baseOptions: Apollo.QueryHookOptions<OnInviteMemberQuery, OnInviteMemberQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<InvitedMemberQuery, InvitedMemberQueryVariables>(InvitedMemberDocument, options);
+        return Apollo.useQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options);
       }
-export function useInvitedMemberLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InvitedMemberQuery, InvitedMemberQueryVariables>) {
+export function useOnInviteMemberLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnInviteMemberQuery, OnInviteMemberQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<InvitedMemberQuery, InvitedMemberQueryVariables>(InvitedMemberDocument, options);
+          return Apollo.useLazyQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options);
         }
-export type InvitedMemberQueryHookResult = ReturnType<typeof useInvitedMemberQuery>;
-export type InvitedMemberLazyQueryHookResult = ReturnType<typeof useInvitedMemberLazyQuery>;
-export type InvitedMemberQueryResult = Apollo.QueryResult<InvitedMemberQuery, InvitedMemberQueryVariables>;
-export const MiletoneUpdatedDocument = gql`
-    query MiletoneUpdated($lowerLimit: Int!, $upperLimit: Int!) {
+export type OnInviteMemberQueryHookResult = ReturnType<typeof useOnInviteMemberQuery>;
+export type OnInviteMemberLazyQueryHookResult = ReturnType<typeof useOnInviteMemberLazyQuery>;
+export type OnInviteMemberQueryResult = Apollo.QueryResult<OnInviteMemberQuery, OnInviteMemberQueryVariables>;
+export const OnMilestoneUpdatedDocument = gql`
+    query OnMilestoneUpdated($lowerLimit: Int!, $upperLimit: Int!) {
   applicationMilestones(
     subgraphError: allow
     where: {state: requested, updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit}
   ) {
     application {
+      id
       projectName: fields(where: {field_ends_with: "projectName"}) {
         values {
           value
@@ -3643,30 +3852,30 @@ export const MiletoneUpdatedDocument = gql`
     `;
 
 /**
- * __useMiletoneUpdatedQuery__
+ * __useOnMilestoneUpdatedQuery__
  *
- * To run a query within a React component, call `useMiletoneUpdatedQuery` and pass it any options that fit your needs.
- * When your component renders, `useMiletoneUpdatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOnMilestoneUpdatedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnMilestoneUpdatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMiletoneUpdatedQuery({
+ * const { data, loading, error } = useOnMilestoneUpdatedQuery({
  *   variables: {
  *      lowerLimit: // value for 'lowerLimit'
  *      upperLimit: // value for 'upperLimit'
  *   },
  * });
  */
-export function useMiletoneUpdatedQuery(baseOptions: Apollo.QueryHookOptions<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>) {
+export function useOnMilestoneUpdatedQuery(baseOptions: Apollo.QueryHookOptions<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>(MiletoneUpdatedDocument, options);
+        return Apollo.useQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options);
       }
-export function useMiletoneUpdatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>) {
+export function useOnMilestoneUpdatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>(MiletoneUpdatedDocument, options);
+          return Apollo.useLazyQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options);
         }
-export type MiletoneUpdatedQueryHookResult = ReturnType<typeof useMiletoneUpdatedQuery>;
-export type MiletoneUpdatedLazyQueryHookResult = ReturnType<typeof useMiletoneUpdatedLazyQuery>;
-export type MiletoneUpdatedQueryResult = Apollo.QueryResult<MiletoneUpdatedQuery, MiletoneUpdatedQueryVariables>;
+export type OnMilestoneUpdatedQueryHookResult = ReturnType<typeof useOnMilestoneUpdatedQuery>;
+export type OnMilestoneUpdatedLazyQueryHookResult = ReturnType<typeof useOnMilestoneUpdatedLazyQuery>;
+export type OnMilestoneUpdatedQueryResult = Apollo.QueryResult<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>;
