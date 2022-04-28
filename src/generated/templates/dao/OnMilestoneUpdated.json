@@ -1,0 +1,8 @@
+{
+    "Template": {
+        "TemplateName": "daoOnMilestoneUpdated",
+        "SubjectPart": "{{grantName}} - Milestone update for {{projectName}}",
+        "HtmlPart": "<p>Hi <b>{{daoName}}</b>,</p> <p> <b>{{applicantName}}</b> has updated the milestone progress for the project <b>{{projectName}}</b>. You can view the updates at {{link}} <br /> <br />Best, <br />Team Questbook </p>",
+        "TextPart": "Hi {{daoName}}, \n {{applicantName}} has updated the milestone progress for the project {{projectName}}. You can view the updates at {{link}} \n \nBest, \nTeam Questbook"
+    }
+}

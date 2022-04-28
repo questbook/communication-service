@@ -7,6 +7,7 @@
   "scripts": {
     "generate-templates": "ts-node ./scripts/generate-templates.ts",
     "deploy-templates": "ts-node ./scripts/deploy-templates.ts",
+    "delete-templates": "ts-node ./scripts/delete-templates.ts",
     "generate": "graphql-codegen --config codegen.yaml",
     "lint": "yarn eslint src --ext ts --cache",
     "lint:fix": "yarn lint --fix || true"

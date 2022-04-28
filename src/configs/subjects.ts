@@ -1,16 +1,19 @@
 const subjects = {
 	applicant: {
-		ApplicationReject: '{{daoName}} - Your application has been rejected',
-		ApplicationResubmit: '{{daoName}} - Request to resubmit your application',
-		ApplicationSubmitted: '{{daoName}} - Your application is under review',
-		FundsReceived: '{{daoName}} - Awarding Grant Amount',
-		NewGrantPosted: '{{daoName}} - Inviting applications for {{grantName}}',
+		OnApplicationAccept: '{{daoName}} - Your application has been accepted',
+		OnApplicationReject: '{{daoName}} - Your application has been rejected',
+		OnApplicationResubmit: '{{daoName}} - Your application has been resubmitted',
+		OnApplicationSubmit: '{{daoName}} - Your application is under review',
+		OnAskedToResubmit: '{{daoName}} - Request to resubmit your application',
+		OnFundsReceived: '{{daoName}} - Awarding Grant Amount',
+		OnMilestoneAccept: '{{daoName}} - Milestone Submission accepted',
+		OnNewGrantPosted: '{{daoName}} - Inviting applications for {{grantName}}',
 	},
 	dao: {
-		ApplicationReceived: '{{grantName}}: New submission as {{projectName}}',
-		ApplicationResubmitted: '{{grantName}}: Resubmission as {{projectName}}',
-		InviteMember: '{{daoName}}: Invitation to join Grants DAO',
-		MilestoneUpdated: '{{grantName}} - Milestone update for {{projectName}}',
+		OnApplicationSubmission: '{{grantName}}: New submission as {{projectName}}',
+		OnApplicationResubmission: '{{grantName}}: Resubmission as {{projectName}}',
+		OnInviteMember: '{{daoName}}: Invitation to join Grants DAO',
+		OnMilestoneUpdated: '{{grantName}} - Milestone update for {{projectName}}',
 	}
 }
 

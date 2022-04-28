@@ -14,7 +14,7 @@ async function sendEmails(data: EmailData[], templateName: string, defaultTempla
 			},
 			ReplacementTemplateData: item.replacementData,
 		})),
-		Source: 'Questbook <questbook.app@gmail.com>' /* required */,
+		Source: 'Questbook <contact@questbook.app>' /* required */,
 		Template: templateName /* required */,
 		DefaultTemplateData: defaultTemplateData,
 		ReplyToAddresses: [],

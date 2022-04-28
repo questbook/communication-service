@@ -1,0 +1,8 @@
+{
+    "Template": {
+        "TemplateName": "applicantOnAskedToResubmit",
+        "SubjectPart": "{{daoName}} - Request to resubmit your application",
+        "HtmlPart": "<p>Hi <b>{{applicantName}}</b>,</p> <p> <b>{{daoName}}</b> has reviewed your grant application and has requested to resubmit your application for the project <b>{{projectName}}</b>. You can view the reasons for resubmission on {{link}}. <br /> <br />Best, <br />Team Questbook </p>",
+        "TextPart": "Hi {{applicantName}}, \n {{daoName}} has reviewed your grant application and has requested to resubmit your application for the project {{projectName}}. You can view the reasons for resubmission on {{link}}. \n \nBest, \nTeam Questbook"
+    }
+}
