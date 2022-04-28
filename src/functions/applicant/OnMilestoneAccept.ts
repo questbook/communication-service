@@ -14,6 +14,7 @@ import {
 	OnMilestoneAcceptedDocument,
 	OnMilestoneAcceptedQuery, } from '../../generated/graphql'
 import templateNames from '../../generated/templateNames'
+import getDomain from '../../utils/linkUtils'
 import { getItem, setItem } from '../db'
 import sendEmails from '../email'
 import executeQuery from '../query'
@@ -49,7 +50,9 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 				cc: [],
 				replacementData: JSON.stringify({
 					applicantName: result.application.applicantName[0].values[0].value,
-					daoName: result.application.grant.workspace.title
+					daoName: result.application.grant.workspace.title,
+					projectName: result.application.projectName[0].values[0].value,
+					link: getDomain(chainId) + `/your_applications/manage_grant/?applicationId=${result.application.id}&chainId=${chainId}`
 				}),
 			}
 			emailData.push(email)
@@ -65,6 +68,8 @@ export const run = async(event: APIGatewayProxyEvent, context: Context) => {
 			JSON.stringify({
 				applicantName: '',
 				daoName: '',
+				projectName: '',
+				link: '',
 			})
 		)
 
