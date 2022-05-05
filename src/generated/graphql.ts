@@ -1,11 +1,12 @@
-import { gql } from '@apollo/client'
-import * as Apollo from '@apollo/client'
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions = {} as const
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -167,7 +168,7 @@ export enum ApplicationMilestone_OrderBy {
   Id = 'id',
   State = 'state',
   Title = 'title',
-  UpdatedAtS = 'updatedAtS'
+  UpdatedAtS = 'updatedAtS',
 }
 
 export enum ApplicationState {
@@ -175,7 +176,7 @@ export enum ApplicationState {
   Completed = 'completed',
   Rejected = 'rejected',
   Resubmit = 'resubmit',
-  Submitted = 'submitted'
+  Submitted = 'submitted',
 }
 
 /** The block at which the query should be executed. */
@@ -218,7 +219,7 @@ export type FundsTransfer = {
 export enum FundsTransferType {
   FundsDeposited = 'funds_deposited',
   FundsDisbursed = 'funds_disbursed',
-  FundsWithdrawn = 'funds_withdrawn'
+  FundsWithdrawn = 'funds_withdrawn',
 }
 
 export type FundsTransfer_Filter = {
@@ -333,7 +334,7 @@ export enum FundsTransfer_OrderBy {
   Milestone = 'milestone',
   Sender = 'sender',
   To = 'to',
-  Type = 'type'
+  Type = 'type',
 }
 
 export type Grant = {
@@ -373,7 +374,6 @@ export type Grant = {
   workspace: Workspace;
 };
 
-
 export type GrantApplicationsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GrantApplication_OrderBy>;
@@ -382,7 +382,6 @@ export type GrantApplicationsArgs = {
   where?: InputMaybe<GrantApplication_Filter>;
 };
 
-
 export type GrantFieldsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GrantField_OrderBy>;
@@ -390,7 +389,6 @@ export type GrantFieldsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GrantField_Filter>;
 };
-
 
 export type GrantManagersArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -431,7 +429,6 @@ export type GrantApplication = {
   version: Scalars['Int'];
 };
 
-
 export type GrantApplicationFieldsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GrantFieldAnswer_OrderBy>;
@@ -439,7 +436,6 @@ export type GrantApplicationFieldsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GrantFieldAnswer_Filter>;
 };
-
 
 export type GrantApplicationMilestonesArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -449,7 +445,6 @@ export type GrantApplicationMilestonesArgs = {
   where?: InputMaybe<ApplicationMilestone_Filter>;
 };
 
-
 export type GrantApplicationPiiArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<PiiAnswer_OrderBy>;
@@ -458,7 +453,6 @@ export type GrantApplicationPiiArgs = {
   where?: InputMaybe<PiiAnswer_Filter>;
 };
 
-
 export type GrantApplicationReviewersArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<WorkspaceMember_OrderBy>;
@@ -466,7 +460,6 @@ export type GrantApplicationReviewersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<WorkspaceMember_Filter>;
 };
-
 
 export type GrantApplicationReviewsArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -499,7 +492,6 @@ export type GrantApplicationRevision = {
   version: Scalars['Int'];
 };
 
-
 /** A revision after an update */
 export type GrantApplicationRevisionFieldsArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -508,7 +500,6 @@ export type GrantApplicationRevisionFieldsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GrantFieldAnswer_Filter>;
 };
-
 
 /** A revision after an update */
 export type GrantApplicationRevisionMilestonesArgs = {
@@ -638,7 +629,7 @@ export enum GrantApplicationRevision_OrderBy {
   Id = 'id',
   Milestones = 'milestones',
   State = 'state',
-  Version = 'version'
+  Version = 'version',
 }
 
 export type GrantApplication_Filter = {
@@ -784,7 +775,7 @@ export enum GrantApplication_OrderBy {
   Reviews = 'reviews',
   State = 'state',
   UpdatedAtS = 'updatedAtS',
-  Version = 'version'
+  Version = 'version',
 }
 
 export type GrantField = {
@@ -802,7 +793,6 @@ export type GrantFieldAnswer = {
   id: Scalars['ID'];
   values: Array<GrantFieldAnswerItem>;
 };
-
 
 export type GrantFieldAnswerValuesArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -881,7 +871,7 @@ export enum GrantFieldAnswerItem_OrderBy {
   Answer = 'answer',
   Id = 'id',
   Value = 'value',
-  WalletId = 'walletId'
+  WalletId = 'walletId',
 }
 
 export type GrantFieldAnswer_Filter = {
@@ -918,14 +908,14 @@ export type GrantFieldAnswer_Filter = {
 export enum GrantFieldAnswer_OrderBy {
   Field = 'field',
   Id = 'id',
-  Values = 'values'
+  Values = 'values',
 }
 
 export enum GrantFieldInputType {
   Array = 'array',
   LongForm = 'long_form',
   Numeric = 'numeric',
-  ShortForm = 'short_form'
+  ShortForm = 'short_form',
 }
 
 export type GrantField_Filter = {
@@ -978,7 +968,7 @@ export enum GrantField_OrderBy {
   InputType = 'inputType',
   IsPii = 'isPii',
   PossibleValues = 'possibleValues',
-  Title = 'title'
+  Title = 'title',
 }
 
 export type GrantManager = {
@@ -1045,7 +1035,7 @@ export type GrantManager_Filter = {
 export enum GrantManager_OrderBy {
   Grant = 'grant',
   Id = 'id',
-  Member = 'member'
+  Member = 'member',
 }
 
 export type Grant_Filter = {
@@ -1291,13 +1281,13 @@ export enum Grant_OrderBy {
   Summary = 'summary',
   Title = 'title',
   UpdatedAtS = 'updatedAtS',
-  Workspace = 'workspace'
+  Workspace = 'workspace',
 }
 
 export enum MilestoneState {
   Approved = 'approved',
   Requested = 'requested',
-  Submitted = 'submitted'
+  Submitted = 'submitted',
 }
 
 export type Notification = {
@@ -1329,7 +1319,7 @@ export enum NotificationType {
   FundsWithdrawn = 'funds_withdrawn',
   MilestoneAccepted = 'milestone_accepted',
   MilestoneRejected = 'milestone_rejected',
-  MilestoneRequested = 'milestone_requested'
+  MilestoneRequested = 'milestone_requested',
 }
 
 export type Notification_Filter = {
@@ -1447,13 +1437,13 @@ export enum Notification_OrderBy {
   Id = 'id',
   RecipientIds = 'recipientIds',
   Title = 'title',
-  Type = 'type'
+  Type = 'type',
 }
 
 /** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
   Asc = 'asc',
-  Desc = 'desc'
+  Desc = 'desc',
 }
 
 export type PiiAnswer = {
@@ -1519,7 +1509,7 @@ export type PiiAnswer_Filter = {
 export enum PiiAnswer_OrderBy {
   Data = 'data',
   Id = 'id',
-  Manager = 'manager'
+  Manager = 'manager',
 }
 
 export type Query = {
@@ -1564,18 +1554,15 @@ export type Query = {
   workspaces: Array<Workspace>;
 };
 
-
 export type Query_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
-
 
 export type QueryApplicationMilestoneArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryApplicationMilestonesArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1587,13 +1574,11 @@ export type QueryApplicationMilestonesArgs = {
   where?: InputMaybe<ApplicationMilestone_Filter>;
 };
 
-
 export type QueryFundsTransferArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryFundsTransfersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1605,13 +1590,11 @@ export type QueryFundsTransfersArgs = {
   where?: InputMaybe<FundsTransfer_Filter>;
 };
 
-
 export type QueryGrantArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryGrantApplicationArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1619,13 +1602,11 @@ export type QueryGrantApplicationArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type QueryGrantApplicationRevisionArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryGrantApplicationRevisionsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1637,7 +1618,6 @@ export type QueryGrantApplicationRevisionsArgs = {
   where?: InputMaybe<GrantApplicationRevision_Filter>;
 };
 
-
 export type QueryGrantApplicationsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1648,13 +1628,11 @@ export type QueryGrantApplicationsArgs = {
   where?: InputMaybe<GrantApplication_Filter>;
 };
 
-
 export type QueryGrantFieldArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryGrantFieldAnswerArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1662,13 +1640,11 @@ export type QueryGrantFieldAnswerArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type QueryGrantFieldAnswerItemArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryGrantFieldAnswerItemsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1680,7 +1656,6 @@ export type QueryGrantFieldAnswerItemsArgs = {
   where?: InputMaybe<GrantFieldAnswerItem_Filter>;
 };
 
-
 export type QueryGrantFieldAnswersArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1690,7 +1665,6 @@ export type QueryGrantFieldAnswersArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<GrantFieldAnswer_Filter>;
 };
-
 
 export type QueryGrantFieldsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1702,13 +1676,11 @@ export type QueryGrantFieldsArgs = {
   where?: InputMaybe<GrantField_Filter>;
 };
 
-
 export type QueryGrantManagerArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryGrantManagersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1720,7 +1692,6 @@ export type QueryGrantManagersArgs = {
   where?: InputMaybe<GrantManager_Filter>;
 };
 
-
 export type QueryGrantsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1731,13 +1702,11 @@ export type QueryGrantsArgs = {
   where?: InputMaybe<Grant_Filter>;
 };
 
-
 export type QueryNotificationArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryNotificationsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1749,13 +1718,11 @@ export type QueryNotificationsArgs = {
   where?: InputMaybe<Notification_Filter>;
 };
 
-
 export type QueryPiianswerArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryPiianswersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1767,13 +1734,11 @@ export type QueryPiianswersArgs = {
   where?: InputMaybe<PiiAnswer_Filter>;
 };
 
-
 export type QueryReviewArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryReviewsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1785,13 +1750,11 @@ export type QueryReviewsArgs = {
   where?: InputMaybe<Review_Filter>;
 };
 
-
 export type QueryRewardArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryRewardsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1803,20 +1766,17 @@ export type QueryRewardsArgs = {
   where?: InputMaybe<Reward_Filter>;
 };
 
-
 export type QueryRubricArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type QueryRubricItemArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryRubricItemsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1828,7 +1788,6 @@ export type QueryRubricItemsArgs = {
   where?: InputMaybe<RubricItem_Filter>;
 };
 
-
 export type QueryRubricsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1839,13 +1798,11 @@ export type QueryRubricsArgs = {
   where?: InputMaybe<Rubric_Filter>;
 };
 
-
 export type QuerySocialArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QuerySocialsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1857,20 +1814,17 @@ export type QuerySocialsArgs = {
   where?: InputMaybe<Social_Filter>;
 };
 
-
 export type QueryWorkspaceArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type QueryWorkspaceMemberArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type QueryWorkspaceMembersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1881,7 +1835,6 @@ export type QueryWorkspaceMembersArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<WorkspaceMember_Filter>;
 };
-
 
 export type QueryWorkspacesArgs = {
   block?: InputMaybe<Block_Height>;
@@ -1909,7 +1862,6 @@ export type Review = {
   /** ID of the reviewer */
   reviewerId: Scalars['String'];
 };
-
 
 export type ReviewDataArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -2031,7 +1983,7 @@ export enum Review_OrderBy {
   Id = 'id',
   PublicReviewDataHash = 'publicReviewDataHash',
   Reviewer = 'reviewer',
-  ReviewerId = 'reviewerId'
+  ReviewerId = 'reviewerId',
 }
 
 export type Reward = {
@@ -2069,7 +2021,7 @@ export type Reward_Filter = {
 export enum Reward_OrderBy {
   Asset = 'asset',
   Committed = 'committed',
-  Id = 'id'
+  Id = 'id',
 }
 
 export type Rubric = {
@@ -2085,7 +2037,6 @@ export type Rubric = {
   /** Unix timestamp of when the rubric was updated */
   updatedAtS: Scalars['Int'];
 };
-
 
 export type RubricItemsArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -2166,7 +2117,7 @@ export enum RubricItem_OrderBy {
   Details = 'details',
   Id = 'id',
   MaximumPoints = 'maximumPoints',
-  Title = 'title'
+  Title = 'title',
 }
 
 export type Rubric_Filter = {
@@ -2232,7 +2183,7 @@ export enum Rubric_OrderBy {
   Id = 'id',
   IsPrivate = 'isPrivate',
   Items = 'items',
-  UpdatedAtS = 'updatedAtS'
+  UpdatedAtS = 'updatedAtS',
 }
 
 export type Social = {
@@ -2298,7 +2249,7 @@ export type Social_Filter = {
 export enum Social_OrderBy {
   Id = 'id',
   Name = 'name',
-  Value = 'value'
+  Value = 'value',
 }
 
 export type Subscription = {
@@ -2343,18 +2294,15 @@ export type Subscription = {
   workspaces: Array<Workspace>;
 };
 
-
 export type Subscription_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
-
 
 export type SubscriptionApplicationMilestoneArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionApplicationMilestonesArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2366,13 +2314,11 @@ export type SubscriptionApplicationMilestonesArgs = {
   where?: InputMaybe<ApplicationMilestone_Filter>;
 };
 
-
 export type SubscriptionFundsTransferArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionFundsTransfersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2384,13 +2330,11 @@ export type SubscriptionFundsTransfersArgs = {
   where?: InputMaybe<FundsTransfer_Filter>;
 };
 
-
 export type SubscriptionGrantArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionGrantApplicationArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2398,13 +2342,11 @@ export type SubscriptionGrantApplicationArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type SubscriptionGrantApplicationRevisionArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionGrantApplicationRevisionsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2416,7 +2358,6 @@ export type SubscriptionGrantApplicationRevisionsArgs = {
   where?: InputMaybe<GrantApplicationRevision_Filter>;
 };
 
-
 export type SubscriptionGrantApplicationsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2427,13 +2368,11 @@ export type SubscriptionGrantApplicationsArgs = {
   where?: InputMaybe<GrantApplication_Filter>;
 };
 
-
 export type SubscriptionGrantFieldArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionGrantFieldAnswerArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2441,13 +2380,11 @@ export type SubscriptionGrantFieldAnswerArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type SubscriptionGrantFieldAnswerItemArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionGrantFieldAnswerItemsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2459,7 +2396,6 @@ export type SubscriptionGrantFieldAnswerItemsArgs = {
   where?: InputMaybe<GrantFieldAnswerItem_Filter>;
 };
 
-
 export type SubscriptionGrantFieldAnswersArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2469,7 +2405,6 @@ export type SubscriptionGrantFieldAnswersArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<GrantFieldAnswer_Filter>;
 };
-
 
 export type SubscriptionGrantFieldsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2481,13 +2416,11 @@ export type SubscriptionGrantFieldsArgs = {
   where?: InputMaybe<GrantField_Filter>;
 };
 
-
 export type SubscriptionGrantManagerArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionGrantManagersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2499,7 +2432,6 @@ export type SubscriptionGrantManagersArgs = {
   where?: InputMaybe<GrantManager_Filter>;
 };
 
-
 export type SubscriptionGrantsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2510,13 +2442,11 @@ export type SubscriptionGrantsArgs = {
   where?: InputMaybe<Grant_Filter>;
 };
 
-
 export type SubscriptionNotificationArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionNotificationsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2528,13 +2458,11 @@ export type SubscriptionNotificationsArgs = {
   where?: InputMaybe<Notification_Filter>;
 };
 
-
 export type SubscriptionPiianswerArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionPiianswersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2546,13 +2474,11 @@ export type SubscriptionPiianswersArgs = {
   where?: InputMaybe<PiiAnswer_Filter>;
 };
 
-
 export type SubscriptionReviewArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionReviewsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2564,13 +2490,11 @@ export type SubscriptionReviewsArgs = {
   where?: InputMaybe<Review_Filter>;
 };
 
-
 export type SubscriptionRewardArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionRewardsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2582,20 +2506,17 @@ export type SubscriptionRewardsArgs = {
   where?: InputMaybe<Reward_Filter>;
 };
 
-
 export type SubscriptionRubricArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type SubscriptionRubricItemArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionRubricItemsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2607,7 +2528,6 @@ export type SubscriptionRubricItemsArgs = {
   where?: InputMaybe<RubricItem_Filter>;
 };
 
-
 export type SubscriptionRubricsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2618,13 +2538,11 @@ export type SubscriptionRubricsArgs = {
   where?: InputMaybe<Rubric_Filter>;
 };
 
-
 export type SubscriptionSocialArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionSocialsArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2636,20 +2554,17 @@ export type SubscriptionSocialsArgs = {
   where?: InputMaybe<Social_Filter>;
 };
 
-
 export type SubscriptionWorkspaceArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-
 export type SubscriptionWorkspaceMemberArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
-
 
 export type SubscriptionWorkspaceMembersArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2660,7 +2575,6 @@ export type SubscriptionWorkspaceMembersArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<WorkspaceMember_Filter>;
 };
-
 
 export type SubscriptionWorkspacesArgs = {
   block?: InputMaybe<Block_Height>;
@@ -2679,7 +2593,7 @@ export enum SupportedNetwork {
   Chain_137 = 'chain_137',
   Chain_80001 = 'chain_80001',
   Chain_1666600000 = 'chain_1666600000',
-  Chain_1666700000 = 'chain_1666700000'
+  Chain_1666700000 = 'chain_1666700000',
 }
 
 /** Schema for a Workspace or DAO */
@@ -2710,7 +2624,6 @@ export type Workspace = {
   updatedAtS: Scalars['Int'];
 };
 
-
 /** Schema for a Workspace or DAO */
 export type WorkspaceMembersArgs = {
   first?: InputMaybe<Scalars['Int']>;
@@ -2719,7 +2632,6 @@ export type WorkspaceMembersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<WorkspaceMember_Filter>;
 };
-
 
 /** Schema for a Workspace or DAO */
 export type WorkspaceSocialsArgs = {
@@ -2752,7 +2664,7 @@ export enum WorkspaceMemberAccessLevel {
   Admin = 'admin',
   Member = 'member',
   Owner = 'owner',
-  Reviewer = 'reviewer'
+  Reviewer = 'reviewer',
 }
 
 export type WorkspaceMember_Filter = {
@@ -2860,7 +2772,7 @@ export enum WorkspaceMember_OrderBy {
   Id = 'id',
   PublicKey = 'publicKey',
   UpdatedAt = 'updatedAt',
-  Workspace = 'workspace'
+  Workspace = 'workspace',
 }
 
 export type Workspace_Filter = {
@@ -3020,7 +2932,7 @@ export enum Workspace_OrderBy {
   Socials = 'socials',
   SupportedNetworks = 'supportedNetworks',
   Title = 'title',
-  UpdatedAtS = 'updatedAtS'
+  UpdatedAtS = 'updatedAtS',
 }
 
 export type _Block_ = {
@@ -3052,14 +2964,13 @@ export enum _SubgraphErrorPolicy_ {
   /** Data will be returned even if the subgraph has indexing errors */
   Allow = 'allow',
   /** If the subgraph has indexing errors, data will be omitted. The default. */
-  Deny = 'deny'
+  Deny = 'deny',
 }
 
 export type OnApplicationAcceptQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
-
 
 export type OnApplicationAcceptQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
@@ -3068,14 +2979,12 @@ export type OnApplicationRejectQueryVariables = Exact<{
   upperLimit: Scalars['Int'];
 }>;
 
-
 export type OnApplicationRejectQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type OnApplicationResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
-
 
 export type OnApplicationResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string } } }> };
 
@@ -3084,14 +2993,12 @@ export type OnApplicationSubmitQueryVariables = Exact<{
   upperLimit: Scalars['Int'];
 }>;
 
-
 export type OnApplicationSubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } }> };
 
 export type OnAskedToResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
-
 
 export type OnAskedToResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
@@ -3100,14 +3007,12 @@ export type OnFundsReceivedQueryVariables = Exact<{
   upperLimit: Scalars['Int'];
 }>;
 
-
 export type OnFundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, application?: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> }, reward: { __typename?: 'Reward', asset: string } } } | null }> };
 
 export type OnMilestoneAcceptedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
-
 
 export type OnMilestoneAcceptedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } } }> };
 
@@ -3116,14 +3021,12 @@ export type OnNewGrantPostedQueryVariables = Exact<{
   upperLimit: Scalars['Int'];
 }>;
 
-
 export type OnNewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
 
 export type OnApplicationResubmissionQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
-
 
 export type OnApplicationResubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
@@ -3132,14 +3035,12 @@ export type OnApplicationSubmissionQueryVariables = Exact<{
   upperLimit: Scalars['Int'];
 }>;
 
-
 export type OnApplicationSubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type OnInviteMemberQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
-
 
 export type OnInviteMemberQuery = { __typename?: 'Query', workspaceMembers: Array<{ __typename?: 'WorkspaceMember', email?: string | null, accessLevel: WorkspaceMemberAccessLevel, updatedAt: number, workspace: { __typename?: 'Workspace', title: string } }> };
 
@@ -3148,9 +3049,7 @@ export type OnMilestoneUpdatedQueryVariables = Exact<{
   upperLimit: Scalars['Int'];
 }>;
 
-
 export type OnMilestoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
-
 
 export const OnApplicationAcceptDocument = gql`
     query OnApplicationAccept($lowerLimit: Int!, $upperLimit: Int!) {
@@ -3185,7 +3084,7 @@ export const OnApplicationAcceptDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnApplicationAcceptQuery__
@@ -3205,13 +3104,13 @@ export const OnApplicationAcceptDocument = gql`
  * });
  */
 export function useOnApplicationAcceptQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options);
 }
 
 export function useOnApplicationAcceptLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>(OnApplicationAcceptDocument, options);
 }
 
 export type OnApplicationAcceptQueryHookResult = ReturnType<typeof useOnApplicationAcceptQuery>;
@@ -3250,7 +3149,7 @@ export const OnApplicationRejectDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnApplicationRejectQuery__
@@ -3270,13 +3169,13 @@ export const OnApplicationRejectDocument = gql`
  * });
  */
 export function useOnApplicationRejectQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options);
 }
 
 export function useOnApplicationRejectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>(OnApplicationRejectDocument, options);
 }
 
 export type OnApplicationRejectQueryHookResult = ReturnType<typeof useOnApplicationRejectQuery>;
@@ -3311,7 +3210,7 @@ export const OnApplicationResubmitDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnApplicationResubmitQuery__
@@ -3331,13 +3230,13 @@ export const OnApplicationResubmitDocument = gql`
  * });
  */
 export function useOnApplicationResubmitQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options);
 }
 
 export function useOnApplicationResubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>(OnApplicationResubmitDocument, options);
 }
 
 export type OnApplicationResubmitQueryHookResult = ReturnType<typeof useOnApplicationResubmitQuery>;
@@ -3373,7 +3272,7 @@ export const OnApplicationSubmitDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnApplicationSubmitQuery__
@@ -3393,13 +3292,13 @@ export const OnApplicationSubmitDocument = gql`
  * });
  */
 export function useOnApplicationSubmitQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options);
 }
 
 export function useOnApplicationSubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>(OnApplicationSubmitDocument, options);
 }
 
 export type OnApplicationSubmitQueryHookResult = ReturnType<typeof useOnApplicationSubmitQuery>;
@@ -3439,7 +3338,7 @@ export const OnAskedToResubmitDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnAskedToResubmitQuery__
@@ -3459,13 +3358,13 @@ export const OnAskedToResubmitDocument = gql`
  * });
  */
 export function useOnAskedToResubmitQuery(baseOptions: Apollo.QueryHookOptions<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options);
 }
 
 export function useOnAskedToResubmitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnAskedToResubmitQuery, OnAskedToResubmitQueryVariables>(OnAskedToResubmitDocument, options);
 }
 
 export type OnAskedToResubmitQueryHookResult = ReturnType<typeof useOnAskedToResubmitQuery>;
@@ -3510,7 +3409,7 @@ export const OnFundsReceivedDocument = gql`
     amount
   }
 }
-    `
+    `;
 
 /**
  * __useOnFundsReceivedQuery__
@@ -3530,13 +3429,13 @@ export const OnFundsReceivedDocument = gql`
  * });
  */
 export function useOnFundsReceivedQuery(baseOptions: Apollo.QueryHookOptions<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options);
 }
 
 export function useOnFundsReceivedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnFundsReceivedQuery, OnFundsReceivedQueryVariables>(OnFundsReceivedDocument, options);
 }
 
 export type OnFundsReceivedQueryHookResult = ReturnType<typeof useOnFundsReceivedQuery>;
@@ -3574,7 +3473,7 @@ export const OnMilestoneAcceptedDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnMilestoneAcceptedQuery__
@@ -3594,13 +3493,13 @@ export const OnMilestoneAcceptedDocument = gql`
  * });
  */
 export function useOnMilestoneAcceptedQuery(baseOptions: Apollo.QueryHookOptions<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options);
 }
 
 export function useOnMilestoneAcceptedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnMilestoneAcceptedQuery, OnMilestoneAcceptedQueryVariables>(OnMilestoneAcceptedDocument, options);
 }
 
 export type OnMilestoneAcceptedQueryHookResult = ReturnType<typeof useOnMilestoneAcceptedQuery>;
@@ -3632,7 +3531,7 @@ export const OnNewGrantPostedDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnNewGrantPostedQuery__
@@ -3652,13 +3551,13 @@ export const OnNewGrantPostedDocument = gql`
  * });
  */
 export function useOnNewGrantPostedQuery(baseOptions: Apollo.QueryHookOptions<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options);
 }
 
 export function useOnNewGrantPostedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnNewGrantPostedQuery, OnNewGrantPostedQueryVariables>(OnNewGrantPostedDocument, options);
 }
 
 export type OnNewGrantPostedQueryHookResult = ReturnType<typeof useOnNewGrantPostedQuery>;
@@ -3698,7 +3597,7 @@ export const OnApplicationResubmissionDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnApplicationResubmissionQuery__
@@ -3718,13 +3617,13 @@ export const OnApplicationResubmissionDocument = gql`
  * });
  */
 export function useOnApplicationResubmissionQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options);
 }
 
 export function useOnApplicationResubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnApplicationResubmissionQuery, OnApplicationResubmissionQueryVariables>(OnApplicationResubmissionDocument, options);
 }
 
 export type OnApplicationResubmissionQueryHookResult = ReturnType<typeof useOnApplicationResubmissionQuery>;
@@ -3764,7 +3663,7 @@ export const OnApplicationSubmissionDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnApplicationSubmissionQuery__
@@ -3784,13 +3683,13 @@ export const OnApplicationSubmissionDocument = gql`
  * });
  */
 export function useOnApplicationSubmissionQuery(baseOptions: Apollo.QueryHookOptions<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options);
 }
 
 export function useOnApplicationSubmissionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnApplicationSubmissionQuery, OnApplicationSubmissionQueryVariables>(OnApplicationSubmissionDocument, options);
 }
 
 export type OnApplicationSubmissionQueryHookResult = ReturnType<typeof useOnApplicationSubmissionQuery>;
@@ -3810,7 +3709,7 @@ export const OnInviteMemberDocument = gql`
     updatedAt
   }
 }
-    `
+    `;
 
 /**
  * __useOnInviteMemberQuery__
@@ -3830,13 +3729,13 @@ export const OnInviteMemberDocument = gql`
  * });
  */
 export function useOnInviteMemberQuery(baseOptions: Apollo.QueryHookOptions<OnInviteMemberQuery, OnInviteMemberQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options);
 }
 
 export function useOnInviteMemberLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnInviteMemberQuery, OnInviteMemberQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnInviteMemberQuery, OnInviteMemberQueryVariables>(OnInviteMemberDocument, options);
 }
 
 export type OnInviteMemberQueryHookResult = ReturnType<typeof useOnInviteMemberQuery>;
@@ -3873,7 +3772,7 @@ export const OnMilestoneUpdatedDocument = gql`
     }
   }
 }
-    `
+    `;
 
 /**
  * __useOnMilestoneUpdatedQuery__
@@ -3893,13 +3792,13 @@ export const OnMilestoneUpdatedDocument = gql`
  * });
  */
 export function useOnMilestoneUpdatedQuery(baseOptions: Apollo.QueryHookOptions<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options);
 }
 
 export function useOnMilestoneUpdatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>) {
-	const options = { ...defaultOptions, ...baseOptions }
-	return Apollo.useLazyQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>(OnMilestoneUpdatedDocument, options);
 }
 
 export type OnMilestoneUpdatedQueryHookResult = ReturnType<typeof useOnMilestoneUpdatedQuery>;
