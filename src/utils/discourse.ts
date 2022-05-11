@@ -1,3 +1,4 @@
+import { draftToMarkdown } from "markdown-draft-js";
 import { SupportedChainId } from "../configs/chains";
 import {
   ApplicationMilestone,
@@ -8,6 +9,7 @@ import {
 import { getItem, setItem } from "./db";
 import { authHeaders, defaultHeaders } from "./headers";
 import "dotenv/config";
+import getFromIPFS from "./ipfs";
 
 const Pino = require("pino");
 
@@ -29,23 +31,38 @@ const getStringField = (fields: GrantFieldAnswer[], fieldName: string) => fields
   ?? "";
 
 const getProjectDetails = async (projectDetails: string) => {
-    if (projectDetails.startsWith("Qm") {
-        
-    } else return projectDetails;
+  if (projectDetails.startsWith("Qm")) {
+    const raw = await getFromIPFS(projectDetails);
+    return draftToMarkdown(JSON.parse(raw));
+  }
+  return projectDetails;
 };
 
 const getRawFromApplication = async (
   application: GrantApplication,
 ): Promise<string> => {
-  const details = await getProjectDetails(getStringField(application.fields, 'projectDetails'));
-  const raw = `## Name of Project / DAO / Company\n${getStringField(application.fields, 'projectName')}\n\n`
-                    + `## Application type\n${'Product Launch'}\n\n`
-                    + `## Proposal overview\n${details}\n\n`
-                    + `## Team\n${getStringField(application.fields, 'applicantName')} - ${getStringField(application.fields, 'applicantEmail')}\n\n`
-                    + `## Proposal ask\n${getStringField(application.fields, 'fundingAsk')}\n\n`
-                    + `## Justification\n${getStringField(application.fields, 'fundingBreakdown')}\n\n`
-                    + `## Metrics for success\n${application.milestones.map((milestone: ApplicationMilestone) => `${milestone.title} - ${milestone.amount}`)}\n\n`
-                    + `## External links\n${getStringField(application.fields, 'customFields')}`;
+  const details = await getProjectDetails(
+    getStringField(application.fields, "projectDetails"),
+  );
+  const raw = `## Name of Project / DAO / Company\n${getStringField(
+    application.fields,
+    "projectName",
+  )}\n\n`
+    + `## Application type\n${"Product Launch"}\n\n`
+    + `## Proposal overview\n${details}\n\n`
+    + `## Team\n${getStringField(
+      application.fields,
+      "applicantName",
+    )} - ${getStringField(application.fields, "applicantEmail")}\n\n`
+    + `## Proposal ask\n${getStringField(application.fields, "fundingAsk")}\n\n`
+    + `## Justification\n${getStringField(
+      application.fields,
+      "fundingBreakdown",
+    )}\n\n`
+    + `## Metrics for success\n${application.milestones.map(
+      (milestone: ApplicationMilestone) => `${milestone.title} - ${milestone.amount}`,
+    )}\n\n`
+    + `## External links\n${getStringField(application.fields, "customFields")}`;
   return raw;
 };
 

@@ -23,25 +23,10 @@ import executeQuery from "../../utils/query";
 const TEMPLATE = templateNames.applicant.OnNewGrantPosted;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(chainId: SupportedChainId, time: Date) {
-  const fromTimestamp = await getItem(getKey(chainId));
-  const toTimestamp = Math.floor(time.getTime() / 1000);
-
-  if (fromTimestamp === -1) {
-    await setItem(getKey(chainId), toTimestamp);
-    return;
-  }
-
-  const results: OnNewGrantPostedQuery = await executeQuery(
-    chainId,
-    fromTimestamp,
-    toTimestamp,
-    OnNewGrantPostedDocument,
-  );
-
+async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplications: OnNewGrantPostedQuery['grantApplications'], chainId: SupportedChainId) {
   const emailData: EmailData[] = [];
-  results.grants.forEach((grant: OnNewGrantPostedQuery["grants"][0]) => {
-    results.grantApplications.forEach((applicant: OnNewGrantPostedQuery["grantApplications"][0]) => {
+  grants.forEach((grant: OnNewGrantPostedQuery["grants"][0]) => {
+    grantApplications.forEach((applicant: OnNewGrantPostedQuery["grantApplications"][0]) => {
       const email = {
         to: [applicant.applicantEmail[0]?.values[0]?.value],
         cc: [],
@@ -64,7 +49,7 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
   });
 
   if (emailData.length === 0) {
-    return;
+    return false;
   }
 
   const emailResult = await sendEmails(
@@ -80,19 +65,29 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
     }),
   );
 
-  await setItem(getKey(chainId), toTimestamp);
+  return true;
 }
 
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
-    switch (chainId) {
-      case SupportedChainId.HARMONY_TESTNET_S0:
-        break;
+  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+    const fromTimestamp = await getItem(getKey(chainId));
+    const toTimestamp = Math.floor(time.getTime() / 1000);
 
-      default:
-        handleEmail(chainId, time);
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      return;
     }
+
+    const results: OnNewGrantPostedQuery = await executeQuery(
+      chainId,
+      fromTimestamp,
+      toTimestamp,
+      OnNewGrantPostedDocument,
+    );
+
+    const ret = process.env.DISCOURSE_TEST ? false : handleEmail(results.grants, results.grantApplications, chainId);
+    if (ret) { await setItem(getKey(chainId), toTimestamp); }
   });
 };
 

@@ -24,25 +24,10 @@ import executeQuery from "../../utils/query";
 const TEMPLATE = templateNames.applicant.OnFundsReceived;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(chainId: SupportedChainId, time: Date) {
-  const fromTimestamp = await getItem(getKey(chainId));
-  const toTimestamp = Math.floor(time.getTime() / 1000);
-
-  if (fromTimestamp === -1) {
-    await setItem(getKey(chainId), toTimestamp);
-    return;
-  }
-
-  const results: OnFundsReceivedQuery = await executeQuery(
-    chainId,
-    fromTimestamp,
-    toTimestamp,
-    OnFundsReceivedDocument,
-  );
-
+async function handleEmail(fundsTransfers: OnFundsReceivedQuery['fundsTransfers'], chainId: SupportedChainId) {
   const emailData: EmailData[] = [];
-  results.fundsTransfers.forEach(
-    (result: OnFundsReceivedQuery["fundsTransfers"][0]) => {
+  fundsTransfers.forEach(
+    (result: OnFundsReceivedQuery["fundsTransfers"][number]) => {
       const currency = CHAIN_INFO[chainId].supportedCurrencies[result.application.grant.reward.asset];
 
       const email = {
@@ -62,7 +47,7 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
   );
 
   if (emailData.length === 0) {
-    return;
+    return false;
   }
 
   const emailResult = await sendEmails(
@@ -76,19 +61,43 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
     }),
   );
 
-  await setItem(getKey(chainId), toTimestamp);
+  return true;
 }
+
+const handleDiscourse = async (fundsTransfers: OnFundsReceivedQuery['fundsTransfers']) => {
+  const a = 5;
+  return true;
+};
 
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
+  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+    const fromTimestamp = await getItem(getKey(chainId));
+    const toTimestamp = Math.floor(time.getTime() / 1000);
+
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      return;
+    }
+
+    const results: OnFundsReceivedQuery = await executeQuery(
+      chainId,
+      fromTimestamp,
+      toTimestamp,
+      OnFundsReceivedDocument,
+    );
+
+    let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
+        ret = await handleDiscourse(results.fundsTransfers);
         break;
 
       default:
-        handleEmail(chainId, time);
+        ret = process.env.DISCOURSE_TEST ? false : await handleEmail(results.fundsTransfers, chainId);
     }
+
+    if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
 

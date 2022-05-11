@@ -6,7 +6,7 @@
     "checkJs": false,
     "outDir": ".build",
     "strict": false,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "noImplicitThis": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

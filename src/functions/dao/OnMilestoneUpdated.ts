@@ -20,24 +20,9 @@ import executeQuery from '../../utils/query';
 const TEMPLATE = templateNames.dao.OnMilestoneUpdated;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(chainId: SupportedChainId, time: Date) {
-  const fromTimestamp = await getItem(getKey(chainId));
-  const toTimestamp = Math.floor(time.getTime() / 1000);
-
-  if (fromTimestamp === -1) {
-    await setItem(getKey(chainId), toTimestamp);
-    return;
-  }
-
-  const results : OnMilestoneUpdatedQuery = await executeQuery(
-    chainId,
-    fromTimestamp,
-    toTimestamp,
-    OnMilestoneUpdatedDocument,
-  );
-
+async function handleEmail(applicationMilestones: OnMilestoneUpdatedQuery['applicationMilestones'], chainId: SupportedChainId) : Promise<boolean> {
   const emailData: EmailData[] = [];
-  results.applicationMilestones.forEach((result: OnMilestoneUpdatedQuery['applicationMilestones'][0]) => {
+  applicationMilestones.forEach((result: OnMilestoneUpdatedQuery['applicationMilestones'][0]) => {
     const email = {
       to: result.application.grant.workspace.members.map(
         (member: OnMilestoneUpdatedQuery['applicationMilestones'][0]['application']['grant']['workspace']['members'][0]) => member.email,
@@ -55,7 +40,7 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
   });
 
   if (emailData.length === 0) {
-    return;
+    return false;
   }
 
   const emailResult = await sendEmails(
@@ -70,18 +55,41 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
     }),
   );
 
-  await setItem(getKey(chainId), toTimestamp);
+  return true;
 }
+
+const handleDiscourse = async (applicationMilestones: OnMilestoneUpdatedQuery['applicationMilestones']) : Promise<boolean> => {
+  const a = 5;
+  return true;
+};
 
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
+  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+    const fromTimestamp = await getItem(getKey(chainId));
+    const toTimestamp = Math.floor(time.getTime() / 1000);
+
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      return;
+    }
+
+    const results : OnMilestoneUpdatedQuery = await executeQuery(
+      chainId,
+      fromTimestamp,
+      toTimestamp,
+      OnMilestoneUpdatedDocument,
+    );
+
+    let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
+        ret = await handleDiscourse(results.applicationMilestones);
         break;
 
       default:
-        handleEmail(chainId, time);
+        ret = process.env.DISCOURSE_TEST === 'true' ? false : await handleEmail(results.applicationMilestones, chainId);
     }
+    if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };

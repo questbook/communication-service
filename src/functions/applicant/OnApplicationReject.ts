@@ -23,24 +23,9 @@ import executeQuery from "../../utils/query";
 const TEMPLATE = templateNames.applicant.OnApplicationReject;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(chainId: SupportedChainId, time: Date) {
-  const fromTimestamp = await getItem(getKey(chainId));
-  const toTimestamp = Math.floor(time.getTime() / 1000);
-
-  if (fromTimestamp === -1) {
-    await setItem(getKey(chainId), toTimestamp);
-    return;
-  }
-
-  const results: OnApplicationRejectQuery = await executeQuery(
-    chainId,
-    fromTimestamp,
-    toTimestamp,
-    OnApplicationRejectDocument,
-  );
-
+async function handleEmail(grantApplications: OnApplicationRejectQuery['grantApplications'], chainId: SupportedChainId) : Promise<boolean> {
   const emailData: EmailData[] = [];
-  results.grantApplications.forEach((result: OnApplicationRejectQuery['grantApplications'][0]) => {
+  grantApplications.forEach((result: OnApplicationRejectQuery['grantApplications'][0]) => {
     const email = {
       to: result.applicantEmail[0].values.map(
         (
@@ -62,7 +47,7 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
     emailData.push(email);
   });
   if (!emailData.length) {
-    return;
+    return false;
   }
 
   const emailResult = await sendEmails(
@@ -76,20 +61,43 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
     }),
   );
 
-  await setItem(getKey(chainId), toTimestamp);
+  return true;
 }
+
+const handleDiscourse = async (grantApplications: OnApplicationRejectQuery['grantApplications']) : Promise<boolean> => {
+  const a = 5;
+  return true;
+};
 
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
 
-  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
+  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+    const fromTimestamp = await getItem(getKey(chainId));
+    const toTimestamp = Math.floor(time.getTime() / 1000);
+
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      return;
+    }
+
+    const results: OnApplicationRejectQuery = await executeQuery(
+      chainId,
+      fromTimestamp,
+      toTimestamp,
+      OnApplicationRejectDocument,
+    );
+
+    let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
+        ret = await handleDiscourse(results.grantApplications);
         break;
 
       default:
-        handleEmail(chainId, time);
+        ret = process.env.DISCOURSE_TEST === 'true' ? false : await handleEmail(results.grantApplications, chainId);
     }
+    if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
 
