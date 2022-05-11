@@ -22,29 +22,14 @@ import executeQuery from "../../utils/query";
 const TEMPLATE = templateNames.applicant.OnApplicationSubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(chainId: SupportedChainId, time: Date) {
-  const fromTimestamp = await getItem(getKey(chainId));
-  const toTimestamp = Math.floor(time.getTime() / 1000);
-
-  if (fromTimestamp === -1) {
-    await setItem(getKey(chainId), toTimestamp);
-    return;
-  }
-
-  const results: OnApplicationSubmitQuery = await executeQuery(
-    chainId,
-    fromTimestamp,
-    toTimestamp,
-    OnApplicationSubmitDocument,
-  );
-
+async function handleEmail(grantApplications: OnApplicationSubmitQuery["grantApplications"]): Promise<boolean> {
   const emailData: EmailData[] = [];
-  results.grantApplications.forEach(
-    (result: OnApplicationSubmitQuery["grantApplications"][0]) => {
+  grantApplications.forEach(
+    (result: OnApplicationSubmitQuery["grantApplications"][number]) => {
       const email = {
         to: result.applicantEmail[0].values.map(
           (
-            item: OnApplicationSubmitQuery["grantApplications"][0]["applicantEmail"][0]["values"][0],
+            item: OnApplicationSubmitQuery["grantApplications"][number]["applicantEmail"][number]["values"][number],
           ) => item.value,
         ),
         cc: [],
@@ -59,7 +44,7 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
   );
 
   if (emailData.length === 0) {
-    return;
+    return false;
   }
 
   const emailResult = await sendEmails(
@@ -72,19 +57,45 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
     }),
   );
 
-  await setItem(getKey(chainId), toTimestamp);
+  return true;
+}
+
+async function handleDiscourse(grantApplications: OnApplicationSubmitQuery["grantApplications"]) : Promise<boolean> {
+  return true;
 }
 
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
+  const toTimestamp = Math.floor(time.getTime() / 1000);
+
+  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+    const fromTimestamp = await getItem(getKey(chainId));
+
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      return;
+    }
+
+    const results: OnApplicationSubmitQuery = await executeQuery(
+      chainId,
+      fromTimestamp,
+      toTimestamp,
+      OnApplicationSubmitDocument,
+    );
+
+    if (!results.grantApplications || !results.grantApplications.length) return;
+
+    let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
+        ret = await handleDiscourse(results.grantApplications);
         break;
 
       default:
-        handleEmail(chainId, time);
+        ret = process.env.DISCOURSE_TEST === 'true' ? false : await handleEmail(results.grantApplications);
     }
+
+    if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
 
