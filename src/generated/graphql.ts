@@ -2940,7 +2940,7 @@ export type GetGrantApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type GetGrantApplicationsQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, fields: Array<{ __typename?: 'GrantFieldAnswer', id: string, field: { __typename?: 'GrantField', id: string, title: string, isPii: boolean, possibleValues?: Array<string> | null, inputType: GrantFieldInputType }, values: Array<{ __typename?: 'GrantFieldAnswerItem', id: string, value: string }> }>, milestones: Array<{ __typename?: 'ApplicationMilestone', id: string, title: string, amount: string }> }> };
+export type GetGrantApplicationsQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', id: string } }, fields: Array<{ __typename?: 'GrantFieldAnswer', id: string, field: { __typename?: 'GrantField', id: string, title: string, isPii: boolean, possibleValues?: Array<string> | null, inputType: GrantFieldInputType }, values: Array<{ __typename?: 'GrantFieldAnswerItem', id: string, value: string }> }>, milestones: Array<{ __typename?: 'ApplicationMilestone', id: string, title: string, amount: string }> }> };
 
 export type OnApplicationAcceptQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -3043,6 +3043,11 @@ export const GetGrantApplicationsDocument = gql`
     query GetGrantApplications($applicationIDs: [ID!]) {
   grantApplications(subgraphError: allow, where: {id_in: $applicationIDs}) {
     id
+    grant {
+      workspace {
+        id
+      }
+    }
     fields {
       id
       field {

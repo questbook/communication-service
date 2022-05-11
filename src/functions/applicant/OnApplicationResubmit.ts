@@ -18,7 +18,7 @@ import {
 import templateNames from "../../generated/templateNames";
 import { getItem, setItem } from "../../utils/db";
 import sendEmails from "../../utils/email";
-import executeQuery from "../../utils/query";
+import { executeQuery } from "../../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnApplicationResubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -63,7 +63,7 @@ async function handleEmail(grantApplications: OnApplicationResubmitQuery['grantA
 
 const handleDiscourse = async (grantApplications: OnApplicationResubmitQuery['grantApplications']) : Promise<boolean> => {
   const a = 5;
-  return true;
+  return false;
 };
 
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
@@ -91,7 +91,7 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
         break;
 
       default:
-        ret = process.env.DISCOURSE_TEST === 'true' ? false : await handleEmail(results.grantApplications);
+        ret = await handleEmail(results.grantApplications);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);

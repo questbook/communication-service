@@ -19,7 +19,7 @@ import templateNames from "../../generated/templateNames";
 import formatAmount from "../../utils/formattingUtils";
 import { getItem, setItem } from "../../utils/db";
 import sendEmails from "../../utils/email";
-import executeQuery from "../../utils/query";
+import { executeQuery } from "../../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnFundsReceived;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -66,7 +66,7 @@ async function handleEmail(fundsTransfers: OnFundsReceivedQuery['fundsTransfers'
 
 const handleDiscourse = async (fundsTransfers: OnFundsReceivedQuery['fundsTransfers']) => {
   const a = 5;
-  return true;
+  return false;
 };
 
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
@@ -94,7 +94,7 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
         break;
 
       default:
-        ret = process.env.DISCOURSE_TEST === 'true' ? false : await handleEmail(results.fundsTransfers, chainId);
+        ret = await handleEmail(results.fundsTransfers, chainId);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);

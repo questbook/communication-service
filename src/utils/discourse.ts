@@ -69,10 +69,9 @@ const getRawFromApplication = async (
 async function createPost(
   chainId: SupportedChainId,
   application: GetGrantApplicationsQuery["grantApplications"][number],
-  workspaceId: string,
 ) {
   const raw = JSON.stringify({
-    category: await getCategoryFromWorkspace(chainId, workspaceId),
+    category: await getCategoryFromWorkspace(chainId, application.grant.workspace.id),
     title: getStringField(application.fields, "projectName"),
     raw: await getRawFromApplication(application),
   });
@@ -94,7 +93,9 @@ async function createPost(
 
   if (response.status === 200) {
     await setItem(`${chainId}.${application.id}`, json.post.id);
+    return true;
   }
+  return false;
 }
 
 async function editPost(

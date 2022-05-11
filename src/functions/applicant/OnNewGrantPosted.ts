@@ -18,7 +18,7 @@ import templateNames from "../../generated/templateNames";
 import getDomain from "../../utils/linkUtils";
 import { getItem, setItem } from "../../utils/db";
 import sendEmails from "../../utils/email";
-import executeQuery from "../../utils/query";
+import { executeQuery } from "../../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnNewGrantPosted;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -86,7 +86,7 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnNewGrantPostedDocument,
     );
 
-    const ret = process.env.DISCOURSE_TEST === 'true' ? false : handleEmail(results.grants, results.grantApplications, chainId);
+    const ret = handleEmail(results.grants, results.grantApplications, chainId);
     if (ret) { await setItem(getKey(chainId), toTimestamp); }
   });
 };

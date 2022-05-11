@@ -11,18 +11,23 @@ import {
   SupportedChainId,
 } from "../../configs/chains";
 import {
+  GetGrantApplicationsDocument,
+  GetGrantApplicationsQuery,
   OnApplicationSubmitDocument,
   OnApplicationSubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import { getItem, setItem } from "../../utils/db";
+import { createPost } from "../../utils/discourse";
 import sendEmails from "../../utils/email";
-import executeQuery from "../../utils/query";
+import { executeApplicationQuery, executeQuery } from "../../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnApplicationSubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(grantApplications: OnApplicationSubmitQuery["grantApplications"]): Promise<boolean> {
+async function handleEmail(
+  grantApplications: OnApplicationSubmitQuery["grantApplications"],
+): Promise<boolean> {
   const emailData: EmailData[] = [];
   grantApplications.forEach(
     (result: OnApplicationSubmitQuery["grantApplications"][number]) => {
@@ -60,7 +65,25 @@ async function handleEmail(grantApplications: OnApplicationSubmitQuery["grantApp
   return true;
 }
 
-async function handleDiscourse(grantApplications: OnApplicationSubmitQuery["grantApplications"]) : Promise<boolean> {
+async function handleDiscourse(
+  grantApplications: OnApplicationSubmitQuery["grantApplications"],
+  chainId: SupportedChainId,
+): Promise<boolean> {
+  const applicationIDs: string[] = grantApplications.map(
+    (application: OnApplicationSubmitQuery["grantApplications"][number]) => application.id,
+  );
+  const results: GetGrantApplicationsQuery = await executeApplicationQuery(
+    chainId,
+    applicationIDs,
+    GetGrantApplicationsDocument,
+  );
+  results.grantApplications.forEach(
+    async (
+      application: GetGrantApplicationsQuery["grantApplications"][number],
+    ) => {
+      await createPost(chainId, application);
+    },
+  );
   return true;
 }
 
@@ -88,11 +111,11 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
     let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(results.grantApplications);
+        ret = await handleDiscourse(results.grantApplications, chainId);
         break;
 
       default:
-        ret = process.env.DISCOURSE_TEST === 'true' ? false : await handleEmail(results.grantApplications);
+        ret = await handleEmail(results.grantApplications);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);

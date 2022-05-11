@@ -1,6 +1,11 @@
 query GetGrantApplications($applicationIDs: [ID!]) {
   grantApplications(subgraphError: allow, where: { id_in: $applicationIDs }) {
     id
+    grant {
+      workspace {
+        id
+      }
+    }
     fields {
       id
       field {

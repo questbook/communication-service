@@ -18,7 +18,7 @@ import templateNames from "../../generated/templateNames";
 import getDomain from "../../utils/linkUtils";
 import { getItem, setItem } from "../../utils/db";
 import sendEmails from "../../utils/email";
-import executeQuery from "../../utils/query";
+import { executeQuery } from "../../utils/query";
 
 const TEMPLATE = templateNames.dao.OnInviteMember;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -81,13 +81,7 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
 const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
-    switch (chainId) {
-      case SupportedChainId.HARMONY_TESTNET_S0:
-        break;
-
-      default:
-        handleEmail(chainId, time);
-    }
+    handleEmail(chainId, time);
   });
 };
 
