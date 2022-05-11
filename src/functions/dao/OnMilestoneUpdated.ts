@@ -63,7 +63,7 @@ const handleDiscourse = async (applicationMilestones: OnMilestoneUpdatedQuery['a
   return false;
 };
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
     const fromTimestamp = await getItem(getKey(chainId));
@@ -80,6 +80,8 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       toTimestamp,
       OnMilestoneUpdatedDocument,
     );
+
+    if (!results.applicationMilestones || !results.applicationMilestones.length) return;
 
     let ret: boolean;
     switch (chainId) {

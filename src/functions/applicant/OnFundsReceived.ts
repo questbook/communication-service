@@ -14,32 +14,58 @@ import {
 import {
   OnFundsReceivedDocument,
   OnFundsReceivedQuery,
+  Token,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import formatAmount from "../../utils/formattingUtils";
 import { getItem, setItem } from "../../utils/db";
 import sendEmails from "../../utils/email";
 import { executeQuery } from "../../utils/query";
+import { Template } from "../../generated/templates/applicant/OnFundsReceived.json";
+import { addReplyToPost } from "../../utils/discourse";
 
 const TEMPLATE = templateNames.applicant.OnFundsReceived;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(fundsTransfers: OnFundsReceivedQuery['fundsTransfers'], chainId: SupportedChainId) {
+const getCurrency = (
+  key: string,
+  chainId: SupportedChainId,
+  tokens: OnFundsReceivedQuery["fundsTransfers"][number]["application"]["grant"]["workspace"]["tokens"],
+) => {
+  const currency = tokens.find(
+    (
+      token: OnFundsReceivedQuery["fundsTransfers"][number]["application"]["grant"]["workspace"]["tokens"][number],
+    ) => token.address === key,
+  ) || CHAIN_INFO[chainId].supportedCurrencies[key];
+  if (!currency) return { label: "UNDEFINED", decimals: 18 };
+  return { label: currency.label, decimal: currency.decimal };
+};
+
+async function handleEmail(
+  fundsTransfers: OnFundsReceivedQuery["fundsTransfers"],
+  chainId: SupportedChainId,
+) {
   const emailData: EmailData[] = [];
   fundsTransfers.forEach(
-    (result: OnFundsReceivedQuery["fundsTransfers"][number]) => {
-      const currency = CHAIN_INFO[chainId].supportedCurrencies[result.application.grant.reward.asset];
+    (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][number]) => {
+      const currency = getCurrency(
+        fundsTransfer.application.grant.reward.asset,
+        chainId,
+        fundsTransfer.application.grant.workspace.tokens,
+      );
 
       const email = {
-        to: [result.application.applicantEmail[0].values[0].value],
+        to: [fundsTransfer.application.applicantEmail[0].values[0].value],
         cc: [],
         replacementData: JSON.stringify({
-          projectName: result.application.projectName[0].values[0].value,
-          applicantName: result.application.applicantName[0].values[0].value,
-          daoName: result.application.grant.workspace.title,
-          grantAmount: `${formatAmount(result.amount, currency.decimals)} ${
-            currency.label
-          }`,
+          projectName: fundsTransfer.application.projectName[0].values[0].value,
+          applicantName:
+            fundsTransfer.application.applicantName[0].values[0].value,
+          daoName: fundsTransfer.application.grant.workspace.title,
+          grantAmount: `${formatAmount(
+            fundsTransfer.amount,
+            currency.decimal,
+          )} ${currency.label}`,
         }),
       };
       emailData.push(email);
@@ -64,12 +90,34 @@ async function handleEmail(fundsTransfers: OnFundsReceivedQuery['fundsTransfers'
   return true;
 }
 
-const handleDiscourse = async (fundsTransfers: OnFundsReceivedQuery['fundsTransfers']) => {
-  const a = 5;
-  return false;
+const handleDiscourse = async (fundsTransfers: OnFundsReceivedQuery["fundsTransfers"], chainId: SupportedChainId) => {
+  fundsTransfers.forEach(
+    (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][0]) => {
+      const currency = getCurrency(
+        fundsTransfer.application.grant.reward.asset,
+        chainId,
+        fundsTransfer.application.grant.workspace.tokens,
+      );
+      const data = {
+        projectName: fundsTransfer.application.projectName[0].values[0].value,
+        applicantName:
+          fundsTransfer.application.applicantName[0].values[0].value,
+        daoName: fundsTransfer.application.grant.workspace.title,
+        grantAmount: `${formatAmount(fundsTransfer.amount, currency.decimal)} ${
+          currency.label
+        }`,
+      };
+      let raw = Template.TextPart;
+      Object.keys(data).forEach((key: string) => {
+        raw = raw.replace(`{{${key}}}`, data[key]);
+      });
+      addReplyToPost(chainId, fundsTransfer.application.id, raw);
+    },
+  );
+  return true;
 };
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
     const fromTimestamp = await getItem(getKey(chainId));
@@ -87,18 +135,21 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnFundsReceivedDocument,
     );
 
+    if (!results.fundsTransfers || !results.fundsTransfers.length) return;
+    const fundsTransfers = results.fundsTransfers.filter(
+      (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][number]) => fundsTransfer.application.applicantEmail.length > 0,
+    );
+
     let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(results.fundsTransfers);
+        ret = await handleDiscourse(fundsTransfers, chainId);
         break;
 
       default:
-        ret = await handleEmail(results.fundsTransfers, chainId);
+        ret = await handleEmail(fundsTransfers, chainId);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
-
-export default run;

@@ -19,6 +19,8 @@ import getDomain from '../../utils/linkUtils';
 import { getItem, setItem } from '../../utils/db';
 import sendEmails from '../../utils/email';
 import { executeQuery } from '../../utils/query';
+import { addReplyToPost } from '../../utils/discourse';
+import { Template } from "../../generated/templates/applicant/OnApplicationAccept.json";
 
 const TEMPLATE = templateNames.applicant.OnApplicationAccept;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -26,18 +28,18 @@ const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 async function handleEmail(grantApplications: OnApplicationAcceptQuery['grantApplications'], chainId: SupportedChainId) : Promise<boolean> {
   const emailData: EmailData[] = [];
   grantApplications.forEach(
-    (result: OnApplicationAcceptQuery['grantApplications'][0]) => {
+    (application: OnApplicationAcceptQuery['grantApplications'][0]) => {
       const email = {
-        to: result.applicantEmail[0].values.map(
+        to: application.applicantEmail[0].values.map(
           (
             item: OnApplicationAcceptQuery['grantApplications'][0]['applicantEmail'][0]['values'][0],
           ) => item?.value,
         ),
         cc: [],
         replacementData: JSON.stringify({
-          projectName: result?.projectName[0]?.values[0]?.value,
-          applicantName: result?.applicantName[0]?.values[0]?.value,
-          daoName: result?.grant?.workspace?.title,
+          projectName: application?.projectName[0]?.values[0]?.value,
+          applicantName: application?.applicantName[0]?.values[0]?.value,
+          daoName: application?.grant?.workspace?.title,
           link: `${getDomain(chainId)}/your_applications`,
         }),
       };
@@ -63,12 +65,24 @@ async function handleEmail(grantApplications: OnApplicationAcceptQuery['grantApp
   return true;
 }
 
-const handleDiscourse = async (grantApplications: OnApplicationAcceptQuery['grantApplications']) : Promise<boolean> => {
-  const a = 5;
-  return false;
+const handleDiscourse = async (grantApplications: OnApplicationAcceptQuery['grantApplications'], chainId: SupportedChainId) : Promise<boolean> => {
+  grantApplications.forEach((application: OnApplicationAcceptQuery['grantApplications'][0]) => {
+    const data = {
+      projectName: application?.projectName[0]?.values[0]?.value,
+      applicantName: application?.applicantName[0]?.values[0]?.value,
+      daoName: application?.grant?.workspace?.title,
+      link: `${getDomain(chainId)}/your_applications`,
+    };
+    let raw = Template.TextPart;
+    Object.keys(data).forEach((key: string) => {
+      raw = raw.replace(`{{${key}}}`, data[key]);
+    });
+    addReplyToPost(chainId, application.id, raw.replace("{{daoName}}", application?.grant?.workspace?.title));
+  });
+  return true;
 };
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
 
   ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
@@ -87,17 +101,18 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnApplicationAcceptDocument,
     );
 
+    if (!results.grantApplications || !results.grantApplications.length) return;
+    const grantApplications = results.grantApplications.filter((application: OnApplicationAcceptQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
+
     let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(results.grantApplications);
+        ret = await handleDiscourse(grantApplications, chainId);
         break;
 
       default:
-        ret = await handleEmail(results.grantApplications, chainId);
+        ret = await handleEmail(grantApplications, chainId);
     }
     if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
-
-export default run;

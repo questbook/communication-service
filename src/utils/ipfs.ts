@@ -1,3 +1,5 @@
+import fetch from "cross-fetch";
+
 const IPFS_DOWNLOAD_ENDPOINT = "https://api.thegraph.com/ipfs/api/v0/cat";
 
 const getFromIPFS = async (hash: string): Promise<string> => {

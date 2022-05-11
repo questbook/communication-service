@@ -5,6 +5,7 @@
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
+import { logger } from "ethers";
 import { EmailData } from "../../../types/EmailData";
 import {
   ALL_SUPPORTED_CHAIN_IDS,
@@ -30,18 +31,18 @@ async function handleEmail(
 ): Promise<boolean> {
   const emailData: EmailData[] = [];
   grantApplications.forEach(
-    (result: OnApplicationSubmitQuery["grantApplications"][number]) => {
+    (application: OnApplicationSubmitQuery["grantApplications"][number]) => {
       const email = {
-        to: result.applicantEmail[0].values.map(
+        to: application.applicantEmail[0].values.map(
           (
             item: OnApplicationSubmitQuery["grantApplications"][number]["applicantEmail"][number]["values"][number],
           ) => item.value,
         ),
         cc: [],
         replacementData: JSON.stringify({
-          projectName: result.projectName[0].values[0].value,
-          applicantName: result.applicantName[0].values[0].value,
-          daoName: result.grant.workspace.title,
+          projectName: application.projectName[0].values[0].value,
+          applicantName: application.applicantName[0].values[0].value,
+          daoName: application.grant.workspace.title,
         }),
       };
       emailData.push(email);
@@ -87,7 +88,7 @@ async function handleDiscourse(
   return true;
 }
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   const toTimestamp = Math.floor(time.getTime() / 1000);
 
@@ -107,19 +108,18 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
     );
 
     if (!results.grantApplications || !results.grantApplications.length) return;
+    const grantApplications = results.grantApplications.filter((application: OnApplicationSubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
 
     let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(results.grantApplications, chainId);
+        ret = await handleDiscourse(grantApplications, chainId);
         break;
 
       default:
-        ret = await handleEmail(results.grantApplications);
+        ret = await handleEmail(grantApplications);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
-
-export default run;

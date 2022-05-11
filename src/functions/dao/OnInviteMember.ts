@@ -39,6 +39,8 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
     OnInviteMemberDocument,
   );
 
+  if (!results.workspaceMembers || !results.workspaceMembers.length) return;
+
   const emailData: EmailData[] = [];
   results.workspaceMembers.forEach(
     (result: OnInviteMemberQuery["workspaceMembers"][0]) => {
@@ -78,11 +80,9 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
   await setItem(getKey(chainId), toTimestamp);
 }
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
     handleEmail(chainId, time);
   });
 };
-
-export default run;

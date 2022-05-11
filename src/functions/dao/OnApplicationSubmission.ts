@@ -72,7 +72,7 @@ const handleDiscourse = async (grantApplications: OnApplicationSubmissionQuery['
   return false;
 };
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
     const fromTimestamp = await getItem(getKey(chainId));
@@ -90,18 +90,19 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnApplicationSubmissionDocument,
     );
 
+    if (!results.grantApplications || !results.grantApplications.length) return;
+    const grantApplications = results.grantApplications.filter((grantApplication: OnApplicationSubmissionQuery['grantApplications'][number]) => grantApplication.applicantEmail.length > 0);
+
     let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(results.grantApplications);
+        ret = await handleDiscourse(grantApplications);
         break;
 
       default:
-        ret = await handleEmail(results.grantApplications, chainId);
+        ret = await handleEmail(grantApplications, chainId);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
-
-export default run;

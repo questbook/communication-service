@@ -1,10 +1,13 @@
 import { draftToMarkdown } from "markdown-draft-js";
+import fetch from "cross-fetch";
 import { SupportedChainId } from "../configs/chains";
 import { GetGrantApplicationsQuery, Workspace } from "../generated/graphql";
 import { getItem, setItem } from "./db";
 import { authHeaders, defaultHeaders } from "./headers";
 import "dotenv/config";
 import getFromIPFS from "./ipfs";
+import { CHAIN_INFO } from "../configs/chainInfo";
+import formatAmount from "./formattingUtils";
 
 const Pino = require("pino");
 
@@ -36,12 +39,25 @@ const getProjectDetails = async (projectDetails: string) => {
   return projectDetails;
 };
 
-const getRawFromApplication = async (
-  application: GetGrantApplicationsQuery["grantApplications"][number],
-): Promise<string> => {
+const getCurrency = (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: SupportedChainId) => {
+  const key = application.grant.reward.asset;
+  const currency = application.grant.workspace.tokens.find(
+    (
+      token: GetGrantApplicationsQuery["grantApplications"][number]["grant"]["workspace"]["tokens"][number],
+    ) => token.address === key,
+  ) || CHAIN_INFO[chainId].supportedCurrencies[key];
+  if (!currency) return { label: "UNDEFINED", decimals: 18 };
+  return { label: currency.label, decimals: currency.decimal };
+};
+
+const getRawFromApplication = async (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: SupportedChainId): Promise<string> => {
   const details = await getProjectDetails(
     getStringField(application.fields, "projectDetails"),
   );
+  const dataOrHash = getStringField(application.fields, "projectDetails");
+  logger.info({ dataOrHash }, "Project details");
+  logger.info({ details }, "Decoded project details");
+  const currency: {label: string, decimals: number} = getCurrency(application, chainId);
   const raw = `## Name of Project / DAO / Company\n${getStringField(
     application.fields,
     "projectName",
@@ -52,7 +68,7 @@ const getRawFromApplication = async (
       application.fields,
       "applicantName",
     )} - ${getStringField(application.fields, "applicantEmail")}\n\n`
-    + `## Proposal ask\n${getStringField(application.fields, "fundingAsk")}\n\n`
+    + `## Proposal ask\n${formatAmount(getStringField(application.fields, "fundingAsk"), currency.decimals)} ${currency.label}\n\n`
     + `## Justification\n${getStringField(
       application.fields,
       "fundingBreakdown",
@@ -60,9 +76,10 @@ const getRawFromApplication = async (
     + `## Metrics for success\n${application.milestones.map(
       (
         milestone: GetGrantApplicationsQuery["grantApplications"][number]["milestones"][number],
-      ) => `${milestone.title} - ${milestone.amount}`,
+      ) => `${milestone.title} - ${formatAmount(milestone.amount, currency.decimals)} ${currency.label}`,
     )}\n\n`
     + `## External links\n${getStringField(application.fields, "customFields")}`;
+  logger.info({ raw }, "Raw");
   return raw;
 };
 
@@ -71,9 +88,12 @@ async function createPost(
   application: GetGrantApplicationsQuery["grantApplications"][number],
 ) {
   const raw = JSON.stringify({
-    category: await getCategoryFromWorkspace(chainId, application.grant.workspace.id),
+    category: await getCategoryFromWorkspace(
+      chainId,
+      application.grant.workspace.id,
+    ),
     title: getStringField(application.fields, "projectName"),
-    raw: await getRawFromApplication(application),
+    raw: await getRawFromApplication(application, chainId),
   });
 
   const requestOptions = {
@@ -82,17 +102,16 @@ async function createPost(
     body: raw,
   };
 
-  const response = await fetch(
-    `${process.env.DISCOURSE_API_URL}/posts.json`,
-    requestOptions,
-  );
+  const url = `${process.env.DISCOURSE_HOST}/posts.json`;
+  const response = await fetch(url, requestOptions);
   logger.info(response.status, "Create post status");
 
   const json = await response.json();
   logger.info(json, "Create post json");
 
   if (response.status === 200) {
-    await setItem(`${chainId}.${application.id}`, json.post.id);
+    await setItem(`${chainId}.${application.id}.post_id`, json.id);
+    await setItem(`${chainId}.${application.id}.topic_id`, json.topic_id);
     return true;
   }
   return false;
@@ -101,15 +120,14 @@ async function createPost(
 async function editPost(
   chainId: SupportedChainId,
   application: GetGrantApplicationsQuery["grantApplications"][number],
-  workspaceId: string,
 ) {
-  const key = `${chainId}.${application.id}`;
+  const key = `${chainId}.${application.id}.post_id`;
   const postId = await getItem(key);
   if (postId === -1) return;
 
   const raw = JSON.stringify({
-    title: getStringField(application.fields, "projectName"),
-    raw: await getRawFromApplication(application),
+    title: `${getStringField(application.fields, "projectName")} - Resubmission`,
+    raw: await getRawFromApplication(application, chainId),
     edit_reason: "Application Resubmission",
   });
 
@@ -120,7 +138,7 @@ async function editPost(
   };
 
   const response = await fetch(
-    `${process.env.DISCOURSE_API_URL}/posts/${postId}.json`,
+    `${process.env.DISCOURSE_HOST}/posts/${postId}.json`,
     requestOptions,
   );
   logger.info(response.status, "Edit post status");
@@ -134,11 +152,12 @@ async function addReplyToPost(
   applicationId: string,
   reply: string,
 ) {
-  const key = `${chainId}.${applicationId}`;
-  const postId = await getItem(key);
+  const key = `${chainId}.${applicationId}.topic_id`;
+  const topicId = await getItem(key);
+  if (topicId === -1) return;
 
   const raw = JSON.stringify({
-    parent_post_id: postId,
+    topic_id: topicId,
     raw: reply,
   });
 
@@ -149,7 +168,7 @@ async function addReplyToPost(
   };
 
   const response = await fetch(
-    `${process.env.DISCOURSE_API_URL}/posts.json`,
+    `${process.env.DISCOURSE_HOST}/posts.json`,
     requestOptions,
   );
   logger.info(response.status, "Reply to post status");

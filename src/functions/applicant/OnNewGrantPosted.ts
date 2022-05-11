@@ -68,7 +68,7 @@ async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplica
   return true;
 }
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
     const fromTimestamp = await getItem(getKey(chainId));
@@ -86,9 +86,10 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnNewGrantPostedDocument,
     );
 
-    const ret = handleEmail(results.grants, results.grantApplications, chainId);
+    if (!results.grantApplications || !results.grantApplications.length || !results.grants || !results.grants.length) return;
+    const grantApplications = results.grantApplications.filter((grantApplication: OnNewGrantPostedQuery['grantApplications'][number]) => grantApplication.applicantEmail.length > 0);
+
+    const ret = handleEmail(results.grants, grantApplications, chainId);
     if (ret) { await setItem(getKey(chainId), toTimestamp); }
   });
 };
-
-export default run;

@@ -4,6 +4,17 @@ query GetGrantApplications($applicationIDs: [ID!]) {
     grant {
       workspace {
         id
+        title
+        tokens {
+          id
+          label
+          address
+          decimal
+        }
+      }
+      reward {
+        id
+        asset
       }
     }
     fields {

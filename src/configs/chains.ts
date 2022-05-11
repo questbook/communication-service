@@ -21,5 +21,3 @@ export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(
       && id === SupportedChainId.HARMONY_TESTNET_S0)
       || process.env.DISCOURSE_TEST === "false"),
 ) as SupportedChainId[];
-
-// export { SupportedChainId, ALL_SUPPORTED_CHAIN_IDS };

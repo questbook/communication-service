@@ -19,6 +19,8 @@ import getDomain from "../../utils/linkUtils";
 import { getItem, setItem } from "../../utils/db";
 import sendEmails from "../../utils/email";
 import { executeQuery } from "../../utils/query";
+import { Template } from "../../generated/templates/applicant/OnMilestoneAccept.json";
+import { addReplyToPost } from "../../utils/discourse";
 
 const TEMPLATE = templateNames.applicant.OnMilestoneAccept;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -26,22 +28,22 @@ const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 async function handleEmail(applicationMilestones: OnMilestoneAcceptedQuery['applicationMilestones'], chainId: SupportedChainId) : Promise<boolean> {
   const emailData: EmailData[] = [];
   applicationMilestones.forEach(
-    (result: OnMilestoneAcceptedQuery["applicationMilestones"][0]) => {
+    (applicationMilestone: OnMilestoneAcceptedQuery["applicationMilestones"][0]) => {
       const email = {
-        to: result.application.applicantEmail[0].values.map(
+        to: applicationMilestone.application.applicantEmail[0].values.map(
           (
             item: OnMilestoneAcceptedQuery["applicationMilestones"][0]["application"]["applicantEmail"][0]["values"][0],
           ) => item.value,
         ),
         cc: [],
         replacementData: JSON.stringify({
-          applicantName: result.application.applicantName[0].values[0].value,
-          daoName: result.application.grant.workspace.title,
-          projectName: result.application.projectName[0].values[0].value,
+          applicantName: applicationMilestone.application.applicantName[0].values[0].value,
+          daoName: applicationMilestone.application.grant.workspace.title,
+          projectName: applicationMilestone.application.projectName[0].values[0].value,
           link: `${getDomain(
             chainId,
           )}/your_applications/manage_grant/?applicationId=${
-            result.application.id
+            applicationMilestone.application.id
           }&chainId=${chainId}`,
         }),
       };
@@ -67,12 +69,30 @@ async function handleEmail(applicationMilestones: OnMilestoneAcceptedQuery['appl
   return true;
 }
 
-const handleDiscourse = async (grantApplications: OnMilestoneAcceptedQuery['applicationMilestones']) : Promise<boolean> => {
-  const a = 5;
-  return false;
+const handleDiscourse = async (applicationMilestones: OnMilestoneAcceptedQuery['applicationMilestones'], chainId: SupportedChainId) : Promise<boolean> => {
+  applicationMilestones.forEach(
+    (applicationMilestone: OnMilestoneAcceptedQuery["applicationMilestones"][0]) => {
+      const data = {
+        applicantName: applicationMilestone.application.applicantName[0].values[0].value,
+        daoName: applicationMilestone.application.grant.workspace.title,
+        projectName: applicationMilestone.application.projectName[0].values[0].value,
+        link: `${getDomain(
+          chainId,
+        )}/your_applications/manage_grant/?applicationId=${
+          applicationMilestone.application.id
+        }&chainId=${chainId}`,
+      };
+      let raw = Template.TextPart;
+      Object.keys(data).forEach((key: string) => {
+        raw = raw.replace(`{{${key}}}`, data[key]);
+      });
+      addReplyToPost(chainId, applicationMilestone.application.id, raw);
+    },
+  );
+  return true;
 };
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
     const fromTimestamp = await getItem(getKey(chainId));
@@ -90,18 +110,19 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnMilestoneAcceptedDocument,
     );
 
+    if (!results.applicationMilestones || !results.applicationMilestones.length) return;
+    const fundsTransfers = results.applicationMilestones.filter((fundsTransfer: OnMilestoneAcceptedQuery['applicationMilestones'][number]) => fundsTransfer.application.applicantEmail.length > 0);
+
     let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(results.applicationMilestones);
+        ret = await handleDiscourse(fundsTransfers, chainId);
         break;
 
       default:
-        ret = await handleEmail(results.applicationMilestones, chainId);
+        ret = await handleEmail(fundsTransfers, chainId);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
-
-export default run;

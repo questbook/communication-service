@@ -11,14 +11,16 @@ import {
   SupportedChainId,
 } from "../../configs/chains";
 import {
-  GrantApplication,
+  GetGrantApplicationsDocument,
+  GetGrantApplicationsQuery,
   OnApplicationResubmitDocument,
   OnApplicationResubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import { getItem, setItem } from "../../utils/db";
+import { editPost } from "../../utils/discourse";
 import sendEmails from "../../utils/email";
-import { executeQuery } from "../../utils/query";
+import { executeApplicationQuery, executeQuery } from "../../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnApplicationResubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -26,18 +28,18 @@ const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 async function handleEmail(grantApplications: OnApplicationResubmitQuery['grantApplications']) : Promise<boolean> {
   const emailData: EmailData[] = [];
   grantApplications.forEach(
-    (result: OnApplicationResubmitQuery["grantApplications"][0]) => {
+    (application: OnApplicationResubmitQuery["grantApplications"][0]) => {
       const email = {
-        to: result.applicantEmail[0].values.map(
+        to: application.applicantEmail[0].values.map(
           (
             item: OnApplicationResubmitQuery["grantApplications"][0]["applicantEmail"][0]["values"][0],
           ) => item.value,
         ),
         cc: [],
         replacementData: JSON.stringify({
-          projectName: result.projectName[0].values[0].value,
-          applicantName: result.applicantName[0].values[0].value,
-          daoName: result.grant.workspace.title,
+          projectName: application.projectName[0].values[0].value,
+          applicantName: application.applicantName[0].values[0].value,
+          daoName: application.grant.workspace.title,
         }),
       };
       emailData.push(email);
@@ -61,12 +63,26 @@ async function handleEmail(grantApplications: OnApplicationResubmitQuery['grantA
   return true;
 }
 
-const handleDiscourse = async (grantApplications: OnApplicationResubmitQuery['grantApplications']) : Promise<boolean> => {
-  const a = 5;
-  return false;
+const handleDiscourse = async (grantApplications: OnApplicationResubmitQuery['grantApplications'], chainId: SupportedChainId) : Promise<boolean> => {
+  const applicationIDs: string[] = grantApplications.map(
+    (application: OnApplicationResubmitQuery["grantApplications"][number]) => application.id,
+  );
+  const results: GetGrantApplicationsQuery = await executeApplicationQuery(
+    chainId,
+    applicationIDs,
+    GetGrantApplicationsDocument,
+  );
+  results.grantApplications.forEach(
+    async (
+      application: GetGrantApplicationsQuery["grantApplications"][number],
+    ) => {
+      await editPost(chainId, application);
+    },
+  );
+  return true;
 };
 
-const run = async (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
     const fromTimestamp = await getItem(getKey(chainId));
@@ -84,18 +100,19 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnApplicationResubmitDocument,
     );
 
+    if (!results.grantApplications || !results.grantApplications.length) return;
+    const grantApplications = results.grantApplications.filter((application: OnApplicationResubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
+
     let ret: boolean;
     switch (chainId) {
       case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(results.grantApplications);
+        ret = await handleDiscourse(grantApplications, chainId);
         break;
 
       default:
-        ret = await handleEmail(results.grantApplications);
+        ret = await handleEmail(grantApplications);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);
   });
 };
-
-export default run;
