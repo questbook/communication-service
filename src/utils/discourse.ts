@@ -1,11 +1,6 @@
 import { draftToMarkdown } from "markdown-draft-js";
 import { SupportedChainId } from "../configs/chains";
-import {
-  ApplicationMilestone,
-  GrantApplication,
-  GrantFieldAnswer,
-  Workspace,
-} from "../generated/graphql";
+import { GetGrantApplicationsQuery, Workspace } from "../generated/graphql";
 import { getItem, setItem } from "./db";
 import { authHeaders, defaultHeaders } from "./headers";
 import "dotenv/config";
@@ -27,7 +22,10 @@ const getCategoryFromWorkspace = async (
   return value;
 };
 
-const getStringField = (fields: GrantFieldAnswer[], fieldName: string) => fields?.find(({ id }) => id.split(".")[1] === fieldName)?.values[0]?.value
+const getStringField = (
+  fields: GetGrantApplicationsQuery["grantApplications"][number]["fields"],
+  fieldName: string,
+) => fields?.find(({ id }) => id.split(".")[1] === fieldName)?.values[0]?.value
   ?? "";
 
 const getProjectDetails = async (projectDetails: string) => {
@@ -39,7 +37,7 @@ const getProjectDetails = async (projectDetails: string) => {
 };
 
 const getRawFromApplication = async (
-  application: GrantApplication,
+  application: GetGrantApplicationsQuery["grantApplications"][number],
 ): Promise<string> => {
   const details = await getProjectDetails(
     getStringField(application.fields, "projectDetails"),
@@ -60,7 +58,9 @@ const getRawFromApplication = async (
       "fundingBreakdown",
     )}\n\n`
     + `## Metrics for success\n${application.milestones.map(
-      (milestone: ApplicationMilestone) => `${milestone.title} - ${milestone.amount}`,
+      (
+        milestone: GetGrantApplicationsQuery["grantApplications"][number]["milestones"][number],
+      ) => `${milestone.title} - ${milestone.amount}`,
     )}\n\n`
     + `## External links\n${getStringField(application.fields, "customFields")}`;
   return raw;
@@ -68,7 +68,7 @@ const getRawFromApplication = async (
 
 async function createPost(
   chainId: SupportedChainId,
-  application: GrantApplication,
+  application: GetGrantApplicationsQuery["grantApplications"][number],
   workspaceId: string,
 ) {
   const raw = JSON.stringify({
@@ -99,7 +99,7 @@ async function createPost(
 
 async function editPost(
   chainId: SupportedChainId,
-  application: GrantApplication,
+  application: GetGrantApplicationsQuery["grantApplications"][number],
   workspaceId: string,
 ) {
   const key = `${chainId}.${application.id}`;

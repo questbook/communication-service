@@ -1,0 +1,24 @@
+query GetGrantApplications($applicationIDs: [ID!]) {
+  grantApplications(subgraphError: allow, where: { id_in: $applicationIDs }) {
+    id
+    fields {
+      id
+      field {
+        id
+        title
+        isPii
+        possibleValues
+        inputType
+      }
+      values {
+        id
+        value
+      }
+    }
+    milestones {
+      id
+      title
+      amount
+    }
+  }
+}
