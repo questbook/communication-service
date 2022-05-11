@@ -91,7 +91,7 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
         break;
 
       default:
-        ret = process.env.DISCOURSE_TEST ? false : await handleEmail(results.grantApplications);
+        ret = process.env.DISCOURSE_TEST === 'true' ? false : await handleEmail(results.grantApplications);
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);

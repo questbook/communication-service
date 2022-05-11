@@ -86,7 +86,7 @@ const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnNewGrantPostedDocument,
     );
 
-    const ret = process.env.DISCOURSE_TEST ? false : handleEmail(results.grants, results.grantApplications, chainId);
+    const ret = process.env.DISCOURSE_TEST === 'true' ? false : handleEmail(results.grants, results.grantApplications, chainId);
     if (ret) { await setItem(getKey(chainId), toTimestamp); }
   });
 };
