@@ -122,7 +122,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
     if (fromTimestamp === -1) {
       await setItem(getKey(chainId), toTimestamp);
-      return;
+      continue;
     }
 
     const results: OnFundsReceivedQuery = await executeQuery(
@@ -132,7 +132,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnFundsReceivedDocument,
     );
 
-    if (!results.fundsTransfers || !results.fundsTransfers.length) return;
+    if (!results.fundsTransfers || !results.fundsTransfers.length) continue;
     const fundsTransfers = results.fundsTransfers.filter(
       (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][number]) => fundsTransfer.application.applicantEmail.length > 0,
     );

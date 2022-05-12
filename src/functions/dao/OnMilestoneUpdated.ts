@@ -71,7 +71,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
     if (fromTimestamp === -1) {
       await setItem(getKey(chainId), toTimestamp);
-      return;
+      continue;
     }
 
     const results : OnMilestoneUpdatedQuery = await executeQuery(
@@ -81,7 +81,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnMilestoneUpdatedDocument,
     );
 
-    if (!results.applicationMilestones || !results.applicationMilestones.length) return;
+    if (!results.applicationMilestones || !results.applicationMilestones.length) continue;
 
     let ret: boolean;
     switch (chainId) {

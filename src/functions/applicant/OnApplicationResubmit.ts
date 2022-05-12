@@ -85,7 +85,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
     if (fromTimestamp === -1) {
       await setItem(getKey(chainId), toTimestamp);
-      return;
+      continue;
     }
 
     const results: OnApplicationResubmitQuery = await executeQuery(
@@ -95,7 +95,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnApplicationResubmitDocument,
     );
 
-    if (!results.grantApplications || !results.grantApplications.length) return;
+    if (!results.grantApplications || !results.grantApplications.length) continue;
     const grantApplications = results.grantApplications.filter((application: OnApplicationResubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
 
     let ret: boolean;
