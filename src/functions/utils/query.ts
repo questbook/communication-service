@@ -5,8 +5,8 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import fetch from 'cross-fetch';
-import { CHAIN_INFO } from '../configs/chainInfo';
-import { SupportedChainId } from '../configs/chains';
+import { CHAIN_INFO } from '../../configs/chainInfo';
+import { SupportedChainId } from '../../configs/chains';
 
 const Pino = require('pino');
 

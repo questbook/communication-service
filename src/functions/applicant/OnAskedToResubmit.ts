@@ -15,12 +15,12 @@ import {
   OnAskedToResubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import getDomain from "../../utils/linkUtils";
-import { getItem, setItem } from "../../utils/db";
-import sendEmails from "../../utils/email";
-import { executeQuery } from "../../utils/query";
+import getDomain from "../utils/linkUtils";
+import { getItem, setItem } from "../utils/db";
+import sendEmails from "../utils/email";
+import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnAskedToResubmit.json";
-import { addReplyToPost } from "../../utils/discourse";
+import { addReplyToPost } from "../utils/discourse";
 
 const TEMPLATE = templateNames.applicant.OnAskedToResubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;

@@ -17,12 +17,12 @@ import {
   Token,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import formatAmount from "../../utils/formattingUtils";
-import { getItem, setItem } from "../../utils/db";
-import sendEmails from "../../utils/email";
-import { executeQuery } from "../../utils/query";
+import formatAmount from "../utils/formattingUtils";
+import { getItem, setItem } from "../utils/db";
+import sendEmails from "../utils/email";
+import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnFundsReceived.json";
-import { addReplyToPost } from "../../utils/discourse";
+import { addReplyToPost } from "../utils/discourse";
 
 const TEMPLATE = templateNames.applicant.OnFundsReceived;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;

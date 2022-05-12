@@ -1,12 +1,12 @@
 import { draftToMarkdown } from "markdown-draft-js";
 import fetch from "cross-fetch";
-import { SupportedChainId } from "../configs/chains";
-import { GetGrantApplicationsQuery, Workspace } from "../generated/graphql";
+import { SupportedChainId } from "../../configs/chains";
+import { GetGrantApplicationsQuery, Workspace } from "../../generated/graphql";
 import { getItem, setItem } from "./db";
 import { authHeaders, defaultHeaders } from "./headers";
 import "dotenv/config";
 import getFromIPFS from "./ipfs";
-import { CHAIN_INFO } from "../configs/chainInfo";
+import { CHAIN_INFO } from "../../configs/chainInfo";
 import formatAmount from "./formattingUtils";
 
 const Pino = require("pino");

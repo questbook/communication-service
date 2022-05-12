@@ -17,10 +17,10 @@ import {
   OnApplicationResubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import { getItem, setItem } from "../../utils/db";
-import { editPost } from "../../utils/discourse";
-import sendEmails from "../../utils/email";
-import { executeApplicationQuery, executeQuery } from "../../utils/query";
+import { getItem, setItem } from "../utils/db";
+import { editPost } from "../utils/discourse";
+import sendEmails from "../utils/email";
+import { executeApplicationQuery, executeQuery } from "../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnApplicationResubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;

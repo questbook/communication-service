@@ -15,10 +15,10 @@ import {
   OnInviteMemberQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import getDomain from "../../utils/linkUtils";
-import { getItem, setItem } from "../../utils/db";
-import sendEmails from "../../utils/email";
-import { executeQuery } from "../../utils/query";
+import getDomain from "../utils/linkUtils";
+import { getItem, setItem } from "../utils/db";
+import sendEmails from "../utils/email";
+import { executeQuery } from "../utils/query";
 
 const TEMPLATE = templateNames.dao.OnInviteMember;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;

@@ -15,11 +15,11 @@ import {
   OnApplicationAcceptQuery,
 } from '../../generated/graphql';
 import templateNames from '../../generated/templateNames';
-import getDomain from '../../utils/linkUtils';
-import { getItem, setItem } from '../../utils/db';
-import sendEmails from '../../utils/email';
-import { executeQuery } from '../../utils/query';
-import { addReplyToPost } from '../../utils/discourse';
+import getDomain from '../utils/linkUtils';
+import { getItem, setItem } from '../utils/db';
+import sendEmails from '../utils/email';
+import { executeQuery } from '../utils/query';
+import { addReplyToPost } from '../utils/discourse';
 import { Template } from "../../generated/templates/applicant/OnApplicationAccept.json";
 
 const TEMPLATE = templateNames.applicant.OnApplicationAccept;
