@@ -5,7 +5,6 @@
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
-import { logger } from "ethers";
 import { EmailData } from "../../../types/EmailData";
 import {
   ALL_SUPPORTED_CHAIN_IDS,
@@ -25,6 +24,9 @@ import { executeApplicationQuery, executeQuery } from "../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnApplicationSubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
+const Pino = require('pino');
+
+const logger = Pino();
 
 async function handleEmail(
   grantApplications: OnApplicationSubmitQuery["grantApplications"],
@@ -88,38 +90,43 @@ async function handleDiscourse(
   return true;
 }
 
-export const run = async (event: APIGatewayProxyEvent, context: Context) => {
+async function work(chainId: SupportedChainId, toTimestamp: number): Promise<void> {
+  const fromTimestamp = await getItem(getKey(chainId));
+  logger.info({ chainId, fromTimestamp, toTimestamp }, "Fetching timestamp");
+
+  if (fromTimestamp === -1) {
+    await setItem(getKey(chainId), toTimestamp);
+    return;
+  }
+
+  const results: OnApplicationSubmitQuery = await executeQuery(
+    chainId,
+    fromTimestamp,
+    toTimestamp,
+    OnApplicationSubmitDocument,
+  );
+
+  if (!results.grantApplications || !results.grantApplications.length) return;
+  const grantApplications = results.grantApplications.filter((application: OnApplicationSubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
+
+  let ret: boolean;
+  switch (chainId) {
+    case SupportedChainId.HARMONY_TESTNET_S0:
+      ret = await handleDiscourse(grantApplications, chainId);
+      break;
+
+    default:
+      ret = await handleEmail(grantApplications);
+  }
+
+  if (ret) await setItem(getKey(chainId), toTimestamp);
+}
+
+export const run = (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   const toTimestamp = Math.floor(time.getTime() / 1000);
 
-  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
-    const fromTimestamp = await getItem(getKey(chainId));
-
-    if (fromTimestamp === -1) {
-      await setItem(getKey(chainId), toTimestamp);
-      return;
-    }
-
-    const results: OnApplicationSubmitQuery = await executeQuery(
-      chainId,
-      fromTimestamp,
-      toTimestamp,
-      OnApplicationSubmitDocument,
-    );
-
-    if (!results.grantApplications || !results.grantApplications.length) return;
-    const grantApplications = results.grantApplications.filter((application: OnApplicationSubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
-
-    let ret: boolean;
-    switch (chainId) {
-      case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(grantApplications, chainId);
-        break;
-
-      default:
-        ret = await handleEmail(grantApplications);
-    }
-
-    if (ret) await setItem(getKey(chainId), toTimestamp);
+  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
+    work(chainId, toTimestamp);
   });
 };
