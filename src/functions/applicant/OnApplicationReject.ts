@@ -22,13 +22,14 @@ import sendEmails from "../utils/email";
 import { executeApplicationQuery, executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnApplicationReject.json";
 import { addReplyToPost } from "../utils/discourse";
+import replaceAll from "../utils/string";
 
 const TEMPLATE = templateNames.applicant.OnApplicationReject;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
 async function handleEmail(grantApplications: OnApplicationRejectQuery['grantApplications'], chainId: SupportedChainId) : Promise<boolean> {
   const emailData: EmailData[] = [];
-  grantApplications.forEach((application: OnApplicationRejectQuery['grantApplications'][0]) => {
+  for (const application of grantApplications) {
     const email = {
       to: application.applicantEmail[0].values.map(
         (
@@ -48,7 +49,7 @@ async function handleEmail(grantApplications: OnApplicationRejectQuery['grantApp
       }),
     };
     emailData.push(email);
-  });
+  }
   if (!emailData.length) {
     return false;
   }
@@ -68,7 +69,7 @@ async function handleEmail(grantApplications: OnApplicationRejectQuery['grantApp
 }
 
 const handleDiscourse = async (grantApplications: OnApplicationRejectQuery['grantApplications'], chainId: SupportedChainId) : Promise<boolean> => {
-  grantApplications.forEach((application: OnApplicationRejectQuery['grantApplications'][0]) => {
+  for (const application of grantApplications) {
     const data = {
       projectName: application.projectName[0].values[0].value,
       applicantName: application.applicantName[0].values[0].value,
@@ -80,18 +81,18 @@ const handleDiscourse = async (grantApplications: OnApplicationRejectQuery['gran
       }&chainId=${chainId}`,
     };
     let raw = Template.TextPart;
-    Object.keys(data).forEach((key: string) => {
-      raw = raw.replace(`{{${key}}}`, data[key]);
-    });
-    addReplyToPost(chainId, application.id, raw);
-  });
+    for (const key of Object.keys(data)) {
+      raw = replaceAll(raw, `{{${key}}}`, data[key]);
+    }
+    await addReplyToPost(chainId, application.id, raw);
+  }
   return true;
 };
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
 
-  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
     const fromTimestamp = await getItem(getKey(chainId));
     const toTimestamp = Math.floor(time.getTime() / 1000);
 
@@ -120,5 +121,5 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
         ret = await handleEmail(grantApplications, chainId);
     }
     if (ret) await setItem(getKey(chainId), toTimestamp);
-  });
+  }
 };

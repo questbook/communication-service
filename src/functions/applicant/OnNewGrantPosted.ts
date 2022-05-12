@@ -25,15 +25,15 @@ const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
 async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplications: OnNewGrantPostedQuery['grantApplications'], chainId: SupportedChainId) {
   const emailData: EmailData[] = [];
-  grants.forEach((grant: OnNewGrantPostedQuery["grants"][0]) => {
-    grantApplications.forEach((applicant: OnNewGrantPostedQuery["grantApplications"][0]) => {
+  for (const grant of grants) {
+    for (const application of grantApplications) {
       const email = {
-        to: [applicant.applicantEmail[0]?.values[0]?.value],
+        to: [application.applicantEmail[0]?.values[0]?.value],
         cc: [],
         replacementData: JSON.stringify({
           grantName: grant.title,
           daoName: grant.workspace.title,
-          applicantName: applicant.applicantName[0]?.values[0]?.value,
+          applicantName: application.applicantName[0]?.values[0]?.value,
           grantLink: `${getDomain(
             chainId,
           )}/explore_grants/about_grant/?grantId=${
@@ -45,8 +45,8 @@ async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplica
         }),
       };
       emailData.push(email);
-    });
-  });
+    }
+  }
 
   if (emailData.length === 0) {
     return false;
@@ -70,7 +70,7 @@ async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplica
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
     const fromTimestamp = await getItem(getKey(chainId));
     const toTimestamp = Math.floor(time.getTime() / 1000);
 
@@ -91,5 +91,5 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
     const ret = handleEmail(results.grants, grantApplications, chainId);
     if (ret) { await setItem(getKey(chainId), toTimestamp); }
-  });
+  }
 };

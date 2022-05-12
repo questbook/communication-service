@@ -42,26 +42,24 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
   if (!results.workspaceMembers || !results.workspaceMembers.length) return;
 
   const emailData: EmailData[] = [];
-  results.workspaceMembers.forEach(
-    (result: OnInviteMemberQuery["workspaceMembers"][0]) => {
-      if (!result.email) {
-        return;
-      }
+  for (const member of results.workspaceMembers) {
+    if (!member.email) {
+      return;
+    }
 
-      const email = {
-        to: [result.email!],
-        cc: [],
-        replacementData: JSON.stringify({
-          daoName: result.workspace.title,
-          role: `${result.accessLevel.startsWith("a") ? "an" : "a"} ${
-            result.accessLevel
-          }`,
-          link: getDomain(chainId),
-        }),
-      };
-      emailData.push(email);
-    },
-  );
+    const email = {
+      to: [member.email!],
+      cc: [],
+      replacementData: JSON.stringify({
+        daoName: member.workspace.title,
+        role: `${member.accessLevel.startsWith("a") ? "an" : "a"} ${
+          member.accessLevel
+        }`,
+        link: getDomain(chainId),
+      }),
+    };
+    emailData.push(email);
+  }
 
   if (emailData.length === 0) {
     return;
@@ -82,7 +80,7 @@ async function handleEmail(chainId: SupportedChainId, time: Date) {
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
-    handleEmail(chainId, time);
-  });
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
+    await handleEmail(chainId, time);
+  }
 };

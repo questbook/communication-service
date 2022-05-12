@@ -23,6 +23,7 @@ import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnFundsReceived.json";
 import { addReplyToPost } from "../utils/discourse";
+import replaceAll from "../utils/string";
 
 const TEMPLATE = templateNames.applicant.OnFundsReceived;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
@@ -46,31 +47,29 @@ async function handleEmail(
   chainId: SupportedChainId,
 ) {
   const emailData: EmailData[] = [];
-  fundsTransfers.forEach(
-    (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][number]) => {
-      const currency = getCurrency(
-        fundsTransfer.application.grant.reward.asset,
-        chainId,
-        fundsTransfer.application.grant.workspace.tokens,
-      );
+  for (const fundsTransfer of fundsTransfers) {
+    const currency = getCurrency(
+      fundsTransfer.application.grant.reward.asset,
+      chainId,
+      fundsTransfer.application.grant.workspace.tokens,
+    );
 
-      const email = {
-        to: [fundsTransfer.application.applicantEmail[0].values[0].value],
-        cc: [],
-        replacementData: JSON.stringify({
-          projectName: fundsTransfer.application.projectName[0].values[0].value,
-          applicantName:
-            fundsTransfer.application.applicantName[0].values[0].value,
-          daoName: fundsTransfer.application.grant.workspace.title,
-          grantAmount: `${formatAmount(
-            fundsTransfer.amount,
-            currency.decimal,
-          )} ${currency.label}`,
-        }),
-      };
-      emailData.push(email);
-    },
-  );
+    const email = {
+      to: [fundsTransfer.application.applicantEmail[0].values[0].value],
+      cc: [],
+      replacementData: JSON.stringify({
+        projectName: fundsTransfer.application.projectName[0].values[0].value,
+        applicantName:
+          fundsTransfer.application.applicantName[0].values[0].value,
+        daoName: fundsTransfer.application.grant.workspace.title,
+        grantAmount: `${formatAmount(
+          fundsTransfer.amount,
+          currency.decimal,
+        )} ${currency.label}`,
+      }),
+    };
+    emailData.push(email);
+  }
 
   if (emailData.length === 0) {
     return false;
@@ -91,35 +90,33 @@ async function handleEmail(
 }
 
 const handleDiscourse = async (fundsTransfers: OnFundsReceivedQuery["fundsTransfers"], chainId: SupportedChainId) => {
-  fundsTransfers.forEach(
-    (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][0]) => {
-      const currency = getCurrency(
-        fundsTransfer.application.grant.reward.asset,
-        chainId,
-        fundsTransfer.application.grant.workspace.tokens,
-      );
-      const data = {
-        projectName: fundsTransfer.application.projectName[0].values[0].value,
-        applicantName:
-          fundsTransfer.application.applicantName[0].values[0].value,
-        daoName: fundsTransfer.application.grant.workspace.title,
-        grantAmount: `${formatAmount(fundsTransfer.amount, currency.decimal)} ${
-          currency.label
-        }`,
-      };
-      let raw = Template.TextPart;
-      Object.keys(data).forEach((key: string) => {
-        raw = raw.replace(`{{${key}}}`, data[key]);
-      });
-      addReplyToPost(chainId, fundsTransfer.application.id, raw);
-    },
-  );
+  for (const fundsTransfer of fundsTransfers) {
+    const currency = getCurrency(
+      fundsTransfer.application.grant.reward.asset,
+      chainId,
+      fundsTransfer.application.grant.workspace.tokens,
+    );
+    const data = {
+      projectName: fundsTransfer.application.projectName[0].values[0].value,
+      applicantName:
+        fundsTransfer.application.applicantName[0].values[0].value,
+      daoName: fundsTransfer.application.grant.workspace.title,
+      grantAmount: `${formatAmount(fundsTransfer.amount, currency.decimal)} ${
+        currency.label
+      }`,
+    };
+    let raw = Template.TextPart;
+    for (const key of Object.keys(data)) {
+      raw = replaceAll(raw, `{{${key}}}`, data[key]);
+    }
+    await addReplyToPost(chainId, fundsTransfer.application.id, raw);
+  }
   return true;
 };
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
     const fromTimestamp = await getItem(getKey(chainId));
     const toTimestamp = Math.floor(time.getTime() / 1000);
 
@@ -151,5 +148,5 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);
-  });
+  }
 };

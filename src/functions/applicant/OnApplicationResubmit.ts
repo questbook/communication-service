@@ -27,24 +27,22 @@ const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
 async function handleEmail(grantApplications: OnApplicationResubmitQuery['grantApplications']) : Promise<boolean> {
   const emailData: EmailData[] = [];
-  grantApplications.forEach(
-    (application: OnApplicationResubmitQuery["grantApplications"][0]) => {
-      const email = {
-        to: application.applicantEmail[0].values.map(
-          (
-            item: OnApplicationResubmitQuery["grantApplications"][0]["applicantEmail"][0]["values"][0],
-          ) => item.value,
-        ),
-        cc: [],
-        replacementData: JSON.stringify({
-          projectName: application.projectName[0].values[0].value,
-          applicantName: application.applicantName[0].values[0].value,
-          daoName: application.grant.workspace.title,
-        }),
-      };
-      emailData.push(email);
-    },
-  );
+  for (const application of grantApplications) {
+    const email = {
+      to: application.applicantEmail[0].values.map(
+        (
+          item: OnApplicationResubmitQuery["grantApplications"][0]["applicantEmail"][0]["values"][0],
+        ) => item.value,
+      ),
+      cc: [],
+      replacementData: JSON.stringify({
+        projectName: application.projectName[0].values[0].value,
+        applicantName: application.applicantName[0].values[0].value,
+        daoName: application.grant.workspace.title,
+      }),
+    };
+    emailData.push(email);
+  }
 
   if (emailData.length === 0) {
     return false;
@@ -72,19 +70,16 @@ const handleDiscourse = async (grantApplications: OnApplicationResubmitQuery['gr
     applicationIDs,
     GetGrantApplicationsDocument,
   );
-  results.grantApplications.forEach(
-    async (
-      application: GetGrantApplicationsQuery["grantApplications"][number],
-    ) => {
-      await editPost(chainId, application);
-    },
-  );
+
+  for (const application of results.grantApplications) {
+    await editPost(chainId, application);
+  }
   return true;
 };
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
     const fromTimestamp = await getItem(getKey(chainId));
     const toTimestamp = Math.floor(time.getTime() / 1000);
 
@@ -114,5 +109,5 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     }
 
     if (ret) await setItem(getKey(chainId), toTimestamp);
-  });
+  }
 };

@@ -22,22 +22,22 @@ const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
 async function handleEmail(applicationMilestones: OnMilestoneUpdatedQuery['applicationMilestones'], chainId: SupportedChainId) : Promise<boolean> {
   const emailData: EmailData[] = [];
-  applicationMilestones.forEach((result: OnMilestoneUpdatedQuery['applicationMilestones'][0]) => {
+  for (const milestone of applicationMilestones) {
     const email = {
-      to: result.application.grant.workspace.members.map(
+      to: milestone.application.grant.workspace.members.map(
         (member: OnMilestoneUpdatedQuery['applicationMilestones'][0]['application']['grant']['workspace']['members'][0]) => member.email,
       ),
       cc: [],
       replacementData: JSON.stringify({
-        projectName: result.application.projectName[0].values[0].value,
-        applicantName: result.application.applicantName[0].values[0].value,
-        daoName: result.application.grant.workspace.title,
-        grantName: result.application.grant.title,
-        link: `${getDomain(chainId)}/your_grants/view_applicants/manage/?applicationId=${result.application.id}`,
+        projectName: milestone.application.projectName[0].values[0].value,
+        applicantName: milestone.application.applicantName[0].values[0].value,
+        daoName: milestone.application.grant.workspace.title,
+        grantName: milestone.application.grant.title,
+        link: `${getDomain(chainId)}/your_grants/view_applicants/manage/?applicationId=${milestone.application.id}`,
       }),
     };
     emailData.push(email);
-  });
+  }
 
   if (emailData.length === 0) {
     return false;
@@ -65,7 +65,7 @@ const handleDiscourse = async (applicationMilestones: OnMilestoneUpdatedQuery['a
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
-  ALL_SUPPORTED_CHAIN_IDS.forEach(async (chainId: SupportedChainId) => {
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
     const fromTimestamp = await getItem(getKey(chainId));
     const toTimestamp = Math.floor(time.getTime() / 1000);
 
@@ -93,5 +93,5 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
         ret = await handleEmail(results.applicationMilestones, chainId);
     }
     if (ret) await setItem(getKey(chainId), toTimestamp);
-  });
+  }
 };

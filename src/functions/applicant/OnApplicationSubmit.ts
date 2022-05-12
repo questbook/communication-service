@@ -24,7 +24,7 @@ import { executeApplicationQuery, executeQuery } from "../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnApplicationSubmit;
 const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
-const Pino = require('pino');
+const Pino = require("pino");
 
 const logger = Pino();
 
@@ -32,24 +32,22 @@ async function handleEmail(
   grantApplications: OnApplicationSubmitQuery["grantApplications"],
 ): Promise<boolean> {
   const emailData: EmailData[] = [];
-  grantApplications.forEach(
-    (application: OnApplicationSubmitQuery["grantApplications"][number]) => {
-      const email = {
-        to: application.applicantEmail[0].values.map(
-          (
-            item: OnApplicationSubmitQuery["grantApplications"][number]["applicantEmail"][number]["values"][number],
-          ) => item.value,
-        ),
-        cc: [],
-        replacementData: JSON.stringify({
-          projectName: application.projectName[0].values[0].value,
-          applicantName: application.applicantName[0].values[0].value,
-          daoName: application.grant.workspace.title,
-        }),
-      };
-      emailData.push(email);
-    },
-  );
+  for (const application of grantApplications) {
+    const email = {
+      to: application.applicantEmail[0].values.map(
+        (
+          item: OnApplicationSubmitQuery["grantApplications"][number]["applicantEmail"][number]["values"][number],
+        ) => item.value,
+      ),
+      cc: [],
+      replacementData: JSON.stringify({
+        projectName: application.projectName[0].values[0].value,
+        applicantName: application.applicantName[0].values[0].value,
+        daoName: application.grant.workspace.title,
+      }),
+    };
+    emailData.push(email);
+  }
 
   if (emailData.length === 0) {
     return false;
@@ -80,53 +78,45 @@ async function handleDiscourse(
     applicationIDs,
     GetGrantApplicationsDocument,
   );
-  results.grantApplications.forEach(
-    async (
-      application: GetGrantApplicationsQuery["grantApplications"][number],
-    ) => {
-      await createPost(chainId, application);
-    },
-  );
+
+  for (const application of results.grantApplications) await createPost(chainId, application);
   return true;
 }
 
-async function work(chainId: SupportedChainId, toTimestamp: number): Promise<void> {
-  const fromTimestamp = await getItem(getKey(chainId));
-  logger.info({ chainId, fromTimestamp, toTimestamp }, "Fetching timestamp");
-
-  if (fromTimestamp === -1) {
-    await setItem(getKey(chainId), toTimestamp);
-    return;
-  }
-
-  const results: OnApplicationSubmitQuery = await executeQuery(
-    chainId,
-    fromTimestamp,
-    toTimestamp,
-    OnApplicationSubmitDocument,
-  );
-
-  if (!results.grantApplications || !results.grantApplications.length) return;
-  const grantApplications = results.grantApplications.filter((application: OnApplicationSubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
-
-  let ret: boolean;
-  switch (chainId) {
-    case SupportedChainId.HARMONY_TESTNET_S0:
-      ret = await handleDiscourse(grantApplications, chainId);
-      break;
-
-    default:
-      ret = await handleEmail(grantApplications);
-  }
-
-  if (ret) await setItem(getKey(chainId), toTimestamp);
-}
-
-export const run = (event: APIGatewayProxyEvent, context: Context) => {
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   const toTimestamp = Math.floor(time.getTime() / 1000);
 
-  ALL_SUPPORTED_CHAIN_IDS.forEach((chainId: SupportedChainId) => {
-    work(chainId, toTimestamp);
-  });
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
+    const fromTimestamp = await getItem(getKey(chainId));
+
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      return;
+    }
+
+    const results: OnApplicationSubmitQuery = await executeQuery(
+      chainId,
+      fromTimestamp,
+      toTimestamp,
+      OnApplicationSubmitDocument,
+    );
+
+    if (!results.grantApplications || !results.grantApplications.length) return;
+    const grantApplications = results.grantApplications.filter(
+      (application: OnApplicationSubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0,
+    );
+
+    let ret: boolean;
+    switch (chainId) {
+      case SupportedChainId.HARMONY_TESTNET_S0:
+        ret = await handleDiscourse(grantApplications, chainId);
+        break;
+
+      default:
+        ret = await handleEmail(grantApplications);
+    }
+
+    if (ret) await setItem(getKey(chainId), toTimestamp);
+  }
 };
