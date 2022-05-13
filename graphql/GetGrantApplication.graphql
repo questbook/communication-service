@@ -17,6 +17,12 @@ query GetGrantApplications($applicationIDs: [ID!]) {
         asset
       }
     }
+    externalLinks: fields(where: { field_contains: "External" }) {
+      values {
+        id
+        value
+      }
+    }
     fields {
       id
       field {

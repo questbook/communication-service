@@ -2940,7 +2940,7 @@ export type GetGrantApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type GetGrantApplicationsQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', id: string, title: string, tokens: Array<{ __typename?: 'Token', id: string, label: string, address: string, decimal: number }> }, reward: { __typename?: 'Reward', id: string, asset: string } }, fields: Array<{ __typename?: 'GrantFieldAnswer', id: string, field: { __typename?: 'GrantField', id: string, title: string, isPii: boolean, possibleValues?: Array<string> | null, inputType: GrantFieldInputType }, values: Array<{ __typename?: 'GrantFieldAnswerItem', id: string, value: string }> }>, milestones: Array<{ __typename?: 'ApplicationMilestone', id: string, title: string, amount: string }> }> };
+export type GetGrantApplicationsQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', id: string, title: string, tokens: Array<{ __typename?: 'Token', id: string, label: string, address: string, decimal: number }> }, reward: { __typename?: 'Reward', id: string, asset: string } }, externalLinks: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', id: string, value: string }> }>, fields: Array<{ __typename?: 'GrantFieldAnswer', id: string, field: { __typename?: 'GrantField', id: string, title: string, isPii: boolean, possibleValues?: Array<string> | null, inputType: GrantFieldInputType }, values: Array<{ __typename?: 'GrantFieldAnswerItem', id: string, value: string }> }>, milestones: Array<{ __typename?: 'ApplicationMilestone', id: string, title: string, amount: string }> }> };
 
 export type OnApplicationAcceptQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -3057,6 +3057,12 @@ export const GetGrantApplicationsDocument = gql`
       reward {
         id
         asset
+      }
+    }
+    externalLinks: fields(where: {field_contains: "External"}) {
+      values {
+        id
+        value
       }
     }
     fields {

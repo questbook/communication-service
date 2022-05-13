@@ -19,10 +19,11 @@ const getCategoryFromWorkspace = async (
   chainId: SupportedChainId,
   workspaceId: string,
 ): Promise<number> => {
-  if (process.env.DISCOURSE_TEST === "true") return 6;
-  const key = getKey(chainId, workspaceId);
-  const value = await getItem(key);
-  return value;
+  logger.info({ chainId, workspaceId }, "Get category from workspace");
+  return 6;
+  // const key = getKey(chainId, workspaceId);
+  // const value = await getItem(key);
+  // return value;
 };
 
 const getStringField = (
@@ -33,6 +34,7 @@ const getStringField = (
 
 const getProjectDetails = async (projectDetails: string) => {
   if (projectDetails.startsWith("Qm")) {
+    logger.info({ projectDetails }, "Get project details from IPFS Hash");
     const raw = await getFromIPFS(projectDetails);
     return draftToMarkdown(JSON.parse(raw));
   }
@@ -78,7 +80,7 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
         milestone: GetGrantApplicationsQuery["grantApplications"][number]["milestones"][number],
       ) => `${milestone.title} - ${formatAmount(milestone.amount, currency.decimals)} ${currency.label}`,
     )}\n\n`
-    + `## External links\n${getStringField(application.fields, "customFields")}`;
+    + `## External links\n${application.externalLinks[0].values[0].value}`;
   logger.info({ raw }, "Raw");
   return raw;
 };
@@ -95,6 +97,7 @@ async function createPost(
     title: getStringField(application.fields, "projectName"),
     raw: await getRawFromApplication(application, chainId),
   });
+  logger.info({ raw }, "Raw Data - Create Post");
 
   const requestOptions = {
     method: "POST",
@@ -131,6 +134,8 @@ async function editPost(
     edit_reason: "Application Resubmission",
   });
 
+  logger.info({ raw }, "Raw Data - Edit Post");
+
   const requestOptions = {
     method: "PUT",
     headers: authHeaders,
@@ -160,6 +165,7 @@ async function addReplyToPost(
     topic_id: topicId,
     raw: reply,
   });
+  logger.info({ raw }, "Raw Data - Reply to Post");
 
   const requestOptions = {
     method: "POST",
