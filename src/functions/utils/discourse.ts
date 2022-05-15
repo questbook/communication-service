@@ -29,8 +29,13 @@ const getCategoryFromWorkspace = async (
 const getStringField = (
   fields: GetGrantApplicationsQuery["grantApplications"][number]["fields"],
   fieldName: string,
-) => fields?.find(({ id }) => id.split(".")[1] === fieldName)?.values[0]?.value
-  ?? "";
+) => {
+  logger.info({ fieldName }, "Get string field");
+  const field = fields?.find(({ id }) => id.split(".")[1] === fieldName)?.values[0]?.value
+      ?? "";
+  logger.info({ field }, "Field");
+  return field;
+};
 
 const getProjectDetails = async (projectDetails: string) => {
   if (projectDetails.startsWith("Qm")) {
@@ -60,6 +65,8 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
   logger.info({ dataOrHash }, "Project details");
   logger.info({ details }, "Decoded project details");
   const currency: {label: string, decimals: number} = getCurrency(application, chainId);
+  logger.info({ currency }, "Currency");
+
   const raw = `## Name of Project / DAO / Company\n${getStringField(
     application.fields,
     "projectName",
@@ -80,7 +87,7 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
         milestone: GetGrantApplicationsQuery["grantApplications"][number]["milestones"][number],
       ) => `${milestone.title} - ${formatAmount(milestone.amount, currency.decimals)} ${currency.label}`,
     )}\n\n`
-    + `## External links\n${application.externalLinks[0].values[0].value}`;
+    + `## External links\n${application.externalLinks.length > 0 ? application.externalLinks[0].values[0].value : ""}`;
   logger.info({ raw }, "Raw");
   return raw;
 };
