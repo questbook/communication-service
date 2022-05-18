@@ -95,12 +95,33 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
 async function createPost(
   chainId: SupportedChainId,
   application: GetGrantApplicationsQuery["grantApplications"][number],
-) {
+) : Promise<boolean> {
+  const category = await getCategoryFromWorkspace(
+    chainId,
+    application.grant.workspace.id,
+  );
+
+  if (category === -1) {
+    logger.info({}, 'Category not found');
+    return false;
+  }
+
+  const postIdKey = `${chainId}.${application.id}.post_id`;
+  const postId = await getItem(postIdKey);
+  if (postId !== -1) {
+    logger.info({ postId }, "Post already exists");
+    return false;
+  }
+
+  const topicIdKey = `${chainId}.${application.id}.topic_id`;
+  const topicId = await getItem(postIdKey);
+  if (topicId !== -1) {
+    logger.info({ topicId }, "Topic already exists");
+    return false;
+  }
+
   const raw = JSON.stringify({
-    category: await getCategoryFromWorkspace(
-      chainId,
-      application.grant.workspace.id,
-    ),
+    category,
     title: getStringField(application.fields, "projectName"),
     raw: await getRawFromApplication(application, chainId),
   });
@@ -130,10 +151,13 @@ async function createPost(
 async function editPost(
   chainId: SupportedChainId,
   application: GetGrantApplicationsQuery["grantApplications"][number],
-) {
+) : Promise<boolean> {
   const key = `${chainId}.${application.id}.post_id`;
   const postId = await getItem(key);
-  if (postId === -1) return;
+  if (postId === -1) {
+    logger.info({}, 'Post not found');
+    return false;
+  }
 
   const raw = JSON.stringify({
     title: `${getStringField(application.fields, "projectName")} - Resubmission`,
@@ -157,16 +181,20 @@ async function editPost(
 
   const json = await response.json();
   logger.info(json, "Edit post json");
+  return true;
 }
 
 async function addReplyToPost(
   chainId: SupportedChainId,
   applicationId: string,
   reply: string,
-) {
+) : Promise<boolean> {
   const key = `${chainId}.${applicationId}.topic_id`;
   const topicId = await getItem(key);
-  if (topicId === -1) return;
+  if (topicId === -1) {
+    logger.info({}, 'Topic not found');
+    return false;
+  }
 
   const raw = JSON.stringify({
     topic_id: topicId,
@@ -188,6 +216,7 @@ async function addReplyToPost(
 
   const json = await response.json();
   logger.info(json, "Reply to post json");
+  return true;
 }
 
 async function createCategory(chainId: SupportedChainId, workspace: Workspace) {
