@@ -114,7 +114,7 @@ async function createPost(
   }
 
   const topicIdKey = `${chainId}.${application.id}.topic_id`;
-  const topicId = await getItem(postIdKey);
+  const topicId = await getItem(topicIdKey);
   if (topicId !== -1) {
     logger.info({ topicId }, "Topic already exists");
     return false;
