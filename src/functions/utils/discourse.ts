@@ -85,7 +85,7 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
     + `## Metrics for success\n${application.milestones.map(
       (
         milestone: GetGrantApplicationsQuery["grantApplications"][number]["milestones"][number],
-      ) => `${milestone.title} - ${formatAmount(milestone.amount, currency.decimals)} ${currency.label}`,
+      ) => `${milestone.title} - ${formatAmount(milestone.amount, currency.decimals)} ${currency.label}\n`,
     )}\n\n`
     + `## External links\n${application.externalLinks.length > 0 ? application.externalLinks[0].values[0].value : ""}`;
   logger.info({ raw }, "Raw");
