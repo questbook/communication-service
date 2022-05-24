@@ -38,10 +38,12 @@ const getStringField = (
 };
 
 const getProjectDetails = async (projectDetails: string) => {
-  if (projectDetails.startsWith("Qm")) {
+  while (projectDetails.startsWith("Qm")) {
     logger.info({ projectDetails }, "Get project details from IPFS Hash");
     const raw = await getFromIPFS(projectDetails);
-    return draftToMarkdown(JSON.parse(raw));
+    if (!raw.startsWith("Qm")) return draftToMarkdown(JSON.parse(raw));
+    // eslint-disable-next-line no-param-reassign
+    projectDetails = raw;
   }
   return projectDetails;
 };
@@ -58,10 +60,8 @@ const getCurrency = (application: GetGrantApplicationsQuery["grantApplications"]
 };
 
 const getRawFromApplication = async (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: SupportedChainId): Promise<string> => {
-  const details = await getProjectDetails(
-    getStringField(application.fields, "projectDetails"),
-  );
   const dataOrHash = getStringField(application.fields, "projectDetails");
+  const details = await getProjectDetails(dataOrHash);
   logger.info({ dataOrHash }, "Project details");
   logger.info({ details }, "Decoded project details");
   const currency: {label: string, decimals: number} = getCurrency(application, chainId);
