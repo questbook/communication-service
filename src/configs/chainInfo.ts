@@ -284,4 +284,31 @@ export const CHAIN_INFO: ChainInfoMap = {
             'https://the-graph.questbook.app/subgraphs/name/qb-subgraph-optimism-mainnet',
     rpcUrls: ['https://mainnet.optimism.io/'],
   },
+  [SupportedChainId.CELO_ALFAJORES_TESTNET]: {
+		id: SupportedChainId.CELO_ALFAJORES_TESTNET,
+		name: 'Celo Alfajores Testnet',
+		nativeCurrency: {
+			name: 'Celo',
+			symbol: 'Celo',
+      decimal: 18
+		},
+		explorer: {
+			address: 'https://alfajores-blockscout.celo-testnet.org/address/',
+			transactionHash: 'https://alfajores-blockscout.celo-testnet.org/tx/',
+		},
+		supportedCurrencies: {
+			'0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9': {
+				label: 'CELO',
+				address: '0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9',
+				decimal: 18,
+			},
+			'0x874069fa1eb16d44d622f2e0ca25eea172369bc1': {
+				label: 'cUSD',
+				address: '0x874069fa1eb16d44d622f2e0ca25eea172369bc1',
+				decimal: 18,
+			}
+		},
+		subgraphClientUrl: 'https://the-graph.questbook.app/subgraphs/name/qb-subgraph-celo-alfajores-testnet',
+		rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
+	}
 };

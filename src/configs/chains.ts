@@ -6,6 +6,7 @@ export enum SupportedChainId {
   POLYGON_TESTNET = 80001,
   POLYGON_MAINNET = 137,
   OPTIMISM_MAINNET = 10,
+  CELO_ALFAJORES_TESTNET = 44787
 }
 
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(
