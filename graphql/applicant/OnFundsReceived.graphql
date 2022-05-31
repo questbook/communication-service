@@ -31,6 +31,12 @@ query OnFundsReceived($lowerLimit: Int!, $upperLimit: Int!) {
             email
             actorId
           }
+          tokens {
+            id
+            label
+            address
+            decimal
+          }
         }
         reward {
           asset

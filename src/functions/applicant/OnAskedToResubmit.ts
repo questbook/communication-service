@@ -4,77 +4,122 @@
 // we modify the timestamp till which we have processed.
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
-import { APIGatewayProxyEvent, Context } from 'aws-lambda'
-import { EmailData } from '../../../types/EmailData'
+import { APIGatewayProxyEvent, Context } from "aws-lambda";
+import { EmailData } from "../../../types/EmailData";
 import {
-	ALL_SUPPORTED_CHAIN_IDS,
-	SupportedChainId,
-} from '../../configs/chains'
+  ALL_SUPPORTED_CHAIN_IDS,
+  SupportedChainId,
+} from "../../configs/chains";
 import {
-	OnAskedToResubmitDocument, OnAskedToResubmitQuery,
-} from '../../generated/graphql'
-import templateNames from '../../generated/templateNames'
-import getDomain from '../../utils/linkUtils'
-import { getItem, setItem } from '../db'
-import sendEmails from '../email'
-import executeQuery from '../query'
+  OnAskedToResubmitDocument,
+  OnAskedToResubmitQuery,
+} from "../../generated/graphql";
+import templateNames from "../../generated/templateNames";
+import getDomain from "../utils/linkUtils";
+import { getItem, setItem } from "../utils/db";
+import sendEmails from "../utils/email";
+import { executeQuery } from "../utils/query";
+import { Template } from "../../generated/templates/applicant/OnAskedToResubmit.json";
+import { addReplyToPost } from "../utils/discourse";
+import replaceAll from "../utils/string";
 
-const TEMPLATE = templateNames.applicant.OnAskedToResubmit
-const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`
+const TEMPLATE = templateNames.applicant.OnAskedToResubmit;
+const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
 
-export const run = async(event: APIGatewayProxyEvent, context: Context) => {
-	const time = new Date()
+async function handleEmail(grantApplications: OnAskedToResubmitQuery['grantApplications'], chainId: SupportedChainId) : Promise<boolean> {
+  const emailData: EmailData[] = [];
+  for (const application of grantApplications) {
+    const email = {
+      to: application.applicantEmail[0].values.map(
+        (
+          item: OnAskedToResubmitQuery["grantApplications"][0]["applicantEmail"][0]["values"][0],
+        ) => item.value,
+      ),
+      cc: [],
+      replacementData: JSON.stringify({
+        projectName: application.projectName[0].values[0].value,
+        applicantName: application.applicantName[0].values[0].value,
+        daoName: application.grant.workspace.title,
+        link: `${getDomain(
+          chainId,
+        )}/your_applications/grant_application/?applicationId=${
+          application.id
+        }&chainId=${chainId}`,
+      }),
+    };
+    emailData.push(email);
+  }
 
-	for(const chainId of ALL_SUPPORTED_CHAIN_IDS) {
-		const fromTimestamp = await getItem(getKey(chainId))
-		const toTimestamp = Math.floor(time.getTime() / 1000)
+  if (emailData.length === 0) {
+    return false;
+  }
 
-		if(fromTimestamp === -1) {
-			await setItem(getKey(chainId), toTimestamp)
-			continue
-		}
+  const emailResult = await sendEmails(
+    emailData,
+    TEMPLATE,
+    JSON.stringify({
+      projectName: "",
+      applicantName: "",
+      daoName: "",
+      link: "",
+    }),
+  );
 
-		const results : OnAskedToResubmitQuery = await executeQuery(
-			chainId,
-			fromTimestamp,
-			toTimestamp,
-			OnAskedToResubmitDocument
-		)
-
-		const emailData: EmailData[] = []
-		for(const result of results.grantApplications) {
-			const email = {
-				to: result.applicantEmail[0].values.map(
-					(item: OnAskedToResubmitQuery['grantApplications'][0]['applicantEmail'][0]['values'][0]) => item.value
-				),
-				cc: [],
-				replacementData: JSON.stringify({
-					projectName: result.projectName[0].values[0].value,
-					applicantName: result.applicantName[0].values[0].value,
-					daoName: result.grant.workspace.title,
-					link: getDomain(chainId) + `/your_applications/grant_application/?applicationId=${result.id}&chainId=${chainId}`,
-				}),
-			}
-			emailData.push(email)
-		}
-
-		if(emailData.length === 0) {
-			continue
-		}
-
-		const emailResult = await sendEmails(
-			emailData,
-			TEMPLATE,
-			JSON.stringify({
-				projectName: '',
-				applicantName: '',
-				daoName: '',
-				link: '',
-			})
-		)
-
-		await setItem(getKey(chainId), toTimestamp)
-	}
+  return true;
 }
 
-export default run
+const handleDiscourse = async (grantApplications: OnAskedToResubmitQuery['grantApplications'], chainId: SupportedChainId) => {
+  for (const application of grantApplications) {
+    const data = {
+      projectName: application.projectName[0].values[0].value,
+      applicantName: application.applicantName[0].values[0].value,
+      daoName: application.grant.workspace.title,
+      link: `${getDomain(
+        chainId,
+      )}/your_applications/grant_application/?applicationId=${
+        application.id
+      }&chainId=${chainId}`,
+    };
+    let raw = Template.TextPart;
+    for (const key of Object.keys(data)) {
+      raw = replaceAll(raw, `{{${key}}}`, data[key]);
+    }
+    await addReplyToPost(chainId, application.id, raw);
+  }
+  return true;
+};
+
+export const run = async (event: APIGatewayProxyEvent, context: Context) => {
+  const time = new Date();
+  for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
+    const fromTimestamp = await getItem(getKey(chainId));
+    const toTimestamp = Math.floor(time.getTime() / 1000);
+
+    if (fromTimestamp === -1) {
+      await setItem(getKey(chainId), toTimestamp);
+      continue;
+    }
+
+    const results: OnAskedToResubmitQuery = await executeQuery(
+      chainId,
+      fromTimestamp,
+      toTimestamp,
+      OnAskedToResubmitDocument,
+    );
+
+    if (!results.grantApplications || !results.grantApplications.length) continue;
+    const grantApplications = results.grantApplications.filter((application: OnAskedToResubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
+
+    let ret: boolean;
+    switch (chainId) {
+      case SupportedChainId.HARMONY_TESTNET_S0:
+        ret = await handleDiscourse(grantApplications, chainId);
+        break;
+
+      default:
+        ret = await handleEmail(grantApplications, chainId);
+    }
+
+    if (ret) await setItem(getKey(chainId), toTimestamp);
+  }
+};

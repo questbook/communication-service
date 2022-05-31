@@ -23,6 +23,7 @@ query OnApplicationReject($lowerLimit: Int!, $upperLimit: Int!) {
         value
       }
     }
+    feedbackDao
     grant {
       workspace {
         title

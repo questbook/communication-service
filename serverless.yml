@@ -63,19 +63,19 @@ functions:
     events:
       - schedule: rate(1 minute)
   
-  dao-on-application-resubmission:
-    handler: src/functions/dao/OnApplicationResubmission.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(1 minute)
+  # dao-on-application-resubmission:
+  #   handler: src/functions/dao/OnApplicationResubmission.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(1 minute)
 
-  dao-on-application-submission:
-    handler: src/functions/dao/OnApplicationSubmission.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(1 minute)
+  # dao-on-application-submission:
+  #   handler: src/functions/dao/OnApplicationSubmission.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(1 minute)
 
   dao-on-invite-members:
     handler: src/functions/dao/OnInviteMember.run
@@ -84,12 +84,12 @@ functions:
     events:
       - schedule: rate(1 minute)
 
-  dao-on-milestone-updated:
-    handler: src/functions/dao/OnMilestoneUpdated.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(1 minute)
+  # dao-on-milestone-updated:
+  #   handler: src/functions/dao/OnMilestoneUpdated.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(1 minute)
   
 
 plugins:
