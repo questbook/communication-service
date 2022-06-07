@@ -1,8 +1,0 @@
-{
-    "Template": {
-        "TemplateName": "applicantOnApplicationResubmit",
-        "SubjectPart": "{{daoName}} - Your application has been resubmitted",
-        "HtmlPart": "<p>Hi <b>{{applicantName}}</b>,</p> <p>This is to confirm that <b>{{daoName}}</b> has received the resubmission for your project <b>{{projectName}}</b>. The grants team will now review your submission. In case the team decides to proceed with your grant application to the next stage, they will get in touch with you soon. <br /> <br />Best, <br />Team Questbook </p>",
-        "TextPart": "Hi {{applicantName}}, \nThis is to confirm that {{daoName}} has received the resubmission for your project {{projectName}}. The grants team will now review your submission. In case the team decides to proceed with your grant application to the next stage, they will get in touch with you soon. \n \nBest, \nTeam Questbook"
-    }
-}

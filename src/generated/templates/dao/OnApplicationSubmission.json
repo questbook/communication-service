@@ -1,8 +1,0 @@
-{
-    "Template": {
-        "TemplateName": "daoOnApplicationSubmission",
-        "SubjectPart": "{{grantName}}: New submission as {{projectName}}",
-        "HtmlPart": "<p>Hi <b>{{daoName}}</b>,</p> <p> <b>{{applicantName}}</b> has submitted the application for the grant titled <b>{{grantName}}</b>. You can view the details of the application at {{link}} <br /> <br />Best, <br />Team Questbook </p>",
-        "TextPart": "Hi {{daoName}}, \n {{applicantName}} has submitted the application for the grant titled {{grantName}}. You can view the details of the application at {{link}} \n \nBest, \nTeam Questbook"
-    }
-}
