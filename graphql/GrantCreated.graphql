@@ -1,0 +1,24 @@
+query GrantCreated($lowerLimit: Int!, $upperLimit: Int!) {
+  grants(
+    subgraphError: allow
+    where: { updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit }
+  ) {
+    id
+    title
+    summary
+    workspace {
+      id
+      chain: supportedNetworks
+    }
+    creatorId
+    createdAtS
+    reward {
+      id
+      committed
+      asset
+      token {
+        id
+      }
+    }
+  }
+}
