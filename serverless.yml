@@ -19,49 +19,49 @@ functions:
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
 
   applicant-on-application-reject:
     handler: src/functions/applicant/OnApplicationReject.run
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
 
   applicant-on-application-resubmit:
     handler: src/functions/applicant/OnApplicationResubmit.run
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
 
   applicant-on-application-submit:
     handler: src/functions/applicant/OnApplicationSubmit.run
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
 
   applicant-on-asked-to-resubmit:
     handler: src/functions/applicant/OnAskedToResubmit.run
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
 
   applicant-on-funds-received:
     handler: src/functions/applicant/OnFundsReceived.run
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
 
   applicant-on-milestone-accept:
     handler: src/functions/applicant/OnMilestoneAccept.run
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
   
   # dao-on-application-resubmission:
   #   handler: src/functions/dao/OnApplicationResubmission.run
@@ -82,7 +82,7 @@ functions:
     timeout: 60
     reservedConcurrency: 1
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(5 minute)
 
   # dao-on-milestone-updated:
   #   handler: src/functions/dao/OnMilestoneUpdated.run
