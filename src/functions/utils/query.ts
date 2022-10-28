@@ -5,15 +5,14 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import fetch from 'cross-fetch';
-import { CHAIN_INFO } from '../../configs/chainInfo';
-import { SupportedChainId } from '../../configs/chains';
+import { CHAIN_INFO } from '../../configs/chains';
 
 const Pino = require('pino');
 
 const logger = Pino();
 
 async function executeQuery(
-  chainId: SupportedChainId,
+  chainId: number,
   from: number,
   to: number,
   query: DocumentNode,
@@ -44,7 +43,7 @@ async function executeQuery(
   return data;
 }
 
-async function executeApplicationQuery(chainId: SupportedChainId, applicationIDs: string[], query: DocumentNode) {
+async function executeApplicationQuery(chainId: number, applicationIDs: string[], query: DocumentNode) {
   logger.info({ chainId, applicationIDs }, 'Executing application query');
   const link = new HttpLink({
     uri: CHAIN_INFO[chainId].subgraphClientUrl,

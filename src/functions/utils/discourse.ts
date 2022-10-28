@@ -1,22 +1,21 @@
 import { draftToMarkdown } from "markdown-draft-js";
 import fetch from "cross-fetch";
-import { SupportedChainId } from "../../configs/chains";
 import { GetGrantApplicationsQuery, Workspace } from "../../generated/graphql";
 import { getItem, setItem } from "./db";
 import { authHeaders, defaultHeaders } from "./headers";
 import "dotenv/config";
 import getFromIPFS from "./ipfs";
-import { CHAIN_INFO } from "../../configs/chainInfo";
 import formatAmount from "./formattingUtils";
+import { CHAIN_INFO } from "../../configs/chains";
 
 const Pino = require("pino");
 
 const logger = Pino();
 
-const getKey = (chainId: SupportedChainId, workspaceId: string) => `${chainId}.${workspaceId}`;
+const getKey = (chainId: number, workspaceId: string) => `${chainId}.${workspaceId}`;
 
 const getCategoryFromWorkspace = async (
-  chainId: SupportedChainId,
+  chainId: number,
   workspaceId: string,
 ): Promise<number> => {
   logger.info({ chainId, workspaceId }, "Get category from workspace");
@@ -48,7 +47,7 @@ const getProjectDetails = async (projectDetails: string) => {
   return projectDetails;
 };
 
-const getCurrency = (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: SupportedChainId) => {
+const getCurrency = (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: number) => {
   const key = application.grant.reward.asset;
   const currency = application.grant.workspace.tokens.find(
     (
@@ -59,7 +58,7 @@ const getCurrency = (application: GetGrantApplicationsQuery["grantApplications"]
   return { label: currency.label, decimals: currency.decimal };
 };
 
-const getRawFromApplication = async (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: SupportedChainId): Promise<string> => {
+const getRawFromApplication = async (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: number): Promise<string> => {
   const dataOrHash = getStringField(application.fields, "projectDetails");
   const details = await getProjectDetails(dataOrHash);
   logger.info({ dataOrHash }, "Project details");
@@ -93,7 +92,7 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
 };
 
 async function createPost(
-  chainId: SupportedChainId,
+  chainId: number,
   application: GetGrantApplicationsQuery["grantApplications"][number],
 ) : Promise<boolean> {
   const category = await getCategoryFromWorkspace(
@@ -149,7 +148,7 @@ async function createPost(
 }
 
 async function editPost(
-  chainId: SupportedChainId,
+  chainId: number,
   application: GetGrantApplicationsQuery["grantApplications"][number],
 ) : Promise<boolean> {
   const key = `${chainId}.${application.id}.post_id`;
@@ -185,7 +184,7 @@ async function editPost(
 }
 
 async function addReplyToPost(
-  chainId: SupportedChainId,
+  chainId: number,
   applicationId: string,
   reply: string,
 ) : Promise<boolean> {
@@ -219,7 +218,7 @@ async function addReplyToPost(
   return true;
 }
 
-async function createCategory(chainId: SupportedChainId, workspace: Workspace) {
+async function createCategory(chainId: number, workspace: Workspace) {
   const key = getKey(chainId, workspace.id);
 
   // TODO: Create a new category under funding-proposals

@@ -7,6 +7,7 @@ const Pino = require('pino');
 const logger = Pino();
 
 const TABLE = 'communication-touchpoints';
+const { EMAIL_TABLE } = process.env;
 
 export async function getItem(key: string): Promise<number> {
   logger.info({ key }, 'Fetching key');
@@ -38,4 +39,22 @@ export async function setItem(key: string, timestamp: number): Promise<void> {
     })
     .promise();
   logger.info({ key, timestamp, updated }, 'Set key');
+}
+
+export async function getEmail(id: string) : Promise<string> {
+  logger.info({ id }, 'Fetching email');
+  const result = await dynamo
+    .get({
+      TableName: EMAIL_TABLE,
+      Key: {
+        id,
+      },
+    })
+    .promise();
+  logger.info({ id, result }, 'Fetched email');
+  if (result.Item) {
+    return result.Item.to;
+  }
+
+  return '';
 }

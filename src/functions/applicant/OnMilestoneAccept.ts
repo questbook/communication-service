@@ -5,10 +5,9 @@
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
-import { EmailData } from "../../../types/EmailData";
+import { EmailData } from "../../types/EmailData";
 import {
   ALL_SUPPORTED_CHAIN_IDS,
-  SupportedChainId,
 } from "../../configs/chains";
 import {
   OnMilestoneAcceptedDocument,
@@ -16,7 +15,7 @@ import {
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import getDomain from "../utils/linkUtils";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnMilestoneAccept.json";
@@ -24,17 +23,20 @@ import { addReplyToPost } from "../utils/discourse";
 import replaceAll from "../utils/string";
 
 const TEMPLATE = templateNames.applicant.OnMilestoneAccept;
-const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
+const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(applicationMilestones: OnMilestoneAcceptedQuery['applicationMilestones'], chainId: SupportedChainId) : Promise<boolean> {
+async function handleEmail(applicationMilestones: OnMilestoneAcceptedQuery['applicationMilestones'], chainId: number) : Promise<boolean> {
   const emailData: EmailData[] = [];
   for (const applicationMilestone of applicationMilestones) {
+    let emailAddresses: string[];
+    if (applicationMilestone.application.applicantEmail.length === 0) {
+      emailAddresses = [await getEmail(applicationMilestone.application.applicantId)];
+    } else {
+      emailAddresses = applicationMilestone.application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddresses) continue;
     const email = {
-      to: applicationMilestone.application.applicantEmail[0].values.map(
-        (
-          item: OnMilestoneAcceptedQuery["applicationMilestones"][0]["application"]["applicantEmail"][0]["values"][0],
-        ) => item.value,
-      ),
+      to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         applicantName: applicationMilestone.application.applicantName[0].values[0].value,
@@ -68,7 +70,7 @@ async function handleEmail(applicationMilestones: OnMilestoneAcceptedQuery['appl
   return true;
 }
 
-const handleDiscourse = async (applicationMilestones: OnMilestoneAcceptedQuery['applicationMilestones'], chainId: SupportedChainId) : Promise<boolean> => {
+const handleDiscourse = async (applicationMilestones: OnMilestoneAcceptedQuery['applicationMilestones'], chainId: number) : Promise<boolean> => {
   for (const applicationMilestone of applicationMilestones) {
     const data = {
       applicantName: applicationMilestone.application.applicantName[0].values[0].value,
@@ -110,16 +112,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     if (!results.applicationMilestones || !results.applicationMilestones.length) continue;
     const fundsTransfers = results.applicationMilestones.filter((fundsTransfer: OnMilestoneAcceptedQuery['applicationMilestones'][number]) => fundsTransfer.application.applicantEmail.length > 0);
 
-    let ret: boolean;
-    switch (chainId) {
-      case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(fundsTransfers, chainId);
-        break;
-
-      default:
-        ret = await handleEmail(fundsTransfers, chainId);
-    }
-
+    const ret = await handleEmail(fundsTransfers, chainId);
     if (ret) await setItem(getKey(chainId), toTimestamp);
   }
 };

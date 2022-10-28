@@ -5,20 +5,17 @@
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
-import { EmailData } from "../../../types/EmailData";
-import { CHAIN_INFO } from "../../configs/chainInfo";
+import { EmailData } from "../../types/EmailData";
 import {
-  ALL_SUPPORTED_CHAIN_IDS,
-  SupportedChainId,
+  ALL_SUPPORTED_CHAIN_IDS, CHAIN_INFO,
 } from "../../configs/chains";
 import {
   OnFundsReceivedDocument,
   OnFundsReceivedQuery,
-  Token,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import formatAmount from "../utils/formattingUtils";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnFundsReceived.json";
@@ -26,11 +23,11 @@ import { addReplyToPost } from "../utils/discourse";
 import replaceAll from "../utils/string";
 
 const TEMPLATE = templateNames.applicant.OnFundsReceived;
-const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
+const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 
 const getCurrency = (
   key: string,
-  chainId: SupportedChainId,
+  chainId: number,
   tokens: OnFundsReceivedQuery["fundsTransfers"][number]["application"]["grant"]["workspace"]["tokens"],
 ) => {
   const currency = tokens.find(
@@ -44,7 +41,7 @@ const getCurrency = (
 
 async function handleEmail(
   fundsTransfers: OnFundsReceivedQuery["fundsTransfers"],
-  chainId: SupportedChainId,
+  chainId: number,
 ) {
   const emailData: EmailData[] = [];
   for (const fundsTransfer of fundsTransfers) {
@@ -54,8 +51,16 @@ async function handleEmail(
       fundsTransfer.application.grant.workspace.tokens,
     );
 
+    let emailAddresses: string[];
+    if (fundsTransfer.application.applicantEmail.length === 0) {
+      emailAddresses = [await getEmail(fundsTransfer.application.applicantId)];
+    } else {
+      emailAddresses = fundsTransfer.application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddresses) continue;
+
     const email = {
-      to: [fundsTransfer.application.applicantEmail[0].values[0].value],
+      to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         projectName: fundsTransfer.application.projectName[0].values[0].value,
@@ -89,7 +94,7 @@ async function handleEmail(
   return true;
 }
 
-const handleDiscourse = async (fundsTransfers: OnFundsReceivedQuery["fundsTransfers"], chainId: SupportedChainId) => {
+const handleDiscourse = async (fundsTransfers: OnFundsReceivedQuery["fundsTransfers"], chainId: number) => {
   for (const fundsTransfer of fundsTransfers) {
     const currency = getCurrency(
       fundsTransfer.application.grant.reward.asset,
@@ -137,16 +142,16 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][number]) => fundsTransfer.application.applicantEmail.length > 0,
     );
 
-    let ret: boolean;
-    switch (chainId) {
-      case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(fundsTransfers, chainId);
-        break;
+    // switch (chainId) {
+    //   case SupportedChainId.HARMONY_TESTNET_S0:
+    //     ret = await handleDiscourse(fundsTransfers, chainId);
+    //     break;
 
-      default:
-        ret = await handleEmail(fundsTransfers, chainId);
-    }
+    //   default:
+    //     ret = await handleEmail(fundsTransfers, chainId);
+    // }
 
+    const ret = await handleEmail(fundsTransfers, chainId);
     if (ret) await setItem(getKey(chainId), toTimestamp);
   }
 };

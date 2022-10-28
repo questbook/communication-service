@@ -9,6 +9,7 @@ query OnMilestoneAccepted($lowerLimit: Int!, $upperLimit: Int!) {
   ) {
     application {
       id
+      applicantId
       projectName: fields(where: { field_ends_with: "projectName" }) {
         values {
           value

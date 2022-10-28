@@ -9,6 +9,7 @@ query OnApplicationSubmit($lowerLimit: Int!, $upperLimit: Int!) {
     }
   ) {
     id
+    applicantId
     projectName: fields(where: { field_ends_with: "projectName" }) {
       values {
         value
