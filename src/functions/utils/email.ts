@@ -1,4 +1,4 @@
-import { EmailData } from '../../../types/EmailData';
+import { EmailData } from '../../types/EmailData';
 
 const AWS = require('aws-sdk');
 const Pino = require('pino');

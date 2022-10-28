@@ -5,10 +5,9 @@
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
-import { EmailData } from "../../../types/EmailData";
+import { EmailData } from "../../types/EmailData";
 import {
   ALL_SUPPORTED_CHAIN_IDS,
-  SupportedChainId,
 } from "../../configs/chains";
 import {
   OnNewGrantPostedDocument,
@@ -21,9 +20,9 @@ import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnNewGrantPosted;
-const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
+const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplications: OnNewGrantPostedQuery['grantApplications'], chainId: SupportedChainId) {
+async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplications: OnNewGrantPostedQuery['grantApplications'], chainId: number) {
   const emailData: EmailData[] = [];
   for (const grant of grants) {
     for (const application of grantApplications) {

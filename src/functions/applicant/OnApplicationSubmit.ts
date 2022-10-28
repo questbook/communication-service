@@ -5,10 +5,9 @@
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
-import { EmailData } from "../../../types/EmailData";
+import { EmailData } from "../../types/EmailData";
 import {
   ALL_SUPPORTED_CHAIN_IDS,
-  SupportedChainId,
 } from "../../configs/chains";
 import {
   GetGrantApplicationsDocument,
@@ -23,7 +22,7 @@ import sendEmails from "../utils/email";
 import { executeApplicationQuery, executeQuery } from "../utils/query";
 
 const TEMPLATE = templateNames.applicant.OnApplicationSubmit;
-const getKey = (chainId: SupportedChainId) => `${chainId}_${TEMPLATE}`;
+const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 const Pino = require("pino");
 
 const logger = Pino();
@@ -68,7 +67,7 @@ async function handleEmail(
 
 async function handleDiscourse(
   grantApplications: OnApplicationSubmitQuery["grantApplications"],
-  chainId: SupportedChainId,
+  chainId: number,
 ): Promise<boolean> {
   const applicationIDs: string[] = grantApplications.map(
     (application: OnApplicationSubmitQuery["grantApplications"][number]) => application.id,
@@ -107,16 +106,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       (application: OnApplicationSubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0,
     );
 
-    let ret: boolean;
-    switch (chainId) {
-      case SupportedChainId.HARMONY_TESTNET_S0:
-        ret = await handleDiscourse(grantApplications, chainId);
-        break;
-
-      default:
-        ret = await handleEmail(grantApplications);
-    }
-
+    const ret = await handleEmail(grantApplications);
     if (ret) await setItem(getKey(chainId), toTimestamp);
   }
 };

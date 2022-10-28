@@ -1,24 +1,8 @@
-import "dotenv/config";
+import chainInfo from '../generated/chainInfo.json';
+import { ChainInfoMap } from '../types/chains';
 
-export enum SupportedChainId {
-  RINKEBY = 4,
-  HARMONY_TESTNET_S0 = 1666700000,
-  POLYGON_TESTNET = 80001,
-  POLYGON_MAINNET = 137,
-  OPTIMISM_MAINNET = 10,
-  CELO_ALFAJORES_TESTNET = 44787
-}
+export const CHAIN_INFO = chainInfo as ChainInfoMap;
 
-export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(
-  SupportedChainId,
-).filter(
-  (id) => typeof id === "number"
-    && ((process.env.IS_TEST === "true"
-      && (id === SupportedChainId.RINKEBY
-        || id === SupportedChainId.HARMONY_TESTNET_S0
-        || id === SupportedChainId.POLYGON_TESTNET))
-      || process.env.IS_TEST === "false")
-    && ((process.env.DISCOURSE_TEST === "true"
-      && id === SupportedChainId.HARMONY_TESTNET_S0)
-      || process.env.DISCOURSE_TEST === "false"),
-) as SupportedChainId[];
+export const ALL_SUPPORTED_CHAIN_IDS: number[] = Object.values(CHAIN_INFO)
+  .map(({ id }) => id)
+  .filter((id) => process.env.IS_TEST === 'true' || !CHAIN_INFO[id].isTestNetwork);
