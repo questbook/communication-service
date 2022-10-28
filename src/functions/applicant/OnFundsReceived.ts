@@ -12,11 +12,10 @@ import {
 import {
   OnFundsReceivedDocument,
   OnFundsReceivedQuery,
-  Token,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import formatAmount from "../utils/formattingUtils";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnFundsReceived.json";
@@ -52,8 +51,16 @@ async function handleEmail(
       fundsTransfer.application.grant.workspace.tokens,
     );
 
+    let emailAddresses: string[];
+    if (fundsTransfer.application.applicantEmail.length === 0) {
+      emailAddresses = [await getEmail(fundsTransfer.application.applicantId)];
+    } else {
+      emailAddresses = fundsTransfer.application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddresses) continue;
+
     const email = {
-      to: [fundsTransfer.application.applicantEmail[0].values[0].value],
+      to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         projectName: fundsTransfer.application.projectName[0].values[0].value,

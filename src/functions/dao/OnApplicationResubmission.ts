@@ -15,7 +15,7 @@ import {
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import getDomain from "../utils/linkUtils";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 
@@ -25,12 +25,15 @@ const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 async function handleEmail(grantApplications: OnApplicationResubmissionQuery['grantApplications'], chainId: number) : Promise<boolean> {
   const emailData: EmailData[] = [];
   for (const application of grantApplications) {
+    let emailAddresses: string[];
+    if (application.applicantEmail.length === 0) {
+      emailAddresses = [await getEmail(application.applicantId)];
+    } else {
+      emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddresses) continue;
     const email = {
-      to: application.grant.workspace.members.map(
-        (
-          member: OnApplicationResubmissionQuery["grantApplications"][0]["grant"]["workspace"]["members"][0],
-        ) => member.email,
-      ),
+      to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         projectName: application.projectName[0].values[0].value,

@@ -15,7 +15,7 @@ import {
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import getDomain from "../utils/linkUtils";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnMilestoneAccept.json";
@@ -28,12 +28,15 @@ const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 async function handleEmail(applicationMilestones: OnMilestoneAcceptedQuery['applicationMilestones'], chainId: number) : Promise<boolean> {
   const emailData: EmailData[] = [];
   for (const applicationMilestone of applicationMilestones) {
+    let emailAddresses: string[];
+    if (applicationMilestone.application.applicantEmail.length === 0) {
+      emailAddresses = [await getEmail(applicationMilestone.application.applicantId)];
+    } else {
+      emailAddresses = applicationMilestone.application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddresses) continue;
     const email = {
-      to: applicationMilestone.application.applicantEmail[0].values.map(
-        (
-          item: OnMilestoneAcceptedQuery["applicationMilestones"][0]["application"]["applicantEmail"][0]["values"][0],
-        ) => item.value,
-      ),
+      to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         applicantName: applicationMilestone.application.applicantName[0].values[0].value,

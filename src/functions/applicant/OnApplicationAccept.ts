@@ -4,36 +4,40 @@
 // we modify the timestamp till which we have processed.
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
-import { EmailData } from '../../types/EmailData';
-import {
-  ALL_SUPPORTED_CHAIN_IDS,
-} from '../../configs/chains';
+import { APIGatewayProxyEvent, Context } from "aws-lambda";
+import { EmailData } from "../../types/EmailData";
+import { ALL_SUPPORTED_CHAIN_IDS } from "../../configs/chains";
 import {
   OnApplicationAcceptDocument,
   OnApplicationAcceptQuery,
-} from '../../generated/graphql';
-import templateNames from '../../generated/templateNames';
-import getDomain from '../utils/linkUtils';
-import { getItem, setItem } from '../utils/db';
-import sendEmails from '../utils/email';
-import { executeQuery } from '../utils/query';
-import { addReplyToPost } from '../utils/discourse';
+} from "../../generated/graphql";
+import templateNames from "../../generated/templateNames";
+import getDomain from "../utils/linkUtils";
+import { getEmail, getItem, setItem } from "../utils/db";
+import sendEmails from "../utils/email";
+import { executeQuery } from "../utils/query";
+import { addReplyToPost } from "../utils/discourse";
 import { Template } from "../../generated/templates/applicant/OnApplicationAccept.json";
-import replaceAll from '../utils/string';
+import replaceAll from "../utils/string";
 
 const TEMPLATE = templateNames.applicant.OnApplicationAccept;
 const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 
-async function handleEmail(grantApplications: OnApplicationAcceptQuery['grantApplications'], chainId: number) : Promise<boolean> {
+async function handleEmail(
+  grantApplications: OnApplicationAcceptQuery["grantApplications"],
+  chainId: number,
+): Promise<boolean> {
   const emailData: EmailData[] = [];
   for (const application of grantApplications) {
+    let emailAddress: string[];
+    if (application.applicantEmail.length === 0) {
+      emailAddress = [await getEmail(application.applicantId)];
+    } else {
+      emailAddress = application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddress) continue;
     const email = {
-      to: application.applicantEmail[0].values.map(
-        (
-          item: OnApplicationAcceptQuery['grantApplications'][0]['applicantEmail'][0]['values'][0],
-        ) => item?.value,
-      ),
+      to: emailAddress,
       cc: [],
       replacementData: JSON.stringify({
         projectName: application?.projectName[0]?.values[0]?.value,
@@ -53,17 +57,20 @@ async function handleEmail(grantApplications: OnApplicationAcceptQuery['grantApp
     emailData,
     TEMPLATE,
     JSON.stringify({
-      projectName: '',
-      applicantName: '',
-      daoName: '',
-      link: '',
+      projectName: "",
+      applicantName: "",
+      daoName: "",
+      link: "",
     }),
   );
 
   return true;
 }
 
-const handleDiscourse = async (grantApplications: OnApplicationAcceptQuery['grantApplications'], chainId: number) : Promise<boolean> => {
+const handleDiscourse = async (
+  grantApplications: OnApplicationAcceptQuery["grantApplications"],
+  chainId: number,
+): Promise<boolean> => {
   for (const application of grantApplications) {
     const data = {
       projectName: application?.projectName[0]?.values[0]?.value,
@@ -99,8 +106,10 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnApplicationAcceptDocument,
     );
 
-    if (!results.grantApplications || !results.grantApplications.length) continue;
-    const grantApplications = results.grantApplications.filter((application: OnApplicationAcceptQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
+    if (!results.grantApplications || !results.grantApplications.length) { continue; }
+    const grantApplications = results.grantApplications.filter(
+      (application: OnApplicationAcceptQuery["grantApplications"][number]) => application.applicantEmail.length > 0,
+    );
 
     const ret = await handleEmail(grantApplications, chainId);
     if (ret) await setItem(getKey(chainId), toTimestamp);

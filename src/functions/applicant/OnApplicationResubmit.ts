@@ -16,7 +16,7 @@ import {
   OnApplicationResubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import { editPost } from "../utils/discourse";
 import sendEmails from "../utils/email";
 import { executeApplicationQuery, executeQuery } from "../utils/query";
@@ -27,12 +27,15 @@ const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 async function handleEmail(grantApplications: OnApplicationResubmitQuery['grantApplications']) : Promise<boolean> {
   const emailData: EmailData[] = [];
   for (const application of grantApplications) {
+    let emailAddresses: string[];
+    if (application.applicantEmail.length === 0) {
+      emailAddresses = [await getEmail(application.applicantId)];
+    } else {
+      emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddresses) continue;
     const email = {
-      to: application.applicantEmail[0].values.map(
-        (
-          item: OnApplicationResubmitQuery["grantApplications"][0]["applicantEmail"][0]["values"][0],
-        ) => item.value,
-      ),
+      to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         projectName: application.projectName[0].values[0].value,

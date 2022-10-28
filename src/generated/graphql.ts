@@ -4178,7 +4178,7 @@ export type OnApplicationAcceptQueryVariables = Exact<{
 }>;
 
 
-export type OnApplicationAcceptQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationAcceptQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type OnApplicationRejectQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4186,7 +4186,7 @@ export type OnApplicationRejectQueryVariables = Exact<{
 }>;
 
 
-export type OnApplicationRejectQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, feedbackDao?: string | null, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationRejectQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, feedbackDao?: string | null, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type OnApplicationResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4194,7 +4194,7 @@ export type OnApplicationResubmitQueryVariables = Exact<{
 }>;
 
 
-export type OnApplicationResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string } } }> };
+export type OnApplicationResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', title: string } } }> };
 
 export type OnApplicationSubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4202,7 +4202,7 @@ export type OnApplicationSubmitQueryVariables = Exact<{
 }>;
 
 
-export type OnApplicationSubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } }> };
+export type OnApplicationSubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } }> };
 
 export type OnAskedToResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4210,7 +4210,7 @@ export type OnAskedToResubmitQueryVariables = Exact<{
 }>;
 
 
-export type OnAskedToResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, feedbackDao?: string | null, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnAskedToResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, feedbackDao?: string | null, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type OnFundsReceivedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4218,7 +4218,7 @@ export type OnFundsReceivedQueryVariables = Exact<{
 }>;
 
 
-export type OnFundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, application?: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }>, tokens: Array<{ __typename?: 'Token', id: string, label: string, address: string, decimal: number }> }, reward: { __typename?: 'Reward', asset: string } } } | null }> };
+export type OnFundsReceivedQuery = { __typename?: 'Query', fundsTransfers: Array<{ __typename?: 'FundsTransfer', amount: string, application?: { __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }>, tokens: Array<{ __typename?: 'Token', id: string, label: string, address: string, decimal: number }> }, reward: { __typename?: 'Reward', asset: string } } } | null }> };
 
 export type OnMilestoneAcceptedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4226,7 +4226,7 @@ export type OnMilestoneAcceptedQueryVariables = Exact<{
 }>;
 
 
-export type OnMilestoneAcceptedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } } }> };
+export type OnMilestoneAcceptedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string } } } }> };
 
 export type OnNewGrantPostedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4234,7 +4234,7 @@ export type OnNewGrantPostedQueryVariables = Exact<{
 }>;
 
 
-export type OnNewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
+export type OnNewGrantPostedQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', title: string } }>, grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }> }> };
 
 export type OnApplicationResubmissionQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4242,7 +4242,7 @@ export type OnApplicationResubmissionQueryVariables = Exact<{
 }>;
 
 
-export type OnApplicationResubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationResubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type OnApplicationSubmissionQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4250,7 +4250,7 @@ export type OnApplicationSubmissionQueryVariables = Exact<{
 }>;
 
 
-export type OnApplicationSubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationSubmissionQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
 
 export type OnInviteMemberQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4266,7 +4266,7 @@ export type OnMilestoneUpdatedQueryVariables = Exact<{
 }>;
 
 
-export type OnMilestoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
+export type OnMilestoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
 
 
 export const GetGrantApplicationsDocument = gql`
@@ -4352,6 +4352,7 @@ export const OnApplicationAcceptDocument = gql`
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: approved}
   ) {
     id
+    applicantId
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -4415,6 +4416,7 @@ export const OnApplicationRejectDocument = gql`
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: rejected}
   ) {
     id
+    applicantId
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -4479,6 +4481,7 @@ export const OnApplicationResubmitDocument = gql`
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version_gt: 1}
   ) {
     id
+    applicantId
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -4538,6 +4541,7 @@ export const OnApplicationSubmitDocument = gql`
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version: 1}
   ) {
     id
+    applicantId
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -4598,6 +4602,7 @@ export const OnAskedToResubmitDocument = gql`
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: resubmit}
   ) {
     id
+    applicantId
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -4663,6 +4668,7 @@ export const OnFundsReceivedDocument = gql`
   ) {
     application {
       id
+      applicantId
       projectName: fields(where: {field_ends_with: "projectName"}) {
         values {
           value
@@ -4739,6 +4745,7 @@ export const OnMilestoneAcceptedDocument = gql`
   ) {
     application {
       id
+      applicantId
       projectName: fields(where: {field_ends_with: "projectName"}) {
         values {
           value
@@ -4807,6 +4814,7 @@ export const OnNewGrantPostedDocument = gql`
   }
   grantApplications(subgraphError: allow) {
     id
+    applicantId
     applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
       values(where: {value_not: null}) {
         value
@@ -4856,6 +4864,7 @@ export const OnApplicationResubmissionDocument = gql`
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version_gt: 1}
   ) {
     id
+    applicantId
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -4920,6 +4929,7 @@ export const OnApplicationSubmissionDocument = gql`
     where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version: 1}
   ) {
     id
+    applicantId
     projectName: fields(where: {field_ends_with: "projectName"}) {
       values {
         value
@@ -5029,6 +5039,7 @@ export const OnMilestoneUpdatedDocument = gql`
   ) {
     application {
       id
+      applicantId
       projectName: fields(where: {field_ends_with: "projectName"}) {
         values {
           value

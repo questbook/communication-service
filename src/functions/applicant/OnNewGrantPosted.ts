@@ -15,7 +15,7 @@ import {
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
 import getDomain from "../utils/linkUtils";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
 
@@ -26,8 +26,15 @@ async function handleEmail(grants: OnNewGrantPostedQuery['grants'], grantApplica
   const emailData: EmailData[] = [];
   for (const grant of grants) {
     for (const application of grantApplications) {
+      let emailAddresses: string[];
+      if (application.applicantEmail.length === 0) {
+        emailAddresses = [await getEmail(application.applicantId)];
+      } else {
+        emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
+      }
+      if (!emailAddresses) continue;
       const email = {
-        to: [application.applicantEmail[0]?.values[0]?.value],
+        to: emailAddresses,
         cc: [],
         replacementData: JSON.stringify({
           grantName: grant.title,

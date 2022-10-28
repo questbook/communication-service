@@ -16,7 +16,7 @@ import {
   OnApplicationSubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import { getItem, setItem } from "../utils/db";
+import { getEmail, getItem, setItem } from "../utils/db";
 import { createPost } from "../utils/discourse";
 import sendEmails from "../utils/email";
 import { executeApplicationQuery, executeQuery } from "../utils/query";
@@ -32,12 +32,15 @@ async function handleEmail(
 ): Promise<boolean> {
   const emailData: EmailData[] = [];
   for (const application of grantApplications) {
+    let emailAddresses: string[];
+    if (application.applicantEmail.length === 0) {
+      emailAddresses = [await getEmail(application.applicantId)];
+    } else {
+      emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
+    }
+    if (!emailAddresses) continue;
     const email = {
-      to: application.applicantEmail[0].values.map(
-        (
-          item: OnApplicationSubmitQuery["grantApplications"][number]["applicantEmail"][number]["values"][number],
-        ) => item.value,
-      ),
+      to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         projectName: application.projectName[0].values[0].value,

@@ -11,6 +11,7 @@ query OnNewGrantPosted($lowerLimit: Int!, $upperLimit: Int!) {
   }
   grantApplications(subgraphError: allow) {
     id
+    applicantId
     applicantEmail: fields(where: { field_ends_with: "applicantEmail" }) {
       values(where: { value_not: null }) {
         value
