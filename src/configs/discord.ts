@@ -4,7 +4,7 @@ interface Workspace {
 }
 
 const discourseWorkspaces: Workspace[] = [
-  { chainId: 10, workspaceId: "0x9d" },
+  { chainId: 10, workspaceId: "0x9d" }, { chainId: 10, workspaceId: "0x88" },
 ];
 
 export default discourseWorkspaces;
