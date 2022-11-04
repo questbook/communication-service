@@ -27,6 +27,7 @@ query OnFundsReceived($lowerLimit: Int!, $upperLimit: Int!) {
       grant {
         title
         workspace {
+          id
           title
           members(where: { accessLevel: admin, email_not: null }) {
             email

@@ -27,6 +27,7 @@ query OnApplicationResubmit($lowerLimit: Int!, $upperLimit: Int!) {
     }
     grant {
       workspace {
+        id
         title
       }
     }

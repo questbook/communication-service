@@ -28,6 +28,7 @@ query OnApplicationSubmit($lowerLimit: Int!, $upperLimit: Int!) {
     grant {
       title
       workspace {
+        id
         title
       }
     }
