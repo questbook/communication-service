@@ -21,6 +21,7 @@ import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnFundsReceived.json";
 import { addReplyToPost } from "../utils/discourse";
 import replaceAll from "../utils/string";
+import discourseWorkspaces from "../../configs/discord";
 
 const TEMPLATE = templateNames.applicant.OnFundsReceived;
 const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
@@ -138,20 +139,25 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     );
 
     if (!results.fundsTransfers || !results.fundsTransfers.length) continue;
-    const fundsTransfers = results.fundsTransfers.filter(
-      (fundsTransfer: OnFundsReceivedQuery["fundsTransfers"][number]) => fundsTransfer.application.applicantEmail.length > 0,
-    );
+    const discourseApplications: OnFundsReceivedQuery["fundsTransfers"] = [];
+    const emailApplications: OnFundsReceivedQuery["fundsTransfers"] = [];
 
-    // switch (chainId) {
-    //   case SupportedChainId.HARMONY_TESTNET_S0:
-    //     ret = await handleDiscourse(fundsTransfers, chainId);
-    //     break;
+    for (const fundTransfer of results.fundsTransfers) {
+      const apps = discourseWorkspaces.filter((workspace) => workspace.chainId === chainId && workspace.workspaceId === fundTransfer.application.grant.workspace.id);
+      if (apps.length > 0) discourseApplications.push(fundTransfer);
+      else emailApplications.push(fundTransfer);
+    }
 
-    //   default:
-    //     ret = await handleEmail(fundsTransfers, chainId);
-    // }
+    let shouldUpdate = true;
+    if (discourseApplications.length > 0) {
+      const ret = await handleDiscourse(discourseApplications, chainId);
+      shouldUpdate = shouldUpdate && ret;
+    }
 
-    const ret = await handleEmail(fundsTransfers, chainId);
-    if (ret) await setItem(getKey(chainId), toTimestamp);
+    if (emailApplications.length > 0) {
+      const ret = await handleEmail(emailApplications, chainId);
+      shouldUpdate = shouldUpdate && ret;
+    }
+    if (shouldUpdate) await setItem(getKey(chainId), toTimestamp);
   }
 };

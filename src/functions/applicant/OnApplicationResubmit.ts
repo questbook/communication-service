@@ -20,6 +20,7 @@ import { getEmail, getItem, setItem } from "../utils/db";
 import { editPost } from "../utils/discourse";
 import sendEmails from "../utils/email";
 import { executeApplicationQuery, executeQuery } from "../utils/query";
+import discourseWorkspaces from "../../configs/discord";
 
 const TEMPLATE = templateNames.applicant.OnApplicationResubmit;
 const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
@@ -98,9 +99,26 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     );
 
     if (!results.grantApplications || !results.grantApplications.length) continue;
-    const grantApplications = results.grantApplications.filter((application: OnApplicationResubmitQuery["grantApplications"][number]) => application.applicantEmail.length > 0);
+    const discourseApplications: OnApplicationResubmitQuery["grantApplications"] = [];
+    const emailApplications: OnApplicationResubmitQuery["grantApplications"] = [];
 
-    const ret = await handleEmail(grantApplications);
-    if (ret) await setItem(getKey(chainId), toTimestamp);
+    for (const application of results.grantApplications) {
+      const apps = discourseWorkspaces.filter((workspace) => workspace.chainId === chainId && workspace.workspaceId === application.grant.workspace.id);
+      if (apps.length > 0) {
+        discourseApplications.push(application);
+      } else emailApplications.push(application);
+    }
+
+    let shouldUpdate = true;
+    if (discourseApplications.length > 0) {
+      const ret = await handleDiscourse(discourseApplications, chainId);
+      shouldUpdate = shouldUpdate && ret;
+    }
+
+    if (emailApplications.length > 0) {
+      const ret = await handleEmail(emailApplications);
+      shouldUpdate = shouldUpdate && ret;
+    }
+    if (shouldUpdate) await setItem(getKey(chainId), toTimestamp);
   }
 };

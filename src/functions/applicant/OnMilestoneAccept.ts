@@ -21,6 +21,7 @@ import { executeQuery } from "../utils/query";
 import { Template } from "../../generated/templates/applicant/OnMilestoneAccept.json";
 import { addReplyToPost } from "../utils/discourse";
 import replaceAll from "../utils/string";
+import discourseWorkspaces from "../../configs/discord";
 
 const TEMPLATE = templateNames.applicant.OnMilestoneAccept;
 const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
@@ -110,9 +111,26 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     );
 
     if (!results.applicationMilestones || !results.applicationMilestones.length) continue;
-    const fundsTransfers = results.applicationMilestones.filter((fundsTransfer: OnMilestoneAcceptedQuery['applicationMilestones'][number]) => fundsTransfer.application.applicantEmail.length > 0);
+    const discourseApplications: OnMilestoneAcceptedQuery["applicationMilestones"] = [];
+    const emailApplications:OnMilestoneAcceptedQuery["applicationMilestones"] = [];
 
-    const ret = await handleEmail(fundsTransfers, chainId);
-    if (ret) await setItem(getKey(chainId), toTimestamp);
+    for (const milestone of results.applicationMilestones) {
+      const apps = discourseWorkspaces.filter((workspace) => workspace.chainId === chainId && workspace.workspaceId === milestone.application.grant.workspace.id);
+      if (apps.length > 0) {
+        discourseApplications.push(milestone);
+      } else emailApplications.push(milestone);
+    }
+
+    let shouldUpdate = true;
+    if (discourseApplications.length > 0) {
+      const ret = await handleDiscourse(discourseApplications, chainId);
+      shouldUpdate = shouldUpdate && ret;
+    }
+
+    if (emailApplications.length > 0) {
+      const ret = await handleEmail(emailApplications, chainId);
+      shouldUpdate = shouldUpdate && ret;
+    }
+    if (shouldUpdate) await setItem(getKey(chainId), toTimestamp);
   }
 };

@@ -27,6 +27,7 @@ query OnApplicationReject($lowerLimit: Int!, $upperLimit: Int!) {
     feedbackDao
     grant {
       workspace {
+        id
         title
         members(where: { accessLevel: admin, email_not: null }) {
           email
