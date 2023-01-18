@@ -1,0 +1,8 @@
+query getMetadata {
+  _meta {
+    block {
+      number
+    }
+    deployment
+  }
+}

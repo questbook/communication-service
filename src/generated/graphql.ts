@@ -4268,6 +4268,11 @@ export type OnMilestoneUpdatedQueryVariables = Exact<{
 
 export type OnMilestoneUpdatedQuery = { __typename?: 'Query', applicationMilestones: Array<{ __typename?: 'ApplicationMilestone', application: { __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', id: string, title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } } }> };
 
+export type GetMetadataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMetadataQuery = { __typename?: 'Query', _meta?: { __typename?: '_Meta_', deployment: string, block: { __typename?: '_Block_', number: number } } | null };
+
 
 export const GetGrantApplicationsDocument = gql`
     query GetGrantApplications($applicationIDs: [ID!]) {
@@ -5104,3 +5109,40 @@ export function useOnMilestoneUpdatedLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type OnMilestoneUpdatedQueryHookResult = ReturnType<typeof useOnMilestoneUpdatedQuery>;
 export type OnMilestoneUpdatedLazyQueryHookResult = ReturnType<typeof useOnMilestoneUpdatedLazyQuery>;
 export type OnMilestoneUpdatedQueryResult = Apollo.QueryResult<OnMilestoneUpdatedQuery, OnMilestoneUpdatedQueryVariables>;
+export const GetMetadataDocument = gql`
+    query getMetadata {
+  _meta {
+    block {
+      number
+    }
+    deployment
+  }
+}
+    `;
+
+/**
+ * __useGetMetadataQuery__
+ *
+ * To run a query within a React component, call `useGetMetadataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMetadataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMetadataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMetadataQuery(baseOptions?: Apollo.QueryHookOptions<GetMetadataQuery, GetMetadataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMetadataQuery, GetMetadataQueryVariables>(GetMetadataDocument, options);
+      }
+export function useGetMetadataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMetadataQuery, GetMetadataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMetadataQuery, GetMetadataQueryVariables>(GetMetadataDocument, options);
+        }
+export type GetMetadataQueryHookResult = ReturnType<typeof useGetMetadataQuery>;
+export type GetMetadataLazyQueryHookResult = ReturnType<typeof useGetMetadataLazyQuery>;
+export type GetMetadataQueryResult = Apollo.QueryResult<GetMetadataQuery, GetMetadataQueryVariables>;

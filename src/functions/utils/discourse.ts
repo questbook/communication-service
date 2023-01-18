@@ -1,8 +1,9 @@
 import { draftToMarkdown } from "markdown-draft-js";
 import fetch from "cross-fetch";
+import { BigNumber } from "ethers";
 import { GetGrantApplicationsQuery, Workspace } from "../../generated/graphql";
 import { getItem, setItem } from "./db";
-import { authHeaders, defaultHeaders } from "./headers";
+import { authHeaders } from "./headers";
 import "dotenv/config";
 import getFromIPFS from "./ipfs";
 import formatAmount from "./formattingUtils";
@@ -30,8 +31,8 @@ const getStringField = (
   fieldName: string,
 ) => {
   logger.info({ fieldName }, "Get string field");
-  const field = fields?.find(({ id }) => id.split(".")[1] === fieldName)?.values[0]?.value
-      ?? "";
+  const field = fields?.find(({ id }) => id.split(".")[1] === fieldName)?.values[0]
+    ?.value ?? "";
   logger.info({ field }, "Field");
   return field;
 };
@@ -47,7 +48,10 @@ const getProjectDetails = async (projectDetails: string) => {
   return projectDetails;
 };
 
-const getCurrency = (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: number) => {
+const getCurrency = (
+  application: GetGrantApplicationsQuery["grantApplications"][number],
+  chainId: number,
+) => {
   const key = application.grant.reward.asset;
   const currency = application.grant.workspace.tokens.find(
     (
@@ -58,12 +62,41 @@ const getCurrency = (application: GetGrantApplicationsQuery["grantApplications"]
   return { label: currency.label, decimals: currency.decimal };
 };
 
-const getRawFromApplication = async (application: GetGrantApplicationsQuery["grantApplications"][number], chainId: number): Promise<string> => {
+const getRewardAmount = (
+  decimals: number | undefined,
+  application: {
+    fields: GetGrantApplicationsQuery["grantApplications"][number]["fields"];
+    milestones: GetGrantApplicationsQuery["grantApplications"][number]["milestones"];
+  },
+) => {
+  if (typeof decimals === "undefined") {
+    // eslint-disable-next-line no-param-reassign
+    decimals = 18;
+  }
+
+  const fundingAskField = getStringField(application.fields, "fundingAsk");
+  if (fundingAskField) {
+    return formatAmount(fundingAskField, decimals);
+  }
+  let sum = BigNumber.from(0);
+  application?.milestones?.forEach((milestone) => {
+    sum = sum.add(milestone.amount);
+  });
+  return formatAmount(sum.toString(), decimals);
+};
+
+const getRawFromApplication = async (
+  application: GetGrantApplicationsQuery["grantApplications"][number],
+  chainId: number,
+): Promise<string> => {
   const dataOrHash = getStringField(application.fields, "projectDetails");
   const details = await getProjectDetails(dataOrHash);
   logger.info({ dataOrHash }, "Project details");
   logger.info({ details }, "Decoded project details");
-  const currency: {label: string, decimals: number} = getCurrency(application, chainId);
+  const currency: { label: string; decimals: number } = getCurrency(
+    application,
+    chainId,
+  );
   logger.info({ currency }, "Currency");
 
   const raw = `## Name of Project / DAO / Company\n${getStringField(
@@ -76,7 +109,9 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
       application.fields,
       "applicantName",
     )} - ${getStringField(application.fields, "applicantEmail")}\n\n`
-    + `## Proposal ask\n${formatAmount(getStringField(application.fields, "fundingAsk"), currency.decimals)} ${currency.label}\n\n`
+    + `## Proposal ask\n${getRewardAmount(currency.decimals, application)} ${
+      currency.label
+    }\n\n`
     + `## Justification\n${getStringField(
       application.fields,
       "fundingBreakdown",
@@ -84,9 +119,16 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
     + `## Metrics for success\n${application.milestones.map(
       (
         milestone: GetGrantApplicationsQuery["grantApplications"][number]["milestones"][number],
-      ) => `${milestone.title} - ${formatAmount(milestone.amount, currency.decimals)} ${currency.label}\n`,
+      ) => `${milestone.title} - ${formatAmount(
+        milestone.amount,
+        currency.decimals,
+      )} ${currency.label}\n`,
     )}\n\n`
-    + `## External links\n${application.externalLinks.length > 0 ? application.externalLinks[0].values[0].value : ""}`;
+    + `## External links\n${
+      application.externalLinks.length > 0
+        ? application.externalLinks[0].values[0].value
+        : ""
+    }`;
   logger.info({ raw }, "Raw");
   return raw;
 };
@@ -94,14 +136,14 @@ const getRawFromApplication = async (application: GetGrantApplicationsQuery["gra
 async function createPost(
   chainId: number,
   application: GetGrantApplicationsQuery["grantApplications"][number],
-) : Promise<boolean> {
+): Promise<boolean> {
   const category = await getCategoryFromWorkspace(
     chainId,
     application.grant.workspace.id,
   );
 
   if (category === -1) {
-    logger.info({}, 'Category not found');
+    logger.info({}, "Category not found");
     return false;
   }
 
@@ -150,16 +192,19 @@ async function createPost(
 async function editPost(
   chainId: number,
   application: GetGrantApplicationsQuery["grantApplications"][number],
-) : Promise<boolean> {
+): Promise<boolean> {
   const key = `${chainId}.${application.id}.post_id`;
   const postId = await getItem(key);
   if (postId === -1) {
-    logger.info({}, 'Post not found');
+    logger.info({}, "Post not found");
     return false;
   }
 
   const raw = JSON.stringify({
-    title: `${getStringField(application.fields, "projectName")} - Resubmission`,
+    title: `${getStringField(
+      application.fields,
+      "projectName",
+    )} - Resubmission`,
     raw: await getRawFromApplication(application, chainId),
     edit_reason: "Application Resubmission",
   });
@@ -187,11 +232,11 @@ async function addReplyToPost(
   chainId: number,
   applicationId: string,
   reply: string,
-) : Promise<boolean> {
+): Promise<boolean> {
   const key = `${chainId}.${applicationId}.topic_id`;
   const topicId = await getItem(key);
   if (topicId === -1) {
-    logger.info({}, 'Topic not found');
+    logger.info({}, "Topic not found");
     return false;
   }
 
