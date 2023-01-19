@@ -76,6 +76,13 @@ functions:
     reservedConcurrency: 1
     events:
       - schedule: rate(10 minutes)
+
+  gas-tank-alert:
+    handler: src/alerts/gasTankAlert.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 hour)
   
 
 plugins:
