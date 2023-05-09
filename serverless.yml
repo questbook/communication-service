@@ -84,6 +84,13 @@ functions:
     events:
       - schedule: rate(1 hour)
   
+  reclaim-gas-alert:
+    handler: src/alerts/reclaimGasTankAlert.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  
 
 plugins:
   - serverless-offline
