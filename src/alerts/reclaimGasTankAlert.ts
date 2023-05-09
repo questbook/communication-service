@@ -19,7 +19,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       const slackResult = await axios.post(
         process.env.SLACK_WEBHOOK_URL,
         JSON.stringify({
-          text: `*Reclaim Gas tank* for ${reclaimChainName} has ${strBalance} ${reclaimChainSymbol} left! Please fill the gas tank ASAP!`,
+          text: `@channel *Reclaim Gas tank* for ${reclaimChainName} has ${strBalance} ${reclaimChainSymbol} left! Please fill the gas tank ASAP!`,
           username: 'Reclaim Bot',
         }),
       );
