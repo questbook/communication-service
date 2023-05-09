@@ -1,7 +1,12 @@
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
 import { logger } from "ethers";
 import axios from 'axios';
-import { reclaimChainName, provider, reclaimChainSymbol } from "../configs/reclaim";
+import {
+  reclaimChainName,
+  provider,
+  reclaimChainSymbol,
+  reclaimThreshold,
+} from "../configs/reclaim";
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   try {
@@ -10,7 +15,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     const str = balance.toString();
     const strBalance = `${str.slice(0, str.length - 18)}.${str.slice(str.length - 18)}`;
 
-    if (balance <= BigInt(10) * BigInt(10 ** 18)) {
+    if (balance <= reclaimThreshold) {
       const slackResult = await axios.post(
         process.env.SLACK_WEBHOOK_URL,
         JSON.stringify({
