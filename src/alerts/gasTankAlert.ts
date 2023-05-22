@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
 import { logger } from "ethers";
+import axios from 'axios';
 import { CHAIN_INFO } from "../configs/chains";
 
 const bicoDapps: { [key: string]: { apiKey: string, threshold: number, symbol: string } } = {
@@ -29,8 +30,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   for (const chainId in bicoDapps) {
     if (!(chainId in CHAIN_INFO)) continue;
 
-    const result = await fetch('https://data.biconomy.io/api/v1/dapp/gas-tank-balance', {
-      method: 'GET',
+    const result = await axios.get('https://data.biconomy.io/api/v1/dapp/gas-tank-balance', {
       headers: {
         apiKey: bicoDapps[chainId].apiKey,
         authToken: process.env.BICO_AUTH_TOKEN,
@@ -38,7 +38,7 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     });
 
     if (result.status === 200) {
-      const json = await result.json();
+      const json = result?.data;
       const balance = json?.dappGasTankData?.effectiveBalanceInStandardForm;
       if (balance === undefined) {
         logger.info('Could not get balance', json);
@@ -47,13 +47,13 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
       if (balance < bicoDapps[chainId].threshold) {
         // Send message to slack
-        const slackResult = await fetch(process.env.SLACK_WEBHOOK_URL, {
-          method: 'POST',
-          body: JSON.stringify({
+        const slackResult = await axios.post(
+          process.env.SLACK_WEBHOOK_URL,
+          JSON.stringify({
             text: `Gas tank for ${CHAIN_INFO[chainId].name} has ${balance} ${bicoDapps[chainId].symbol} left! Please fill the gas tank!`,
             username: 'Gas tank Bot',
           }),
-        });
+        );
 
         if (slackResult.status !== 200) {
           logger.info('Could not send Slack notif!', slackResult);

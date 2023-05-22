@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
 import { logger } from "ethers";
+import axios from "axios";
 import { CHAIN_INFO } from "../configs/chains";
 import { executeQuery } from "../functions/utils/query";
 import { GetMetadataDocument, GetMetadataQuery } from "../generated/graphql";
@@ -24,21 +25,23 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
     const rpc = RPCs[chainId].endpoints[0].replace('{{infura_key}}', process.env.SUBGRAPH_INFURA_API_KEY).replace('{{alchemy_key}}', process.env.SUBGRAPH_ALCHEMY_API_KEY);
     logger.info({ rpc }, 'Checking RPC');
-    const rpcResult = await fetch(rpc, {
-      method: 'POST',
-      body: JSON.stringify({
+    const rpcResult = await axios.post(
+      rpc,
+      JSON.stringify({
         jsonrpc: "2.0",
         method: "eth_blockNumber",
         params: [],
         id: 83,
       }),
-      headers: {
-        'Content-Type': 'application/json',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     if (rpcResult.status === 200) {
-      const rpcJson = await rpcResult.json();
+      const rpcJson = await rpcResult.data;
       const blockNumberFromRpc = parseInt(rpcJson.result, 16);
 
       const diff = blockNumberFromRpc - blockNumberFromSubraph;
@@ -48,13 +51,13 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
       if (diff >= THRESHOLD) {
         // Send message to slack
-        const slackResult = await fetch(process.env.SLACK_WEBHOOK_URL, {
-          method: 'POST',
-          body: JSON.stringify({
+        const slackResult = await axios.post(
+          process.env.SLACK_WEBHOOK_URL,
+          JSON.stringify({
             text: `Subgraph for ${RPCs[chainId].name} is behind by ${diff} blocks. Please check.`,
             username: 'RPC Bot',
           }),
-        });
+        );
 
         if (slackResult.status !== 200) {
           logger.info('Could not send Slack notif!', slackResult);
