@@ -9,20 +9,10 @@ const bicoDapps: { [key: string]: { apiKey: string, threshold: number, symbol: s
     threshold: 0.01,
     symbol: 'ETH',
   },
-  137: {
-    apiKey: 'kcwSbypnqq.f5fe6fbd-10e3-4dfe-a731-5eb4b6d85445',
-    threshold: 0.5,
-    symbol: 'MATIC',
-  },
   10: {
     apiKey: 'xc_x_i8x3.7002d254-03f5-427e-b25f-400b52d1d4c9',
     threshold: 0.01,
     symbol: 'ETH',
-  },
-  42220: {
-    apiKey: 'Ihl5vFVvY.b7fd1559-e1de-4500-9b88-c47728b94a4c',
-    threshold: 0.01,
-    symbol: 'CELO',
   },
 };
 
