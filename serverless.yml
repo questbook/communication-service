@@ -5,7 +5,7 @@ useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   versionFunctions: false
   stage: v1
   region: ap-south-1
@@ -21,54 +21,54 @@ functions:
     events:
       - schedule: rate(5 minutes)
 
-  applicant-on-application-reject:
-    handler: src/functions/applicant/OnApplicationReject.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(5 minutes)
+  # applicant-on-application-reject:
+  #   handler: src/functions/applicant/OnApplicationReject.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(5 minutes)
 
-  applicant-on-application-resubmit:
-    handler: src/functions/applicant/OnApplicationResubmit.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(5 minutes)
+  # applicant-on-application-resubmit:
+  #   handler: src/functions/applicant/OnApplicationResubmit.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(5 minutes)
 
-  applicant-on-application-submit:
-    handler: src/functions/applicant/OnApplicationSubmit.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(5 minutes)
+  # applicant-on-application-submit:
+  #   handler: src/functions/applicant/OnApplicationSubmit.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(5 minutes)
 
-  applicant-on-asked-to-resubmit:
-    handler: src/functions/applicant/OnAskedToResubmit.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(5 minutes)
+  # applicant-on-asked-to-resubmit:
+  #   handler: src/functions/applicant/OnAskedToResubmit.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(5 minutes)
 
-  applicant-on-funds-received:
-    handler: src/functions/applicant/OnFundsReceived.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(5 minutes)
+  # applicant-on-funds-received:
+  #   handler: src/functions/applicant/OnFundsReceived.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(5 minutes)
 
-  applicant-on-milestone-accept:
-    handler: src/functions/applicant/OnMilestoneAccept.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(5 minutes)
+  # applicant-on-milestone-accept:
+  #   handler: src/functions/applicant/OnMilestoneAccept.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(5 minutes)
 
-  dao-on-invite-members:
-    handler: src/functions/dao/OnInviteMember.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(5 minutes)
+  # dao-on-invite-members:
+  #   handler: src/functions/dao/OnInviteMember.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(5 minutes)
 
   rpc-alert:
     handler: src/alerts/rpcAlert.run
