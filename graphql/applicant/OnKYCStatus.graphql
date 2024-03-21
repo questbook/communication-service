@@ -1,0 +1,19 @@
+query grantApplications {
+  grantApplications(filter: {
+    _operators: {
+      synapsStatus: {
+        in: ["pending", "PENDING_VERIFICATION"]
+      }
+    }
+  }, limit: 10, sort: CREATEDATS_DESC) {
+    _id
+    synapsId
+    synapsStatus
+    synapsType
+    grant {
+      workspace {
+        id: _id
+      }
+    }
+  }
+}

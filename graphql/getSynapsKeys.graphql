@@ -1,0 +1,5 @@
+query getSynapseKeys($id:String!, $type:String!){
+  getSynapsKeys(id: $id, type: $type){
+    keys 
+  }
+}

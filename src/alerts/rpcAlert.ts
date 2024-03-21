@@ -6,7 +6,6 @@ import { executeQuery } from "../functions/utils/query";
 import { GetMetadataDocument, GetMetadataQuery } from "../generated/graphql";
 
 const RPCs = {
-  5: { name: 'goerli-testnet', endpoints: ['https://goerli.infura.io/v3/{{infura_key}}'] },
   10: { name: 'optimism-mainnet', endpoints: ['https://opt-mainnet.g.alchemy.com/v2/{{alchemy_key}}'] },
 };
 

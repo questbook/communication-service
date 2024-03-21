@@ -5146,3 +5146,45 @@ export function useGetMetadataLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetMetadataQueryHookResult = ReturnType<typeof useGetMetadataQuery>;
 export type GetMetadataLazyQueryHookResult = ReturnType<typeof useGetMetadataLazyQuery>;
 export type GetMetadataQueryResult = Apollo.QueryResult<GetMetadataQuery, GetMetadataQueryVariables>;
+
+export type GetSynapsStatusQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', _id: string, synapsId: string, synapsStatus: string, synapsType: string, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', id: string } } }> };
+export const GetSynapsStatus = gql`
+query grantApplications {
+  grantApplications(filter: {
+    _operators: {
+      synapsStatus: {
+        in: ["pending", "PENDING_VERIFICATION"]
+      }
+    }
+  }, limit: 10, sort: CREATEDATS_DESC) {
+    _id
+    synapsId
+    synapsStatus
+    synapsType
+    grant {
+      workspace {
+        id: _id
+      }
+    }
+  }
+}
+    `;
+    
+export type GetSynapsKeysQuery = { __typename?: 'Query', getSynapsKeys: { __typename?: 'SynapsKeys', keys: string } };
+export const GetSyanpsKeys = gql`
+query getSynapseKeys($id:String!, $type:String!){
+  getSynapsKeys(id: $id, type: $type){
+    keys 
+  }
+}
+        `;
+
+export const UpdateSynapsStatus = gql`
+mutation updateSynapsStatus($id: String!, $status: String!){
+  updateSynapsStatus(id:$id, status: $status){
+    recordId
+    record{
+      _id
+    }
+  }
+}`;

@@ -1,0 +1,8 @@
+mutation updateSynapsStatus($id: String!, $status: String!){
+  updateSynapsStatus(id:$id, status: $status){
+    recordId
+    record{
+      _id
+    }
+  }
+}

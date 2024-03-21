@@ -69,4 +69,83 @@ async function executeApplicationQuery(chainId: number, applicationIDs: string[]
   return data;
 }
 
-export { executeQuery, executeApplicationQuery };
+async function executeQueryKYCStatus(query: DocumentNode) {
+  logger.info('Executing query for KYC status');
+  const link = new HttpLink({
+    uri: 'https://api-grants.questbook.app/graphql',
+    fetch,
+  });
+  const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache(),
+  });
+
+  const response = await client.query({
+    query,
+    fetchPolicy: 'network-only',
+  });
+  const { data } = response;
+  logger.info({ data }, 'Executed query for KYC status');
+
+  return data;
+}
+
+async function executeQuerySynapsKeys(query: DocumentNode, variables: {
+  id: string,
+  type: string,
+}) {
+  logger.info('Executing query for Synaps keys');
+  const link = new HttpLink({
+    uri: 'https://api-grants.questbook.app/graphql',
+    fetch,
+  });
+  const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache(),
+  });
+
+  const response = await client.query({
+    query,
+    fetchPolicy: 'network-only',
+    variables,
+    context: {
+      headers: {
+        Authorization: process.env.API_KEY,
+      },
+    },
+  });
+  const { data } = response;
+  logger.info({ data }, 'Executed query for Synaps keys');
+
+  return data;
+}
+
+async function executeMutation(query: DocumentNode, variables: any) {
+  logger.info('Executing mutation');
+  const link = new HttpLink({
+    uri: 'https://api-grants.questbook.app/graphql',
+    fetch,
+  });
+  const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache(),
+  });
+
+  const response = await client.mutate({
+    mutation: query,
+    variables,
+    context: {
+      headers: {
+        Authorization: process.env.API_KEY,
+      },
+    },
+  });
+  const { data } = response;
+  logger.info({ data }, 'Executed mutation');
+
+  return data;
+}
+
+export {
+  executeQuery, executeApplicationQuery, executeQueryKYCStatus, executeQuerySynapsKeys, executeMutation,
+};

@@ -13,9 +13,9 @@ provider:
   memorySize: 256
   logRetentionInDays: 14
 
-functions:
-  applicant-on-application-accept:
-    handler: src/functions/applicant/OnApplicationAccept.run
+functions:  
+  kyc-status:
+    handler: src/functions/applicant/OnKYCStatus.run
     timeout: 60
     reservedConcurrency: 1
     events:

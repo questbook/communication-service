@@ -4,11 +4,6 @@ import axios from 'axios';
 import { CHAIN_INFO } from "../configs/chains";
 
 const bicoDapps: { [key: string]: { apiKey: string, threshold: number, symbol: string } } = {
-  5: {
-    apiKey: 'cCEUGyH2y.37cd0d5e-704c-49e6-9f3d-e20fe5bb13d5',
-    threshold: 0.01,
-    symbol: 'ETH',
-  },
   10: {
     apiKey: 'xc_x_i8x3.7002d254-03f5-427e-b25f-400b52d1d4c9',
     threshold: 0.01,
