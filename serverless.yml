@@ -21,6 +21,13 @@ functions:
     events:
       - schedule: rate(5 minutes)
 
+  hello-sign-status:
+    handler: src/functions/applicant/OnHelloSignStatus.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(5 minutes)
+
   # applicant-on-application-reject:
   #   handler: src/functions/applicant/OnApplicationReject.run
   #   timeout: 60
@@ -70,26 +77,26 @@ functions:
   #   events:
   #     - schedule: rate(5 minutes)
 
-  rpc-alert:
-    handler: src/alerts/rpcAlert.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(10 minutes)
+  # rpc-alert:
+  #   handler: src/alerts/rpcAlert.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(10 minutes)
 
-  gas-tank-alert:
-    handler: src/alerts/gasTankAlert.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(1 hour)
+  # gas-tank-alert:
+  #   handler: src/alerts/gasTankAlert.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(1 hour)
   
-  reclaim-gas-alert:
-    handler: src/alerts/reclaimGasTankAlert.run
-    timeout: 60
-    reservedConcurrency: 1
-    events:
-      - schedule: rate(1 hour)
+  # reclaim-gas-alert:
+  #   handler: src/alerts/reclaimGasTankAlert.run
+  #   timeout: 60
+  #   reservedConcurrency: 1
+  #   events:
+  #     - schedule: rate(1 hour)
   
 
 plugins:

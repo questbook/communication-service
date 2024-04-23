@@ -5188,3 +5188,32 @@ mutation updateSynapsStatus($id: String!, $status: String!){
     }
   }
 }`;
+
+export type GetHelloSignProposalsQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', _id: string, helloSignId: string, helloSignStatus: string,  grant: { __typename?: 'Grant', creatorId: string, workspace: { __typename?: 'Workspace', id: string } } }> };
+
+export const GetHelloSignProposals = gql`
+query grantApplications {
+  grantApplications(filter: {
+     helloSignStatus: "pending"
+  }, limit: 10, sort: CREATEDATS_DESC) {
+    _id
+  	helloSignStatus
+    helloSignId
+    grant {
+      creatorId
+      workspace {
+        id: _id
+      }
+    }
+  }
+}
+`;
+
+export type UpdateHelloSignStatusMutation = { __typename?: 'Mutation', fetchAndUpdateHelloSignStatus: { __typename?: 'HelloSignStatus', message: string } };
+
+export const UpdateHelloSignStatus = gql`
+mutation fetchAndUpdateHelloSignStatus($id: String!, $workspaceId: String!, $creatorId: String!){
+  fetchAndUpdateHelloSignStatus(id: $id, workspaceId: $workspaceId, creatorId: $creatorId){
+    message
+  }
+}`

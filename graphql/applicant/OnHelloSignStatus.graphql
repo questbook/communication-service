@@ -1,0 +1,14 @@
+query grantApplications {
+  grantApplications(filter: {
+     helloSignStatus: "pending"
+  }, limit: 10, sort: CREATEDATS_DESC) {
+    _id
+  	helloSignStatus
+    helloSignId
+    grant {
+      workspace {
+        id: _id
+      }
+    }
+  }
+}
