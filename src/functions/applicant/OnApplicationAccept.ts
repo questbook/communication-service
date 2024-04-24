@@ -12,7 +12,7 @@ import {
   OnApplicationAcceptQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import getDomain from "../utils/linkUtils";
+import { getDomain } from "../utils/linkUtils";
 import { getEmail, getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";

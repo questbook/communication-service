@@ -5217,3 +5217,44 @@ mutation fetchAndUpdateHelloSignStatus($id: String!, $workspaceId: String!, $cre
     message
   }
 }`
+
+export type GetKYCApplicationsQuery =  { __typename?: 'Query', grantApplications: Array<{  __typename?: 'GrantApplication', id: string, applicantId: string, synapsId: string, synapsType: string, synapsStatus: string, email: {  __typename?: 'FieldFilterBySection', values: Array<{  __typename?: 'FieldFilterValue', value: string }> }, name: {  __typename?: 'FieldFilterBySection', values: Array<{  __typename?: 'FieldFilterValue', value: string }> }, projectName: {  __typename?: 'FieldFilterBySection', values: Array<{  __typename?: 'FieldFilterValue', value: string }> }, grant: {  __typename?: 'Grant', id: string, title: string } }> };
+
+export const GetKYCApplications = gql`
+query getKYCApplications($lowerLimit: Float!, $upperLimit: Float!) {
+  grantApplications(
+    filter: {
+      _operators: {
+        updatedAtS: {
+          gt: $lowerLimit,
+          lte: $upperLimit
+        }
+      },
+      synapsStatus: "pending"
+    }) {
+    id: _id
+    applicantId
+    synapsId
+    synapsType
+    synapsStatus
+    email: fieldFilterBySection(filter: { field: "applicantEmail" }) {
+      values {
+        value
+      }
+    }
+    name: fieldFilterBySection(filter: { field: "applicantName" }) {
+      values {
+        value
+      }
+    }
+    projectName: fieldFilterBySection(filter: { field: "projectName" }) {
+      values {
+        value
+      }
+    }
+    grant {
+      id: _id
+      title
+    }
+  }
+}`

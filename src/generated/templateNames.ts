@@ -8,6 +8,7 @@ export default {
 		OnApplicationSubmit: 'applicantOnApplicationSubmit',
 		OnAskedToResubmit: 'applicantOnAskedToResubmit',
 		OnFundsReceived: 'applicantOnFundsReceived',
+		OnKYCAdded: 'applicantOnKYCAdded',
 		OnMilestoneAccept: 'applicantOnMilestoneAccept',
 		OnNewGrantPosted: 'applicantOnNewGrantPosted',
 	},

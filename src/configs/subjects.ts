@@ -8,6 +8,7 @@ const subjects = {
     OnFundsReceived: '{{daoName}} - Awarding Grant Amount',
     OnMilestoneAccept: '{{daoName}} - Milestone Submission accepted',
     OnNewGrantPosted: '{{daoName}} - Inviting applications for {{grantName}}',
+    OnKYCAdded: '{{daoName}} - Request to Verify the {{type}}',
   },
   dao: {
     OnApplicationSubmission: '{{grantName}}: New submission as {{projectName}}',

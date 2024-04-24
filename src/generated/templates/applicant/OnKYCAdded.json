@@ -1,0 +1,8 @@
+{
+    "Template": {
+        "TemplateName": "applicantOnKYCAdded",
+        "SubjectPart": "{{daoName}} - Request to Verify the {{type}}",
+        "HtmlPart": "<p>Hi <b>{{applicantName}}</b>,</p> <p> <b>{{daoName}}</b> has requested to complete the {{type}} for grant application <b>{{projectName}}</b>. Please refer to the proposal page, where you can find the <b>{{type}} link </b> in the comments section. Link to your proposal <b>{{link}}</b> <br /> <br />Best, <br />Team Questbook </p>",
+        "TextPart": "Hi {{applicantName}}, \n {{daoName}} has requested to complete the {{type}} for grant application {{projectName}}. Please refer to the proposal page, where you can find the {{type}} link  in the comments section. Link to your proposal {{link}} \n \nBest, \nTeam Questbook"
+    }
+}

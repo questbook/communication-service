@@ -28,6 +28,13 @@ functions:
     events:
       - schedule: rate(5 minutes)
 
+  kyc-added:
+    handler: src/functions/applicant/OnKYCAdded.run
+    timeout: 60
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(5 minutes)
+
   # applicant-on-application-reject:
   #   handler: src/functions/applicant/OnApplicationReject.run
   #   timeout: 60

@@ -10,26 +10,30 @@ import {
   ALL_SUPPORTED_CHAIN_IDS,
 } from "../../configs/chains";
 import {
-  OnApplicationResubmissionDocument,
-  OnApplicationResubmissionQuery,
+  GetKYCApplications,
+  GetKYCApplicationsQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import { getDomain } from "../utils/linkUtils";
-import { getEmail, getItem, setItem } from "../utils/db";
+import { getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
-import { executeQuery } from "../utils/query";
+import { executeApplicationQuery, executeQuery, executeQueryKYCStatus } from "../utils/query";
+import { getDomainFromGrantId } from "../utils/linkUtils";
 
-const TEMPLATE = templateNames.dao.OnApplicationResubmission;
+const TEMPLATE = templateNames.applicant.OnKYCAdded;
 const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
+const Pino = require("pino");
 
-async function handleEmail(grantApplications: OnApplicationResubmissionQuery['grantApplications'], chainId: number) : Promise<boolean> {
+const logger = Pino();
+
+async function handleEmail(
+  grantApplications,
+): Promise<boolean> {
   const emailData: EmailData[] = [];
   for (const application of grantApplications) {
     let emailAddresses: string[];
-    if (application.applicantEmail.length === 0) {
-      emailAddresses = [await getEmail(application.applicantId)];
-    } else {
-      emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
+    if (application.email?.values) {
+      emailAddresses = application?.email[0]?.values?.map((item) => item?.value);
+      logger.info('emailAddresses', emailAddresses);
     }
     if (!emailAddresses) continue;
     const email = {
@@ -37,14 +41,10 @@ async function handleEmail(grantApplications: OnApplicationResubmissionQuery['gr
       cc: [],
       replacementData: JSON.stringify({
         projectName: application.projectName[0].values[0].value,
-        applicantName: application.applicantName[0].values[0].value,
-        grantName: application.grant.title,
-        daoName: application.grant.workspace.title,
-        link: `${getDomain(
-          chainId,
-        )}/your_grants/view_applicants/applicant_form/?commentData=&applicationId=${
-          application.id
-        }`,
+        applicantName: application.name[0].values[0].value,
+        daoName: application.grant.title,
+        link: `${getDomainFromGrantId(application?.grant?.id)}/dashboard/?grantId=${application?.grant?.id}&chainId=10&role=community&proposalId=${application?.id}`,
+        type: `${application?.synapsType}`,
       }),
     };
     emailData.push(email);
@@ -53,49 +53,58 @@ async function handleEmail(grantApplications: OnApplicationResubmissionQuery['gr
   if (emailData.length === 0) {
     return false;
   }
-
+  logger.info("Email data", emailData);
   const emailResult = await sendEmails(
     emailData,
     TEMPLATE,
     JSON.stringify({
       projectName: "",
       applicantName: "",
-      grantName: "",
       daoName: "",
       link: "",
+      type: "",
     }),
   );
+
+  logger.info("Email result", emailResult);
 
   return true;
 }
 
-const handleDiscourse = async (grantApplications: OnApplicationResubmissionQuery['grantApplications']) => {
-  const a = 5;
-  return false;
-};
-
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
+
   for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
     const fromTimestamp = await getItem(getKey(chainId));
+    // const fromTimestamp = 1711982453;
     const toTimestamp = Math.floor(time.getTime() / 1000);
 
-    if (fromTimestamp === -1) {
+    if (Number(fromTimestamp) === -1) {
       await setItem(getKey(chainId), toTimestamp);
       continue;
     }
 
-    const results: OnApplicationResubmissionQuery = await executeQuery(
+    const results: GetKYCApplicationsQuery = await executeQuery(
       chainId,
       fromTimestamp,
       toTimestamp,
-      OnApplicationResubmissionDocument,
+      GetKYCApplications,
     );
 
     if (!results.grantApplications || !results.grantApplications.length) continue;
-    const grantApplications = results.grantApplications.filter((grantApplication: OnApplicationResubmissionQuery['grantApplications'][number]) => grantApplication.applicantEmail.length > 0);
+    const emailApplications = [];
 
-    const ret = await handleEmail(grantApplications, chainId);
-    if (ret) await setItem(getKey(chainId), toTimestamp);
+    for (const application of results.grantApplications && results.grantApplications) {
+      // emailApplications.push(application);
+      emailApplications.push(application);
+    }
+
+    let shouldUpdate = true;
+
+    if (emailApplications.length > 0) {
+      const ret = await handleEmail(emailApplications);
+      shouldUpdate = shouldUpdate && ret;
+    }
+    if (shouldUpdate) await setItem(getKey(chainId), toTimestamp);
   }
 };

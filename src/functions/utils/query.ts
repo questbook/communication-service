@@ -19,7 +19,7 @@ async function executeQuery(
 ) {
   logger.info({ chainId, from, to }, 'Executing query');
   const link = new HttpLink({
-    uri: CHAIN_INFO[chainId].subgraphClientUrl,
+    uri: 'https://api-grants.questbook.app/graphql',
     fetch,
   });
   const client = new ApolloClient({

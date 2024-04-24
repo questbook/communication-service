@@ -14,7 +14,7 @@ import {
   OnInviteMemberQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import getDomain from "../utils/linkUtils";
+import { getDomain } from "../utils/linkUtils";
 import { getItem, setItem } from "../utils/db";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
