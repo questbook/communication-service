@@ -5153,7 +5153,7 @@ query grantApplications {
   grantApplications(filter: {
     _operators: {
       synapsStatus: {
-        in: ["pending", "PENDING_VERIFICATION"]
+        in: ["pending", "PENDING_VERIFICATION", "RESUBMISSION_REQUIRED"]
       }
     }
   }, limit: 10, sort: CREATEDATS_DESC) {

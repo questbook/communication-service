@@ -41,11 +41,18 @@ const checkSynapsStatus = async (id: string, key: string, type: 'KYC' | 'KYB', p
         status: 'completed',
       });
       logger.info({ res }, 'Status updated');
-    } else if (data?.session?.status === 'REJECTED' || data?.session?.status === 'RESUBMISSION_REQUIRED') {
+    } else if (data?.session?.status === 'REJECTED') {
       logger.info({ data }, `${type} status is rejected`);
       const res = await executeMutation(UpdateSynapsStatus, {
         id: proposalId,
         status: 'rejected',
+      });
+      logger.info({ res }, 'Status updated');
+    } else if (data?.session?.status === 'RESUBMISSION_REQUIRED' && status !== 'RESUBMISSION_REQUIRED') {
+      logger.info({ data }, `${type} status is resubmission required`);
+      const res = await executeMutation(UpdateSynapsStatus, {
+        id: proposalId,
+        status: 'RESUBMISSION_REQUIRED',
       });
       logger.info({ res }, 'Status updated');
     } else {
