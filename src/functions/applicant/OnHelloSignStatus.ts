@@ -18,12 +18,16 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
 
   if (results?.grantApplications?.length > 0) {
     for (const grantApplication of results.grantApplications) {
-      const res = await executeMutation(UpdateHelloSignStatus, {
-        id: grantApplication?._id,
-        workspaceId: grantApplication?.grant?.workspace?.id,
-        creatorId: grantApplication?.grant?.creatorId,
-      });
-      logger.info({ res }, 'Status ');
+      try {
+        const res = await executeMutation(UpdateHelloSignStatus, {
+          id: grantApplication?._id,
+          workspaceId: grantApplication?.grant?.workspace?.id,
+          creatorId: grantApplication?.grant?.creatorId,
+        });
+        logger.info({ res }, 'Status ');
+      } catch (error) {
+        logger.error({ error }, 'Error checking HelloSign status');
+      }
     }
   }
   logger.info(results.grantApplications?.length, 'Executed query');
