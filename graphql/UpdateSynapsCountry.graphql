@@ -1,0 +1,8 @@
+mutation updateSynapsDetails($id: String!, $type: String!, $data: string){
+  updateSynapsDetails(id:$id, type: $type, data: $data){
+    recordId
+    record{
+      _id
+    }
+  }
+}

@@ -4,11 +4,102 @@ import Pino from "pino";
 import fetch from "cross-fetch";
 import {
   GetSyanpsKeys, GetSynapsKeysQuery, GetSynapsStatus, GetSynapsStatusQuery,
+  updateSynapsDetails,
   UpdateSynapsStatus,
 } from "../../generated/graphql";
 import { executeMutation, executeQueryKYCStatus, executeQuerySynapsKeys } from "../utils/query";
 
 const logger = Pino();
+
+const updateSynapsInfo = async (id: string, key: string, type: string, proposalId: string): Promise<boolean> => {
+  try {
+    if (type === 'KYC') {
+      const options = {
+        method: 'GET',
+        url: `https://api.synaps.io/v4/individual/session/${id}`,
+        headers: {
+          'Api-Key': key,
+        },
+      };
+      const response = await fetch(options.url, {
+        method: options.method,
+        headers: options.headers,
+      });
+      const data = await response.json();
+      const documentCode = data?.session?.steps?.find((step: any) => step.type === 'ID_DOCUMENT')?.id;
+      if (!documentCode) {
+        logger.info('Document code not found', id);
+        return false;
+      }
+      if (documentCode) {
+        const responseInfo = await fetch(`https://api.synaps.io/v4/individual/session/${id}/step/${documentCode}/`, {
+          method: options.method,
+          headers: options.headers,
+        });
+        const dataCountry = await responseInfo.json();
+        const country = dataCountry?.document?.country;
+        if (country) {
+          const data = await executeMutation(updateSynapsDetails, {
+            id: proposalId,
+            type: 'country',
+            data: country,
+          });
+          logger.info({ data }, 'Country updated');
+        }
+        /* remove this call if not needed */
+        const name = `${dataCountry?.document?.fields?.firstname ?? ''} ${dataCountry?.document?.fields?.lastname ?? ''}`;
+        if (name) {
+          const data = await executeMutation(updateSynapsDetails, {
+            id: proposalId,
+            type: 'name',
+            data: name,
+          });
+          logger.info({ data }, 'Name updated');
+        }
+        return true;
+      }
+
+      return true;
+    }
+
+    const options = {
+      method: 'GET',
+      url: `https://api.synaps.io/v4/corporate/session/${id}/step/LEGAL_REPRESENTATIVE/`,
+      headers: {
+        'Api-Key': key,
+      },
+    };
+
+    const response = await fetch(options.url, {
+      method: options.method,
+      headers: options.headers,
+    });
+
+    const data = await response.json();
+    const country = data?.nationality;
+    if (country) {
+      const data = await executeMutation(updateSynapsDetails, {
+        id: proposalId,
+        type: 'country',
+        data: country,
+      });
+      logger.info({ data }, 'Country updated');
+    }
+    const name = `${data?.firstname ?? ''} ${data?.lastname ?? ''}`;
+    if (name) {
+      const data = await executeMutation(updateSynapsDetails, {
+        id: proposalId,
+        type: 'name',
+        data: name,
+      });
+      logger.info({ data }, 'Name updated');
+    }
+    return true;
+  } catch (error) {
+    logger.error({ error }, 'Error getting synaps info');
+    return false;
+  }
+};
 
 const checkSynapsStatus = async (id: string, key: string, type: 'KYC' | 'KYB', proposalId: string, status: string) => {
   try {
@@ -41,6 +132,10 @@ const checkSynapsStatus = async (id: string, key: string, type: 'KYC' | 'KYB', p
         status: 'completed',
       });
       logger.info({ res }, 'Status updated');
+      const updateInfo = await updateSynapsInfo(id, key, type, proposalId);
+      if (!updateInfo) {
+        logger.error('Error updating synaps info');
+      }
     } else if (data?.session?.status === 'REJECTED') {
       logger.info({ data }, `${type} status is rejected`);
       const res = await executeMutation(UpdateSynapsStatus, {

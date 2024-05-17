@@ -5258,3 +5258,16 @@ query getKYCApplications($lowerLimit: Float!, $upperLimit: Float!) {
     }
   }
 }`
+
+export type updateSynapsDetailsMutation = { __typename?: 'Mutation', updateSynapsDetails: { __typename?: 'SynapsDetails', recordId: string, record: { __typename?: 'GrantApplication', _id: string } } };
+
+export const updateSynapsDetails = gql`
+mutation updateSynapsDetails($id: String!, $type: String!, $data: String!){
+  updateSynapsDetails(id:$id, type: $type, data: $data){
+    recordId
+    record{
+      _id
+    }
+  }
+}
+`;
