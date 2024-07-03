@@ -11,43 +11,48 @@ import { executeMutation, executeQueryKYCStatus, executeQuerySynapsKeys } from "
 const logger = Pino();
 
 const checkSynapsStatus = async (id: string, key: string, type: 'KYC' | 'KYB', proposalId: string, status: string) => {
-  const options = {
-    method: 'GET',
-    url: type === 'KYC' ? `https://api.synaps.io/v4/individual/session/${id}` : `https://api.synaps.io/v4/corporate/session/${id}`,
-    headers: {
-      'Api-Key': key,
-    },
-  };
+  try {
+    const options = {
+      method: 'GET',
+      url: type === 'KYC' ? `https://api.synaps.io/v4/individual/session/${id}` : `https://api.synaps.io/v4/corporate/session/${id}`,
+      headers: {
+        'Api-Key': key,
+      },
+    };
 
-  const response = await fetch(options.url, {
-    method: options.method,
-    headers: options.headers,
-  });
+    const response = await fetch(options.url, {
+      method: options.method,
+      headers: options.headers,
+    });
 
-  const data = await response.json();
-  if (data?.session?.status === 'PENDING_VERIFICATION' && status !== 'PENDING_VERIFICATION') {
-    logger.info({ data }, `${type} status is pending verification`);
-    const res = await executeMutation(UpdateSynapsStatus, {
-      id: proposalId,
-      status: 'PENDING_VERIFICATION',
-    });
-    logger.info({ res }, 'Status updated');
-  } else if (data?.session?.status === 'APPROVED') {
-    logger.info({ data }, `${type} status is approved`);
-    const res = await executeMutation(UpdateSynapsStatus, {
-      id: proposalId,
-      status: 'completed',
-    });
-    logger.info({ res }, 'Status updated');
-  } else if (data?.session?.status === 'REJECTED' || data?.session?.status === 'RESUBMISSION_REQUIRED') {
-    logger.info({ data }, `${type} status is rejected`);
-    const res = await executeMutation(UpdateSynapsStatus, {
-      id: proposalId,
-      status: 'rejected',
-    });
-    logger.info({ res }, 'Status updated');
-  } else {
-    logger.info({ data }, `${type} status is ${data?.session?.status}`);
+    const data = await response.json();
+    logger.info({ data }, 'Synaps status');
+    if (data?.session?.status === 'PENDING_VERIFICATION' && status !== 'PENDING_VERIFICATION') {
+      logger.info({ data }, `${type} status is pending verification`);
+      const res = await executeMutation(UpdateSynapsStatus, {
+        id: proposalId,
+        status: 'PENDING_VERIFICATION',
+      });
+      logger.info({ res }, 'Status updated');
+    } else if (data?.session?.status === 'APPROVED') {
+      logger.info({ data }, `${type} status is approved`);
+      const res = await executeMutation(UpdateSynapsStatus, {
+        id: proposalId,
+        status: 'completed',
+      });
+      logger.info({ res }, 'Status updated');
+    } else if (data?.session?.status === 'REJECTED' || data?.session?.status === 'RESUBMISSION_REQUIRED') {
+      logger.info({ data }, `${type} status is rejected`);
+      const res = await executeMutation(UpdateSynapsStatus, {
+        id: proposalId,
+        status: 'rejected',
+      });
+      logger.info({ res }, 'Status updated');
+    } else {
+      logger.info({ data }, `${type} status is ${data?.session?.status}`);
+    }
+  } catch (error) {
+    logger.error({ error }, 'Error checking synaps status');
   }
 };
 
