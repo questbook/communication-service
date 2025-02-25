@@ -5,6 +5,7 @@
 // TODO: Process the failed email messages. Put them in a queue and process later.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
+import { logger } from "ethers";
 import { EmailData } from "../../types/EmailData";
 import {
   ALL_SUPPORTED_CHAIN_IDS,
@@ -14,95 +15,82 @@ import {
   OnAskedToResubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import { getDomain } from "../utils/linkUtils";
-import { getEmail, getItem, setItem } from "../utils/db";
+import { getDomainFromGrantId } from "../utils/linkUtils";
 import sendEmails from "../utils/email";
 import { executeQuery } from "../utils/query";
-import { Template } from "../../generated/templates/applicant/OnAskedToResubmit.json";
-import { addReplyToPost } from "../utils/discourse";
-import replaceAll from "../utils/string";
-import discourseWorkspaces from "../../configs/discord";
+import { sleep } from "../utils/sleep";
 
 const TEMPLATE = templateNames.applicant.OnAskedToResubmit;
-const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
 
 async function handleEmail(grantApplications: OnAskedToResubmitQuery['grantApplications'], chainId: number) : Promise<boolean> {
   const emailData: EmailData[] = [];
+  logger.info(`Processing ${grantApplications.length} applications for chain ${chainId}`);
+
   for (const application of grantApplications) {
-    let emailAddresses: string[];
-    if (application.applicantEmail.length === 0) {
-      emailAddresses = [await getEmail(application.applicantId)];
-    } else {
-      emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
-    }
-    if (!emailAddresses) continue;
+    const emailAddresses = application.applicantEmail[0].values
+      .map((item) => item?.value)
+      .filter((email): email is string => {
+        // Basic email validation
+        if (!email) return false;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email) && !email.startsWith("0x");
+      });
+
+    if (!emailAddresses.length) continue;
+
     const email = {
       to: emailAddresses,
       cc: [],
       replacementData: JSON.stringify({
         projectName: application.projectName[0].values[0].value,
         applicantName: application.applicantName[0].values[0].value,
-        daoName: application.grant.workspace.title,
-        link: `${getDomain(
-          chainId,
-        )}/your_applications/grant_application/?applicationId=${
-          application.id
-        }&chainId=${chainId}`,
+        daoName: application.grant.title,
+        link: `${getDomainFromGrantId(application?.grant?.id)}/dashboard/?grantId=${application?.grant?.id}&chainId=10&role=community&proposalId=${application?.id}`,
       }),
     };
     emailData.push(email);
   }
 
   if (emailData.length === 0) {
+    logger.info('No valid email addresses found to send notifications');
     return false;
   }
 
-  const emailResult = await sendEmails(
-    emailData,
-    TEMPLATE,
-    JSON.stringify({
-      projectName: "",
-      applicantName: "",
-      daoName: "",
-      link: "",
-    }),
-  );
+  logger.info(`Sending ${emailData.length} emails for chain ${chainId}`);
 
+  // Add delay between sending emails
+  let emailsSent = 0;
+  for (const email of emailData) {
+    try {
+      const emailResult = await sendEmails(
+        [email], // Send one email at a time
+        TEMPLATE,
+        JSON.stringify({
+          projectName: "",
+          applicantName: "",
+          daoName: "",
+          link: "",
+        }),
+      );
+      emailsSent += 1;
+      logger.info(`Successfully sent email ${emailsSent}/${emailData.length}`);
+    } catch (error) {
+      logger.info(`Failed to send email ${emailsSent + 1}/${emailData.length}:`, error);
+    }
+
+    // Wait 500ms before sending the next email
+    await sleep(500);
+  }
+
+  logger.info(`Completed sending ${emailsSent} out of ${emailData.length} emails for chain ${chainId}`);
   return true;
 }
 
-const handleDiscourse = async (grantApplications: OnAskedToResubmitQuery['grantApplications'], chainId: number) => {
-  for (const application of grantApplications) {
-    const data = {
-      projectName: application.projectName[0].values[0].value,
-      applicantName: application.applicantName[0].values[0].value,
-      daoName: application.grant.workspace.title,
-      link: `${getDomain(
-        chainId,
-      )}/your_applications/grant_application/?applicationId=${
-        application.id
-      }&chainId=${chainId}`,
-    };
-    let raw = Template.TextPart;
-    for (const key of Object.keys(data)) {
-      raw = replaceAll(raw, `{{${key}}}`, data[key]);
-    }
-    await addReplyToPost(chainId, application.id, raw);
-  }
-  return true;
-};
-
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
+  const toTimestamp = Math.floor(time.getTime() / 1000);
+  const fromTimestamp = toTimestamp - (5 * 60); // 5 minutes ago
   for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
-    const fromTimestamp = await getItem(getKey(chainId));
-    const toTimestamp = Math.floor(time.getTime() / 1000);
-
-    if (fromTimestamp === -1) {
-      await setItem(getKey(chainId), toTimestamp);
-      continue;
-    }
-
     const results: OnAskedToResubmitQuery = await executeQuery(
       chainId,
       fromTimestamp,
@@ -111,25 +99,17 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     );
 
     if (!results.grantApplications || !results.grantApplications.length) continue;
-    const discourseApplications: OnAskedToResubmitQuery["grantApplications"] = [];
     const emailApplications: OnAskedToResubmitQuery["grantApplications"] = [];
 
     for (const application of results.grantApplications) {
-      const apps = discourseWorkspaces.filter((workspace) => workspace.chainId === chainId && workspace.workspaceId === application.grant.workspace.id);
-      if (apps.length > 0) discourseApplications.push(application);
-      else emailApplications.push(application);
+      emailApplications.push(application);
     }
 
     let shouldUpdate = true;
-    if (discourseApplications.length > 0) {
-      const ret = await handleDiscourse(discourseApplications, chainId);
-      shouldUpdate = shouldUpdate && ret;
-    }
 
     if (emailApplications.length > 0) {
       const ret = await handleEmail(emailApplications, chainId);
       shouldUpdate = shouldUpdate && ret;
     }
-    if (shouldUpdate) await setItem(getKey(chainId), toTimestamp);
   }
 };

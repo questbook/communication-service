@@ -2,7 +2,7 @@
 // send the result to the email module to process and
 // wait for a reply. If it replies with a success message,
 // we modify the timestamp till which we have processed.
-// TODO: Process the failed email messages. Put them in a queue and process later.
+// Failed emails are logged for monitoring.
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
 import { EmailData } from "../../types/EmailData";
@@ -10,20 +10,16 @@ import {
   ALL_SUPPORTED_CHAIN_IDS,
 } from "../../configs/chains";
 import {
-  GetGrantApplicationsDocument,
-  GetGrantApplicationsQuery,
   OnApplicationSubmitDocument,
   OnApplicationSubmitQuery,
 } from "../../generated/graphql";
-import templateNames from "../../generated/templateNames";
-import { getEmail, getItem, setItem } from "../utils/db";
-import { createPost } from "../utils/discourse";
 import sendEmails from "../utils/email";
-import { executeApplicationQuery, executeQuery } from "../utils/query";
-import discourseWorkspaces from "../../configs/discord";
+import { executeQuery } from "../utils/query";
+import { getDomainFromGrantId } from "../utils/linkUtils";
+import templateNames from "../../generated/templateNames";
 
 const TEMPLATE = templateNames.applicant.OnApplicationSubmit;
-const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
+const TEMPLATE_WORKSPACE = templateNames.dao.OnApplicationSubmission;
 const Pino = require("pino");
 
 const logger = Pino();
@@ -32,72 +28,94 @@ async function handleEmail(
   grantApplications: OnApplicationSubmitQuery["grantApplications"],
 ): Promise<boolean> {
   const emailData: EmailData[] = [];
+  const workspaceMail: EmailData[] = [];
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   for (const application of grantApplications) {
-    let emailAddresses: string[];
-    if (application.applicantEmail.length === 0) {
-      emailAddresses = [await getEmail(application.applicantId)];
-    } else {
-      emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
+    const emailAddresses = application.applicantEmail[0].values.map((item) => item?.value).filter(Boolean);
+    if (!emailAddresses.length) continue;
+
+    // Validate applicant emails
+    const validEmails = emailAddresses.filter((email) => emailRegex.test(email) && !email.startsWith("0x"));
+    if (!validEmails.length) {
+      logger.warn({ applicationId: application.id }, "No valid applicant emails");
+      continue;
     }
-    if (!emailAddresses) continue;
-    const email = {
-      to: emailAddresses,
+
+    // Validate workspace member emails
+    const workspaceMails = application.grant.workspace.members
+      .filter((member) => member.enabled && member.email && emailRegex.test(member.email) && !member.email.startsWith("0x"))
+      .map((member) => member.email!);
+
+    const applicantEmail = {
+      to: validEmails,
       cc: [],
       replacementData: JSON.stringify({
-        projectName: application.projectName[0].values[0].value,
-        applicantName: application.applicantName[0].values[0].value,
-        daoName: application.grant.workspace.title,
+        projectName: application.projectName[0].values[0].value || "Unknown Project",
+        applicantName: application.applicantName[0].values[0].value || "Unknown Applicant",
+        daoName: application.grant.title || "Unknown DAO",
+        link: `${getDomainFromGrantId(application?.grant?.id)}/dashboard/?grantId=${application?.grant?.id}&chainId=10&role=community&proposalId=${application?.id}`,
       }),
     };
-    emailData.push(email);
+    emailData.push(applicantEmail);
+
+    if (workspaceMails.length > 0) {
+      const daoEmail = {
+        to: workspaceMails,
+        cc: [],
+        replacementData: JSON.stringify({
+          daoName: `${application.grant.title} Team` || "Unknown Team",
+          applicantName: application.applicantName[0].values[0].value || "Unknown Applicant",
+          grantName: application.projectName[0].values[0].value || "Unknown Grant",
+          link: `${getDomainFromGrantId(application?.grant?.id)}/dashboard/?grantId=${application?.grant?.id}&chainId=10&role=community&proposalId=${application?.id}`,
+        }),
+      };
+      workspaceMail.push(daoEmail);
+    }
   }
 
-  if (emailData.length === 0) {
-    return false;
+  if (emailData.length === 0 && workspaceMail.length === 0) {
+    logger.info("No emails to send");
+    return true;
   }
 
-  const emailResult = await sendEmails(
-    emailData,
-    TEMPLATE,
-    JSON.stringify({
-      projectName: "",
-      applicantName: "",
-      daoName: "",
-    }),
-  );
+  logger.info({ emailDataCount: emailData.length, workspaceMailCount: workspaceMail.length }, "Sending emails");
 
-  return true;
-}
+  let allSuccessful = true;
 
-async function handleDiscourse(
-  grantApplications: OnApplicationSubmitQuery["grantApplications"],
-  chainId: number,
-): Promise<boolean> {
-  const applicationIDs: string[] = grantApplications.map(
-    (application: OnApplicationSubmitQuery["grantApplications"][number]) => application.id,
-  );
-  const results: GetGrantApplicationsQuery = await executeApplicationQuery(
-    chainId,
-    applicationIDs,
-    GetGrantApplicationsDocument,
-  );
+  // Send applicant emails
+  for (const email of emailData) {
+    try {
+      await sendEmails([email], TEMPLATE, "{}"); // Empty default data handled by replacementData
+      logger.info({ to: email.to }, "Applicant email sent successfully");
+    } catch (error) {
+      logger.error({ error, email }, "Failed to send applicant email");
+      allSuccessful = false;
+    }
+  }
 
-  for (const application of results.grantApplications) await createPost(chainId, application);
-  return true;
+  // Send workspace emails @TODO: Uncomment this when the template is deployed
+  // for (const email of workspaceMail) {
+  //   try {
+  //     await sendEmails([email], TEMPLATE_WORKSPACE, "{}");
+  //     // eslint-disable-next-line no-promise-executor-return
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     logger.info({ to: email.to }, "Workspace email sent successfully");
+  //   } catch (error) {
+  //     logger.error({ error, email }, "Failed to send workspace email");
+  //     allSuccessful = false;
+  //   }
+  // }
+
+  return allSuccessful;
 }
 
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
   const toTimestamp = Math.floor(time.getTime() / 1000);
+  const fromTimestamp = toTimestamp - (5 * 60); // 5 minutes ago
 
   for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
-    const fromTimestamp = await getItem(getKey(chainId));
-
-    if (fromTimestamp === -1) {
-      await setItem(getKey(chainId), toTimestamp);
-      continue;
-    }
-
     const results: OnApplicationSubmitQuery = await executeQuery(
       chainId,
       fromTimestamp,
@@ -105,27 +123,15 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
       OnApplicationSubmitDocument,
     );
 
-    if (!results.grantApplications || !results.grantApplications.length) continue;
-    const discourseApplications: OnApplicationSubmitQuery["grantApplications"] = [];
-    const emailApplications: OnApplicationSubmitQuery["grantApplications"] = [];
-
-    for (const application of results.grantApplications) {
-      const apps = discourseWorkspaces.filter((workspace) => workspace.chainId === chainId && workspace.workspaceId === application.grant.workspace.id);
-      if (apps.length > 0) {
-        discourseApplications.push(application);
-      } else emailApplications.push(application);
+    if (!results.grantApplications || !results.grantApplications.length) {
+      logger.info({ chainId }, "No new applications found");
+      continue;
     }
 
-    let shouldUpdate = true;
-    if (discourseApplications.length > 0) {
-      const ret = await handleDiscourse(discourseApplications, chainId);
-      shouldUpdate = shouldUpdate && ret;
-    }
+    logger.info({ chainId, count: results.grantApplications.length }, "Processing applications");
 
-    if (emailApplications.length > 0) {
-      const ret = await handleEmail(emailApplications);
-      shouldUpdate = shouldUpdate && ret;
-    }
-    if (shouldUpdate) await setItem(getKey(chainId), toTimestamp);
+    const emailApplications: OnApplicationSubmitQuery["grantApplications"] = results.grantApplications;
+
+    await handleEmail(emailApplications);
   }
 };

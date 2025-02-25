@@ -1,38 +1,39 @@
-query OnApplicationAccept($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {
-      updatedAtS_gt: $lowerLimit
-      updatedAtS_lte: $upperLimit
-      state: approved
-    }
-  ) {
-    id
-    applicantId
-    projectName: fields(where: { field_ends_with: "projectName" }) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: { field_ends_with: "applicantName" }) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: { field_ends_with: "applicantEmail" }) {
-      values {
-        value
-      }
-    }
-    grant {
-      workspace {
-        id
-        title
-        members(where: { accessLevel: admin, email_not: null }) {
-          email
-          actorId
+query OnApplicationAccept($lowerLimit: Float!, $upperLimit: Float!) {
+    grantApplications(
+        filter: {
+            _operators: {
+                updatedAtS: { gte: $lowerLimit, lte: $upperLimit }
+            }
+            state: "approved"
         }
-      }
+    ) {
+        id: _id
+        applicantId
+        projectName: fieldFilterBySection(filter: { field: "projectName" }) {
+            values {
+                value
+            }
+        }
+        applicantName: fieldFilterBySection(filter: { field: "applicantName" }) {
+            values {
+                value
+            }
+        }
+        applicantEmail: fieldFilterBySection(filter: { field: "applicantEmail" }) {
+            values {
+                value
+            }
+        }
+        grant {
+            id: _id
+            title
+            workspace {
+                id: _id
+                members {
+                    email
+                    enabled
+                }
+            }
+        }
     }
-  }
 }

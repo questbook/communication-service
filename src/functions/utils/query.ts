@@ -62,10 +62,6 @@ async function executeApplicationQuery(chainId: number, applicationIDs: string[]
     },
   });
   const { data } = response;
-  logger.info({
-    chainId, applicationIDs, data,
-  }, 'Executed application query');
-
   return data;
 }
 

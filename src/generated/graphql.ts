@@ -4177,32 +4177,94 @@ export type OnApplicationAcceptQueryVariables = Exact<{
   upperLimit: Scalars['Int'];
 }>;
 
-
-export type OnApplicationAcceptQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', id: string, title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationAcceptQuery = {
+  __typename?: 'Query';
+  grantApplications: Array<{
+    __typename?: 'GrantApplication';
+    id: string;
+    applicantId: string;
+    projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    grant: {
+      id: string;
+      title: string;
+      workspace: {
+        id: string;
+        title: string;
+        members: Array<{
+          email?: string | null;
+          enabled: boolean;
+        }>;
+      };
+    };
+  }>;
+};
 
 export type OnApplicationRejectQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
-
-export type OnApplicationRejectQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, feedbackDao?: string | null, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', id: string, title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnApplicationRejectQuery = {
+  __typename?: 'Query';
+  grantApplications: Array<{
+    __typename?: 'GrantApplication';
+    id: string;
+    applicantId: string;
+    projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    grant: {
+      id: string;
+      title: string;
+      workspace: {
+        id: string;
+        title: string;
+        members: Array<{
+          email?: string | null;
+          enabled: boolean;
+        }>;
+      };
+    };
+  }>;
+}
 
 export type OnApplicationResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
-
-export type OnApplicationResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', workspace: { __typename?: 'Workspace', id: string, title: string } } }> };
+export type OnApplicationResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', id: string, title: string, workspace: { __typename?: 'Workspace', id: string, title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, enabled: boolean }> } } }> };
 
 export type OnApplicationSubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
   upperLimit: Scalars['Int'];
 }>;
 
-
-export type OnApplicationSubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', id: string, title: string } } }> };
+export type OnApplicationSubmitQuery = {
+  __typename?: 'Query';
+  grantApplications: Array<{
+    __typename?: 'GrantApplication';
+    id: string;
+    applicantId: string;
+    projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    grant: {
+      id: string;
+      title: string;
+      workspace: {
+        id: string;
+        title: string;
+        members: Array<{
+          email?: string | null;
+          enabled: boolean;
+        }>;
+      };
+    };
+  }>;
+}
 
 export type OnAskedToResubmitQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4210,7 +4272,29 @@ export type OnAskedToResubmitQueryVariables = Exact<{
 }>;
 
 
-export type OnAskedToResubmitQuery = { __typename?: 'Query', grantApplications: Array<{ __typename?: 'GrantApplication', id: string, applicantId: string, feedbackDao?: string | null, projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>, grant: { __typename?: 'Grant', title: string, workspace: { __typename?: 'Workspace', id: string, title: string, members: Array<{ __typename?: 'WorkspaceMember', email?: string | null, actorId: string }> } } }> };
+export type OnAskedToResubmitQuery = {
+  __typename?: 'Query';
+  grantApplications: Array<{
+    __typename?: 'GrantApplication';
+    id: string;
+    applicantId: string;
+    projectName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantName: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    applicantEmail: Array<{ __typename?: 'GrantFieldAnswer', values: Array<{ __typename?: 'GrantFieldAnswerItem', value: string }> }>;
+    grant: {
+      id: string;
+      title: string;
+      workspace: {
+        id: string;
+        title: string;
+        members: Array<{
+          email?: string | null;
+          enabled: boolean;
+        }>;
+      };
+    };
+  }>;
+}
 
 export type OnFundsReceivedQueryVariables = Exact<{
   lowerLimit: Scalars['Int'];
@@ -4351,40 +4435,46 @@ export type GetGrantApplicationsQueryHookResult = ReturnType<typeof useGetGrantA
 export type GetGrantApplicationsLazyQueryHookResult = ReturnType<typeof useGetGrantApplicationsLazyQuery>;
 export type GetGrantApplicationsQueryResult = Apollo.QueryResult<GetGrantApplicationsQuery, GetGrantApplicationsQueryVariables>;
 export const OnApplicationAcceptDocument = gql`
-    query OnApplicationAccept($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: approved}
-  ) {
-    id
-    applicantId
-    projectName: fields(where: {field_ends_with: "projectName"}) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: {field_ends_with: "applicantName"}) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
-      values {
-        value
-      }
-    }
-    grant {
-      workspace {
-        id
-        title
-        members(where: {accessLevel: admin, email_not: null}) {
-          email
-          actorId
+query OnApplicationAccept($lowerLimit: Float!, $upperLimit: Float!) {
+    grantApplications(
+        filter: {
+            _operators: {
+                updatedAtS: { gte: $lowerLimit, lte: $upperLimit }
+            }
+            state: "approved"
         }
-      }
+    ) {
+        id: _id
+        applicantId
+        projectName: fieldFilterBySection(filter: { field: "projectName" }) {
+            values {
+                value
+            }
+        }
+        applicantName: fieldFilterBySection(filter: { field: "applicantName" }) {
+            values {
+                value
+            }
+        }
+        applicantEmail: fieldFilterBySection(filter: { field: "applicantEmail" }) {
+            values {
+                value
+            }
+        }
+        grant {
+            id: _id
+            title
+            workspace {
+                id: _id
+                members: membersFilter(filter: { enabled: true}) {
+                    email
+                    enabled
+                }
+            }
+        }
     }
-  }
 }
+
     `;
 
 /**
@@ -4416,41 +4506,46 @@ export type OnApplicationAcceptQueryHookResult = ReturnType<typeof useOnApplicat
 export type OnApplicationAcceptLazyQueryHookResult = ReturnType<typeof useOnApplicationAcceptLazyQuery>;
 export type OnApplicationAcceptQueryResult = Apollo.QueryResult<OnApplicationAcceptQuery, OnApplicationAcceptQueryVariables>;
 export const OnApplicationRejectDocument = gql`
-    query OnApplicationReject($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: rejected}
-  ) {
-    id
-    applicantId
-    projectName: fields(where: {field_ends_with: "projectName"}) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: {field_ends_with: "applicantName"}) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
-      values {
-        value
-      }
-    }
-    feedbackDao
-    grant {
-      workspace {
-        id
-        title
-        members(where: {accessLevel: admin, email_not: null}) {
-          email
-          actorId
+   query OnApplicationReject($lowerLimit: Float!, $upperLimit: Float!) {
+    grantApplications(
+        filter: {
+            _operators: {
+                updatedAtS: { gte: $lowerLimit, lte: $upperLimit }
+            }
+            state: "rejected"
         }
-      }
+    ) {
+        id: _id
+        applicantId
+        projectName: fieldFilterBySection(filter: { field: "projectName" }) {
+            values {
+                value
+            }
+        }
+        applicantName: fieldFilterBySection(filter: { field: "applicantName" }) {
+            values {
+                value
+            }
+        }
+        applicantEmail: fieldFilterBySection(filter: { field: "applicantEmail" }) {
+            values {
+                value
+            }
+        }
+        grant {
+            id: _id
+            title
+            workspace {
+                id: _id
+                members: membersFilter(filter: { enabled: true}) {
+                    email
+                    enabled
+                }
+            }
+        }
     }
-  }
 }
+
     `;
 
 /**
@@ -4482,36 +4577,55 @@ export type OnApplicationRejectQueryHookResult = ReturnType<typeof useOnApplicat
 export type OnApplicationRejectLazyQueryHookResult = ReturnType<typeof useOnApplicationRejectLazyQuery>;
 export type OnApplicationRejectQueryResult = Apollo.QueryResult<OnApplicationRejectQuery, OnApplicationRejectQueryVariables>;
 export const OnApplicationResubmitDocument = gql`
-    query OnApplicationResubmit($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version_gt: 1}
-  ) {
-    id
-    applicantId
-    projectName: fields(where: {field_ends_with: "projectName"}) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: {field_ends_with: "applicantName"}) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
-      values {
-        value
-      }
-    }
-    grant {
-      workspace {
-        id
+    query OnApplicationResubmit($lowerLimit: Float!, $upperLimit: Float!) {
+    grantApplications(
+        filter: { _operators: { updatedAtS: { gte: $lowerLimit, lte: $upperLimit }, version: {
+            gt: 1
+        } } }
+    ){
+      id: _id
+      applicantId
+      projectName: fieldFilterBySection(
+          filter:{
+            field: "projectName"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      applicantName: fieldFilterBySection(
+          filter:{
+            field: "applicantName"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      applicantEmail: fieldFilterBySection(
+          filter:{
+            field: "applicantEmail"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      grant {
+        id: _id
         title
+        workspace {
+          id: _id
+          members: membersFilter(filter: { enabled: true}) {
+            email
+            enabled
+          }
+        }
       }
     }
-  }
 }
+
     `;
 
 /**
@@ -4543,37 +4657,53 @@ export type OnApplicationResubmitQueryHookResult = ReturnType<typeof useOnApplic
 export type OnApplicationResubmitLazyQueryHookResult = ReturnType<typeof useOnApplicationResubmitLazyQuery>;
 export type OnApplicationResubmitQueryResult = Apollo.QueryResult<OnApplicationResubmitQuery, OnApplicationResubmitQueryVariables>;
 export const OnApplicationSubmitDocument = gql`
-    query OnApplicationSubmit($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: submitted, version: 1}
-  ) {
-    id
-    applicantId
-    projectName: fields(where: {field_ends_with: "projectName"}) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: {field_ends_with: "applicantName"}) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
-      values {
-        value
-      }
-    }
-    grant {
-      title
-      workspace {
-        id
+query OnApplicationSubmit($lowerLimit: Float!, $upperLimit: Float!) {
+    grantApplications(
+        filter: { _operators: { updatedAtS: { gte: $lowerLimit, lte: $upperLimit } }, version: 1 }
+    ){
+      id: _id
+      applicantId
+      projectName: fieldFilterBySection(
+          filter:{
+            field: "projectName"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      applicantName: fieldFilterBySection(
+          filter:{
+            field: "applicantName"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      applicantEmail: fieldFilterBySection(
+          filter:{
+            field: "applicantEmail"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      grant {
+        id: _id
         title
+        workspace {
+          id: _id
+          members: membersFilter(filter: { enabled: true}) {
+            email
+            enabled
+          }
+        }
       }
     }
-  }
 }
+
     `;
 
 /**
@@ -4605,41 +4735,51 @@ export type OnApplicationSubmitQueryHookResult = ReturnType<typeof useOnApplicat
 export type OnApplicationSubmitLazyQueryHookResult = ReturnType<typeof useOnApplicationSubmitLazyQuery>;
 export type OnApplicationSubmitQueryResult = Apollo.QueryResult<OnApplicationSubmitQuery, OnApplicationSubmitQueryVariables>;
 export const OnAskedToResubmitDocument = gql`
-    query OnAskedToResubmit($lowerLimit: Int!, $upperLimit: Int!) {
-  grantApplications(
-    subgraphError: allow
-    where: {updatedAtS_gt: $lowerLimit, updatedAtS_lte: $upperLimit, state: resubmit}
-  ) {
-    id
-    applicantId
-    projectName: fields(where: {field_ends_with: "projectName"}) {
-      values {
-        value
-      }
-    }
-    applicantName: fields(where: {field_ends_with: "applicantName"}) {
-      values {
-        value
-      }
-    }
-    applicantEmail: fields(where: {field_ends_with: "applicantEmail"}) {
-      values {
-        value
-      }
-    }
-    feedbackDao
-    grant {
-      title
-      workspace {
-        id
+    query OnAskedToResubmit($lowerLimit: Float!, $upperLimit: Float!) {
+    grantApplications(
+        filter: { _operators: { updatedAtS: { gte: $lowerLimit, lte: $upperLimit } } state: "resubmit" }
+    ){
+      id: _id
+      applicantId
+      projectName: fieldFilterBySection(
+          filter:{
+            field: "projectName"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      applicantName: fieldFilterBySection(
+          filter:{
+            field: "applicantName"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      applicantEmail: fieldFilterBySection(
+          filter:{
+            field: "applicantEmail"
+          }
+        ) {
+          values{
+            value
+          }
+        }
+      grant {
+        id: _id
         title
-        members(where: {accessLevel: admin, email_not: null}) {
-          email
-          actorId
+        workspace {
+          id: _id
+          members: membersFilter(filter: { enabled: true}) {
+            email
+            enabled
+          }
         }
       }
     }
-  }
 }
     `;
 

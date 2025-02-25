@@ -2,95 +2,88 @@
 // send the result to the email module to process and
 // wait for a reply. If it replies with a success message,
 // we modify the timestamp till which we have processed.
-// TODO: Process the failed email messages. Put them in a queue and process later.
+// TODO: Process the failed email messages. Put them in a queue and process later (implement retry or put it in sqs)
 
 import { APIGatewayProxyEvent, Context } from "aws-lambda";
+import { logger } from "ethers";
 import { EmailData } from "../../types/EmailData";
 import {
   ALL_SUPPORTED_CHAIN_IDS,
 } from "../../configs/chains";
 import {
-  GetGrantApplicationsDocument,
-  GetGrantApplicationsQuery,
   OnApplicationResubmitDocument,
   OnApplicationResubmitQuery,
 } from "../../generated/graphql";
 import templateNames from "../../generated/templateNames";
-import { getEmail, getItem, setItem } from "../utils/db";
-import { editPost } from "../utils/discourse";
 import sendEmails from "../utils/email";
-import { executeApplicationQuery, executeQuery } from "../utils/query";
-import discourseWorkspaces from "../../configs/discord";
+import { executeQuery } from "../utils/query";
+import { getDomainFromGrantId } from "../utils/linkUtils";
+import { sleep } from "../utils/sleep";
 
-const TEMPLATE = templateNames.applicant.OnApplicationResubmit;
-const getKey = (chainId: number) => `${chainId}_${TEMPLATE}`;
+const TEMPLATE = templateNames.dao.OnApplicationResubmission;
 
 async function handleEmail(grantApplications: OnApplicationResubmitQuery['grantApplications']) : Promise<boolean> {
   const emailData: EmailData[] = [];
+  let emailsSent = 0;
+
   for (const application of grantApplications) {
-    let emailAddresses: string[];
-    if (application.applicantEmail.length === 0) {
-      emailAddresses = [await getEmail(application.applicantId)];
-    } else {
-      emailAddresses = application.applicantEmail[0].values.map((item) => item?.value);
-    }
-    if (!emailAddresses) continue;
+    const workspaceMails = application.grant.workspace.members
+      .filter((member) => member.email !== null
+        && member.enabled
+        && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email)
+        && !member.email.startsWith("0x"))
+      .map((member) => member.email as string);
+
+    if (!workspaceMails.length) continue;
+
     const email = {
-      to: emailAddresses,
+      to: workspaceMails,
       cc: [],
       replacementData: JSON.stringify({
-        projectName: application.projectName[0].values[0].value,
+        grantName: application.grant.title,
         applicantName: application.applicantName[0].values[0].value,
-        daoName: application.grant.workspace.title,
+        daoName: `${application.grant.title} Team`,
+        link: `${getDomainFromGrantId(application?.grant?.id)}/dashboard/?grantId=${application?.grant?.id}&chainId=10&role=community&proposalId=${application?.id}`,
       }),
     };
     emailData.push(email);
   }
 
   if (emailData.length === 0) {
+    logger.info(`No valid emails to send for ${grantApplications.length} applications`);
     return false;
   }
 
-  const emailResult = await sendEmails(
-    emailData,
-    TEMPLATE,
-    JSON.stringify({
-      projectName: "",
-      applicantName: "",
-      daoName: "",
-    }),
-  );
+  for (const email of emailData) {
+    try {
+      await sleep(500); // Add 500ms delay between each email
+      await sendEmails(
+        [email], // Send one email at a time
+        TEMPLATE,
+        JSON.stringify({
+          projectName: "",
+          applicantName: "",
+          daoName: "",
+          link: "",
+        }),
+      );
+      emailsSent += 1;
+    } catch (error) {
+      logger.info(error);
+    }
+  }
 
+  logger.info(`Successfully sent ${emailsSent}/${emailData.length} emails for ${grantApplications.length} applications`);
   return true;
 }
 
-const handleDiscourse = async (grantApplications: OnApplicationResubmitQuery['grantApplications'], chainId: number) : Promise<boolean> => {
-  const applicationIDs: string[] = grantApplications.map(
-    (application: OnApplicationResubmitQuery["grantApplications"][number]) => application.id,
-  );
-  const results: GetGrantApplicationsQuery = await executeApplicationQuery(
-    chainId,
-    applicationIDs,
-    GetGrantApplicationsDocument,
-  );
-
-  for (const application of results.grantApplications) {
-    await editPost(chainId, application);
-  }
-  return true;
-};
-
 export const run = async (event: APIGatewayProxyEvent, context: Context) => {
   const time = new Date();
+  const toTimestamp = Math.floor(time.getTime() / 1000);
+  const fromTimestamp = toTimestamp - (5 * 60); // 5 minutes ago
+  let totalApplicationsProcessed = 0;
+
   for (const chainId of ALL_SUPPORTED_CHAIN_IDS) {
-    const fromTimestamp = await getItem(getKey(chainId));
-    const toTimestamp = Math.floor(time.getTime() / 1000);
-
-    if (fromTimestamp === -1) {
-      await setItem(getKey(chainId), toTimestamp);
-      continue;
-    }
-
     const results: OnApplicationResubmitQuery = await executeQuery(
       chainId,
       fromTimestamp,
@@ -99,26 +92,20 @@ export const run = async (event: APIGatewayProxyEvent, context: Context) => {
     );
 
     if (!results.grantApplications || !results.grantApplications.length) continue;
-    const discourseApplications: OnApplicationResubmitQuery["grantApplications"] = [];
     const emailApplications: OnApplicationResubmitQuery["grantApplications"] = [];
 
     for (const application of results.grantApplications) {
-      const apps = discourseWorkspaces.filter((workspace) => workspace.chainId === chainId && workspace.workspaceId === application.grant.workspace.id);
-      if (apps.length > 0) {
-        discourseApplications.push(application);
-      } else emailApplications.push(application);
+      emailApplications.push(application);
     }
 
     let shouldUpdate = true;
-    if (discourseApplications.length > 0) {
-      const ret = await handleDiscourse(discourseApplications, chainId);
-      shouldUpdate = shouldUpdate && ret;
-    }
+    totalApplicationsProcessed += emailApplications.length;
 
     if (emailApplications.length > 0) {
       const ret = await handleEmail(emailApplications);
       shouldUpdate = shouldUpdate && ret;
     }
-    if (shouldUpdate) await setItem(getKey(chainId), toTimestamp);
   }
+
+  logger.info(`Total applications processed: ${totalApplicationsProcessed}`);
 };
